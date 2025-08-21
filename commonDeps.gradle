@@ -1,0 +1,47 @@
+dependencies {
+    // Spring
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
+    implementation "org.springframework.boot:spring-boot-starter-validation"
+    implementation "org.springframework.boot:spring-boot-starter-log4j2"
+
+    // Keycloak
+    implementation "org.springframework.boot:spring-boot-starter-security"
+    implementation "org.springframework.boot:spring-boot-starter-oauth2-resource-server"
+
+    implementation(group: 'org.springframework.boot', name: 'spring-boot-starter-webflux', version: '3.5.4') {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-netty'
+    }
+
+    if (osdetector.arch.equals("aarch_64")) {
+        implementation("io.netty:netty-all")
+    }
+
+    implementation "com.auth0:java-jwt:4.4.0"
+    implementation("com.google.guava:guava:33.3.1-jre")
+    implementation "com.nimbusds:nimbus-jose-jwt:9.37.3"
+    implementation "org.apache.commons:commons-lang3:3.17.0"
+    implementation 'org.apache.commons:commons-collections4:4.4'
+    implementation 'commons-codec:commons-codec:1.17.1'
+    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0"
+
+    // Lombok
+    compileOnly "org.projectlombok:lombok"
+    annotationProcessor "org.projectlombok:lombok"
+    implementation "org.projectlombok:lombok-mapstruct-binding:0.2.0"
+
+    // MapStruct, MUST BE SETTLED AFTER Lombok!!!
+    implementation "org.mapstruct:mapstruct:1.5.5.Final"
+    annotationProcessor "org.mapstruct:mapstruct-processor:1.5.5.Final"
+    testAnnotationProcessor "org.mapstruct:mapstruct-processor:1.5.5.Final" // if you are using mapstruct in test code
+
+    // JSON
+    implementation("org.json:json:20250107")
+
+    // Thymeleaf шаблонизатор
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+    // Tests
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+
+}
