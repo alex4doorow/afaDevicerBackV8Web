@@ -1,863 +1,526 @@
-<!doctype html>
-<html lang="ru">
-  <head>
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="auto">
+<head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="pribormaster.ru описание">
     <meta name="keywords" content="pribormaster.ru ключевые слова"/>
     <meta name="author" content="Aleksey Fedorov">
-    <link rel="icon" href="resources/51.ico">
-    <!-- Bootstrap core CSS -->
-    <link href="resources/css/bootstrap.css" rel="stylesheet">
-    <link href="resources/css/bootstrap-icons.css" rel="stylesheet">
-    
-    <!-- Custom styles for this template -->
-    <link href="resources/css/dashboard.css" rel="stylesheet">
-    <link href="resources/css/bootstrap-datepicker.css" rel="stylesheet">
-    <link href="resources/css/datatables.css" rel="stylesheet"/>
+    <meta name="generator" content="Astro v5.9.2">
+    <title>SIR RICHARD BOSS · Заказы</title>
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/dashboard/">
 
-<title>SIR RICHARD BOSS | Заказы</title>
+    <link rel="icon" href="resources/all/favicon.ico">
+    <script src="resources/assets/js/color-modes.js"></script>
+    <link href="resources/assets/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="theme-color" content="#712cf9">
+    <link href="resources/all/dashboard.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <style>.bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none
+    }
 
+    @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+            font-size: 3.5rem
+        }
+    }
+
+    .b-example-divider {
+        width: 100%;
+        height: 3rem;
+        background-color: #0000001a;
+        border: solid rgba(0, 0, 0, .15);
+        border-width: 1px 0;
+        box-shadow: inset 0 .5em 1.5em #0000001a, inset 0 .125em .5em #00000026
+    }
+
+    .b-example-vr {
+        flex-shrink: 0;
+        width: 1.5rem;
+        height: 100vh
+    }
+
+    .bi {
+        vertical-align: -.125em;
+        fill: currentColor
+    }
+
+    .nav-scroller {
+        position: relative;
+        z-index: 2;
+        height: 2.75rem;
+        overflow-y: hidden
+    }
+
+    .nav-scroller .nav {
+        display: flex;
+        flex-wrap: nowrap;
+        padding-bottom: 1rem;
+        margin-top: -1px;
+        overflow-x: auto;
+        text-align: center;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch
+    }
+
+    .btn-bd-primary {
+        --bd-violet-bg: #712cf9;
+        --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
+        --bs-btn-font-weight: 600;
+        --bs-btn-color: var(--bs-white);
+        --bs-btn-bg: var(--bd-violet-bg);
+        --bs-btn-border-color: var(--bd-violet-bg);
+        --bs-btn-hover-color: var(--bs-white);
+        --bs-btn-hover-bg: #6528e0;
+        --bs-btn-hover-border-color: #6528e0;
+        --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+        --bs-btn-active-color: var(--bs-btn-hover-color);
+        --bs-btn-active-bg: #5a23c8;
+        --bs-btn-active-border-color: #5a23c8
+    }
+
+    .bd-mode-toggle {
+        z-index: 1500
+    }
+
+    .bd-mode-toggle .bi {
+        width: 1em;
+        height: 1em
+    }
+
+    .bd-mode-toggle .dropdown-menu .active .bi {
+        display: block !important
+    }
+    </style>
 </head>
-  <body>
-    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
-      <a class="navbar-brand col-sm-3 col-md-2 mr-0" target="_blank" href="http://sir-richard.ru/admin">SIR RICHARD BOSS</a>
-            	
-      <input id="input-search-by-order-conditions" class="search-by-order-no form-control form-control-dark w-100" type="text" placeholder='Введите данные для поиска заказа' aria-label='Введите данные для поиска заказа'>	       
-      <ul class="navbar-nav px-3">
-        <li class="nav-item text-nowrap">
-          <a id="link-search-by-order-no" class="search-by-order-no nav-link" href="#"> Поиск </a>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+    <symbol id="check2" viewBox="0 0 16 16">
+        <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"></path>
+    </symbol>
+    <symbol id="circle-half" viewBox="0 0 16 16">
+        <path d="M8 15A7 7 0 1 0 8 1v14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z"></path>
+    </symbol>
+    <symbol id="moon-stars-fill" viewBox="0 0 16 16">
+        <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"></path>
+        <path d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.734 1.734 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.734 1.734 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.734 1.734 0 0 0 1.097-1.097l.387-1.162zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L13.863.1z"></path>
+    </symbol>
+    <symbol id="sun-fill" viewBox="0 0 16 16">
+        <path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"></path>
+    </symbol>
+</svg>
+<div class="dropdown position-fixed bottom-0 end-0 mb-3 me-3 bd-mode-toggle">
+    <button class="btn btn-bd-primary py-2 dropdown-toggle d-flex align-items-center" id="bd-theme" type="button"
+            aria-expanded="false" data-bs-toggle="dropdown" aria-label="Toggle theme (auto)">
+        <svg class="bi my-1 theme-icon-active" aria-hidden="true">
+            <use href="#circle-half"></use>
+        </svg>
+        <span class="visually-hidden" id="bd-theme-text">Toggle theme</span></button>
+    <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="bd-theme-text">
+        <li>
+            <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light"
+                    aria-pressed="false">
+                <svg class="bi me-2 opacity-50" aria-hidden="true">
+                    <use href="#sun-fill"></use>
+                </svg>
+                Light
+                <svg class="bi ms-auto d-none" aria-hidden="true">
+                    <use href="#check2"></use>
+                </svg>
+            </button>
         </li>
-      </ul>
-    </nav>
-
-    <div class="container-fluid">
-      <div class="row">
-        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-          <div class="sidebar-sticky">
-            <ul class="nav flex-column">
-              <li class="nav-item">
-                <a id="nav-link-home" class="nav-menus-item nav-link active" href="/sir-richard-boss-web/">
-                  <i class="bi bi-house-door text-dark"></i>	              
-                  Главная <span class="sr-only">(current)</span>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a id="nav-link-orders" class="nav-menus-item nav-link" href="/sir-richard-boss-web/orders">                  
-                  <i class="bi bi-files text-dark"></i>
-                  Заказы
-                </a>
-              </li>
-              
-              <li class="nav-item">
-                <a id="nav-link-customers" class="nav-menus-item nav-link" href="#">                  
-                  <i class="bi bi-people text-dark"></i>
-                  Покупатели
-                </a>
-              </li>
-              
-              <li class="nav-item">
-                <a id="nav-link-alarm" class="nav-menus-item nav-link" href="/sir-richard-boss-web/alarm/car">                  
-                  <i class="bi bi-alarm text-dark"></i>
-                  Сигнализация
-                </a>
-              </li>
-              
-              <li class="nav-item">
-                <a id="nav-link-alarm" class="nav-menus-item nav-link" href="/sir-richard-boss-web/vacancies">                  
-                  <i class="bi bi-person-plus text-dark"></i>
-                  Вакансии
-                </a>
-              </li>  
-                            
-            </ul>        
-            
-            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-              <span>Wiki</span>              
-            </h6>
-            <ul class="nav flex-column mb-2">
-             <li class="nav-item">
-                <a id="nav-link-products" class="nav-menus-item nav-link" href="/sir-richard-boss-web/wiki/products/-1">
-                  <i class="bi bi-cart-check text-dark"></i>                  
-                  Товары
-                </a>
-              </li>
-              <li class="nav-item">
-                <a id="nav-link-wiki-stock" class="nav-link" href="/sir-richard-boss-web/wiki/stock-products">
-                  <i class="bi bi-shop-window text-dark"></i>
-                  Склад
-                </a>
-              </li>
-              <!-- 
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="file-text"></span>
-                  Categories
-                </a>
-              </li>
-              
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="file-text"></span>
-                  Delivery types
-                </a>
-              </li>
-              -->
-            </ul>
-            
-            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-              <span>Интеграция</span>              
-            </h6>
-            <ul class="nav flex-column mb-2">
-             <li class="nav-item">
-                <a id="nav-link-ym-products" class="nav-menus-item nav-link" href="/sir-richard-boss-web/wiki/products/ym">
-                  <i class="bi bi-cart-check text-dark"></i>
-                  Товары на "Яндекс-Маркет"
-                </a>
-              </li>
-              
-              <li class="nav-item">
-                <a id="nav-link-ozon-products" class="nav-menus-item nav-link" href="/sir-richard-boss-web/wiki/products/ozon">
-				  <i class="bi bi-cart-check text-dark"></i>
-                  Товары на "Озон"
-                </a>
-              </li>
-              
-            </ul>
-            
-            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-              <span>Отчеты</span>              
-            </h6>
-            
-            <div class="sidebar-sticky">  
-                <ul class="nav flex-column">
-	                <li class="nav-item">	                
-		                <a id="nav-link-report-product-sales" class="nav-link" href="/sir-richard-boss-web/reports/product-sales">
-                  		  <i class="bi bi-printer text-dark"></i>
-		                  Отчет по товарам (за период)
-		                </a>
-	                </li>
-
-                    <li class="nav-item">
-                        <a id="nav-link-report-complex-aggregate-product-sales" class="nav-link" href="/sir-richard-boss-web/reports/complex-aggregate-product-sales">
-                            <i class="bi bi-printer text-dark"></i>
-                            Агрегированный отчет по товарам
-                        </a>
-                    </li>
-
-	                <li class="nav-item">	                
-		                <a id="nav-link-report-product-sales-by-query" class="nav-link" href="/sir-richard-boss-web/reports/product-sales-by-query">
-                          <i class="bi bi-printer text-dark"></i>
-		                  Отчет по товарам (по запросу)
-		                </a>
-	                </li>
-	                
-	                <li class="nav-item">	                
-		                <a id="nav-link-report-product-sales-by-query-name" class="nav-link" href="/sir-richard-boss-web/reports/product-sales-by-query-name">
-                          <i class="bi bi-printer text-dark"></i>
-		                  Отчет по товарам (по условию)
-		                </a>
-	                </li>
-	                
-	                <li class="nav-item">	                
-		                <a id="nav-link-report-sales-funnel" class="nav-link" href="/sir-richard-boss-web/reports/sales-funnel">
-                          <i class="bi bi-printer text-dark"></i>
-		                  Отчет "Воронка продаж"
-		                </a>
-	                </li>
-	                
-                </ul>
-	        </div>            
-          </div>
-        </nav>
-
-        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-        	
-        
-      
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-	<!-- local content -->
-	<h1 class="h2">
-		Заказы
-	</h1>
-
-	<div class="btn-toolbar mb-2 mb-md-0">
-		<div class="btn-group mr-2">
-			<button class="btn btn-sm btn-outline-secondary">Share</button>
-			<button class="btn btn-sm btn-outline-secondary" onclick="onClickConditionsFilter()">Фильтр</button>
-		</div>
-		<button id="button-conditions" type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-toggle="dropdown" data-action="no-action" aria-haspopup="true" aria-expanded="false">
-			<span data-feather="calendar"></span>&nbsp;Текущий месяц
-			 
-		</button>
-		<div class="dropdown-menu" aria-labelledby="button-conditions">
-			      <a href="/sir-richard-boss-web/orders/conditions/period/current-month" id="button-conditions-current-month" class="dropdown-item">Текущий месяц</a>
-			      <a href="/sir-richard-boss-web/orders/conditions/period/prior-month" id="button-conditions-prior-month" class="dropdown-item">Предыдущий месяц</a>
-			      <a href="/sir-richard-boss-web/orders/conditions/period/last-7-days" id="button-conditions-last-7-days" class="dropdown-item">Последние 7 дней</a>
-			      <a href="/sir-richard-boss-web/orders/conditions/period/last-30-days" id="button-conditions-last-30-days" class="dropdown-item">Последние 30 дней</a>
-			      <a href="/sir-richard-boss-web/orders/conditions/period/last-90-days" id="button-conditions-last-90-days" class="dropdown-item">Последние 90 дней</a>
-		</div>
-	</div>
-</div> 
-  
-<!-- alert block ets -->
-
-
-		
-
-		<div>	
-			    <button id="button-crm-load" class="btn btn-sm btn-light" onclick="onClickCrmLoad()" data-toggle="tooltip" data-placement="bottom" title='Загрузить заказы из лидов'>
-			   		<i class="bi bi-arrow-repeat text-dark"></i>
-				</button>
-				<button id="button-statuses-reload" class="btn btn-sm btn-light" onclick="onClickStatusesReload()" data-toggle="tooltip" data-placement="bottom" title='Обновить статусы заказов' >
-					<i class="bi bi-activity text-dark"></i>
-				</button>
-				<button id="button-statuses-today" class="btn btn-sm btn-light" onclick="onClickStatusesToday()" data-toggle="tooltip" data-placement="bottom" title='Заказы за сегодня' >
-			   		<i class="bi bi-calendar-date text-dark"></i>
-				</button>				
-				<button id="button-orders-trouble" class="btn btn-sm btn-light" onclick="onClickTroubleOrdersLoad()" data-toggle="tooltip" data-placement="bottom" title='Проблемные заказы'>
-					<i class="bi bi-exclamation-triangle text-dark"></i>
-				</button>					
-				<button id="button-orders-actualization-postpay" class="btn btn-sm btn-light" onclick="onClickActualizationOrdersPostay()" data-toggle="tooltip" data-placement="bottom" title='Завершение заказов по факту оплаты'>
-					<i class="bi bi-cash-stack text-dark"></i>
-				</button>			
-						
-			    
-			    <button id="button-add" type="button" class="btn btn-sm btn-light" onclick="onClickAddOrder()">Добавить</button>
-			    <button id="button-update" type="button" class="btn btn-sm btn-light" disabled onclick="onClickUpdateOrder()">Изменить</button>
-			    <button id="button-erase" type="button" class="btn btn-sm btn-danger" disabled onclick="onClickEraseOrder()">Удалить</button>
-		
-				<div class="btn-group" role="group">
-				
-					<button id="button-operates" type="button" class="btn btn-sm btn-light dropdown-toggle" disabled data-toggle="dropdown" data-action="no-action" aria-haspopup="true" aria-expanded="false">
-				      Операции
-				    </button>
-				    <div class="dropdown-menu" aria-labelledby="button-operates">
-				      <!-- <a id="button-approve" class="dropdown-item">Подтвердить</a>  -->
-				      <!-- <a id="button-cancel" class="dropdown-item">Отменить</a> -->
-				      <a id="button-change-status" class="dropdown-item">Изменить статус</a>
-				      <a id="button-bill-expired-status" class="dropdown-item">Запрос на актуальность</a>
-				      <div class="dropdown-divider"></div>				      				      				      
-				      <a id="button-clone" class="dropdown-item">Копировать</a>
-				      
-				    </div>
-			    </div>
-				
-			    <div class="btn-group" role="group">
-				    <button id="button-reportes" type="button" class="btn btn-sm btn-light dropdown-toggle" disabled data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				      Документы
-				    </button>
-				    <div class="dropdown-menu" aria-labelledby="button-reportes">
-				      <a id="button-report-bill" class="dropdown-item">Товарный чек</a>
-				      <a id="button-report-sdek-bill" class="dropdown-item">Накладная курьеру</a>
-				      
-				      <div class="dropdown-divider"></div>				      
-				      <a id="button-report-post-russia-postpay" class="dropdown-item">Почта России, наложенный платеж</a>
-				      <a id="button-report-post-russia-address-ticket-postpay" class="dropdown-item">Почта России, ярлык (наложенный платеж)</a>				      
-				      <a id="button-report-post-russia-address-ticket" class="dropdown-item">Почта России, ярлык (предоплата)</a>
-
-				  	  <div class="dropdown-divider"></div>
-					  <a id="button-report-kkm" class="dropdown-item">Кассовый чек</a>				  	  
-					  <a id="button-report-pko" class="dropdown-item">Приходный кассовый ордер</a>
-				      
-				      <div class="dropdown-divider"></div>				      
-				      <a id="button-report-garant-ticket-all" class="dropdown-item">Гарантийный талон (для всех)</a>
-				      <a id="button-report-garant-ticket-sititek" class="dropdown-item">Гарантийный талон (СИТИТЕК)</a>
-				      
-   				  	  <div class="dropdown-divider"></div>
-					  <a id="button-report-return-form" class="dropdown-item">Бланк возврата</a>				  	  
-				      				      
-				    </div>
-			    </div>
-			    
-			    <div class="btn-group" role="group">
-				    <button id="button-exporters" type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				      Экспорт
-				    </button>
-				    <div class="dropdown-menu" aria-labelledby="button-exportes">
-				      <a id="button-export-excel-cdek" class="dropdown-item" href="/sir-richard-boss-web/orders/0/export/excel-cdek">Выгрузка заказов в СДЭК (excel)</a>
-				      <a id="button-export-api-cdek" class="dropdown-item" href="/sir-richard-boss-web/orders/0/export/api-cdek">Выгрузка заказов в СДЭК (интеграция)</a>
-				      <a id="button-export-api-ozon-rocket" class="dropdown-item" href="/sir-richard-boss-web/orders/0/export/api-ozon-rocket">Выгрузка заказов в OZON.Rocket</a>
-				    </div>
-			    </div>			    
-			    	    
-			    <!--  
-			    <button id="button-print" type="button" class="btn btn-sm btn-light" disabled onclick="onClickPrintOrderBill()">Печать</button>
-			    -->
-			    
-			    		
-		</div>
-		<br/>
- 
-          <div class="table-responsive">
-            <table class="table table-striped- table-sm">
-
-            <thead>
-				<tr>
-					<th scope="col"><input id="checkbox-union" type="checkbox"></th>
-					<th scope="col">#</th>							
-					<th scope="col">Дата</th>
-					<th scope="col">Категория</th>
-					<th scope="col">Клиент</th>		
-					<th scope="col">Телефон</th>
-					<th scope="col">Адрес</th>
-					<th scope="col">Доставка</th>				
-					<th scope="col">Итого</th>					
-					<th scope="col">Трэккод</th>				
-				</tr>
-			</thead>
-			<tbody>
-							
-				<tr class="table-">				
-		 				<td class="table-success"><input data-delivery-code="CDEK_PVZ_TYPICAL" data-delivery-category="CDEK" id="checkbox-11027" type="checkbox" data-no="14601"></td>
-						<td id="td-id-11027" class="td-id table-danger" scope="row" data-id="11027"><a href="/sir-richard-boss-web/orders/11027/orders">14601</a></td>							
-						
-						<td class="table-danger" data-original-title="счет на оплату, доставляется" data-container="body" data-toggle="tooltip" data-placement="bottom" title="">
-							14.05.2024
-						</td>						
-						<td>отпугиватели птиц</td>						
-						<td data-original-title="" data-toggle="tooltip" data-placement="bottom" title="">АО "ПРОДО ПТИЦЕФАБРИКА КАЛУЖСКАЯ"</td>
-						<td>(000) 000-11-83</td>
-						<td data-original-title="Калуга" data-toggle="tooltip" data-placement="bottom" title="">Калуга</td>
-						<td>СДЭК, ПВЗ</td>
-						<td class="text-right" 
-							data-original-title="Доход: 111 550,00 ₽, 
-								Закупка: 69 000,00 ₽, 
-								Прибыль: 33 362,50 ₽, 
-								Постоплата: 115 500,00 ₽" 
-								data-container="body" data-toggle="tooltip" data-placement="bottom" title="">				
-						  111 550,00 ₽					
-						<td id="td-trackcode-11027" class="text-center">1553729632З</td>
-						
-							
-				</tr>			
-				
-	         </tbody>
-	         </table>
-            
-
- </main>
-      </div>
-    </div>    
-    
-                  
-            
+        <li>
+            <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark"
+                    aria-pressed="false">
+                <svg class="bi me-2 opacity-50" aria-hidden="true">
+                    <use href="#moon-stars-fill"></use>
+                </svg>
+                Dark
+                <svg class="bi ms-auto d-none" aria-hidden="true">
+                    <use href="#check2"></use>
+                </svg>
+            </button>
+        </li>
+        <li>
+            <button type="button" class="dropdown-item d-flex align-items-center active" data-bs-theme-value="auto"
+                    aria-pressed="true">
+                <svg class="bi me-2 opacity-50" aria-hidden="true">
+                    <use href="#circle-half"></use>
+                </svg>
+                Auto
+                <svg class="bi ms-auto d-none" aria-hidden="true">
+                    <use href="#check2"></use>
+                </svg>
+            </button>
+        </li>
+    </ul>
 </div>
-
+<svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+    <symbol id="calendar3" viewBox="0 0 16 16">
+        <path d="M14 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM1 3.857C1 3.384 1.448 3 2 3h12c.552 0 1 .384 1 .857v10.286c0 .473-.448.857-1 .857H2c-.552 0-1-.384-1-.857V3.857z"></path>
+        <path d="M6.5 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"></path>
+    </symbol>
+    <symbol id="cart" viewBox="0 0 16 16">
+        <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"></path>
+    </symbol>
+    <symbol id="chevron-right" viewBox="0 0 16 16">
+        <path fill-rule="evenodd"
+              d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"></path>
+    </symbol>
+    <symbol id="door-closed" viewBox="0 0 16 16">
+        <path d="M3 2a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v13h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V2zm1 13h8V2H4v13z"></path>
+        <path d="M9 9a1 1 0 1 0 2 0 1 1 0 0 0-2 0z"></path>
+    </symbol>
+    <symbol id="file-earmark" viewBox="0 0 16 16">
+        <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z"></path>
+    </symbol>
+    <symbol id="file-earmark-text" viewBox="0 0 16 16">
+        <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"></path>
+        <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"></path>
+    </symbol>
+    <symbol id="gear-wide-connected" viewBox="0 0 16 16">
+        <path d="M7.068.727c.243-.97 1.62-.97 1.864 0l.071.286a.96.96 0 0 0 1.622.434l.205-.211c.695-.719 1.888-.03 1.613.931l-.08.284a.96.96 0 0 0 1.187 1.187l.283-.081c.96-.275 1.65.918.931 1.613l-.211.205a.96.96 0 0 0 .434 1.622l.286.071c.97.243.97 1.62 0 1.864l-.286.071a.96.96 0 0 0-.434 1.622l.211.205c.719.695.03 1.888-.931 1.613l-.284-.08a.96.96 0 0 0-1.187 1.187l.081.283c.275.96-.918 1.65-1.613.931l-.205-.211a.96.96 0 0 0-1.622.434l-.071.286c-.243.97-1.62.97-1.864 0l-.071-.286a.96.96 0 0 0-1.622-.434l-.205.211c-.695.719-1.888.03-1.613-.931l.08-.284a.96.96 0 0 0-1.186-1.187l-.284.081c-.96.275-1.65-.918-.931-1.613l.211-.205a.96.96 0 0 0-.434-1.622l-.286-.071c-.97-.243-.97-1.62 0-1.864l.286-.071a.96.96 0 0 0 .434-1.622l-.211-.205c-.719-.695-.03-1.888.931-1.613l.284.08a.96.96 0 0 0 1.187-1.186l-.081-.284c-.275-.96.918-1.65 1.613-.931l.205.211a.96.96 0 0 0 1.622-.434l.071-.286zM12.973 8.5H8.25l-2.834 3.779A4.998 4.998 0 0 0 12.973 8.5zm0-1a4.998 4.998 0 0 0-7.557-3.779l2.834 3.78h4.723zM5.048 3.967c-.03.021-.058.043-.087.065l.087-.065zm-.431.355A4.984 4.984 0 0 0 3.002 8c0 1.455.622 2.765 1.615 3.678L7.375 8 4.617 4.322zm.344 7.646.087.065-.087-.065z"></path>
+    </symbol>
+    <symbol id="graph-up" viewBox="0 0 16 16">
+        <path fill-rule="evenodd"
+              d="M0 0h1v15h15v1H0V0Zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07Z"></path>
+    </symbol>
+    <symbol id="house-fill" viewBox="0 0 16 16">
+        <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L8 2.207l6.646 6.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5Z"></path>
+        <path d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293l6-6Z"></path>
+    </symbol>
+    <symbol id="list" viewBox="0 0 16 16">
+        <path fill-rule="evenodd"
+              d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"></path>
+    </symbol>
+    <symbol id="people" viewBox="0 0 16 16">
+        <path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1h8Zm-7.978-1A.261.261 0 0 1 7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002a.274.274 0 0 1-.014.002H7.022ZM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM6.936 9.28a5.88 5.88 0 0 0-1.23-.247A7.35 7.35 0 0 0 5 9c-4 0-5 3-5 4 0 .667.333 1 1 1h4.216A2.238 2.238 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816ZM4.92 10A5.493 5.493 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0Zm3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"></path>
+    </symbol>
+    <symbol id="plus-circle" viewBox="0 0 16 16">
+        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"></path>
+    </symbol>
+    <symbol id="puzzle" viewBox="0 0 16 16">
+        <path d="M3.112 3.645A1.5 1.5 0 0 1 4.605 2H7a.5.5 0 0 1 .5.5v.382c0 .696-.497 1.182-.872 1.469a.459.459 0 0 0-.115.118.113.113 0 0 0-.012.025L6.5 4.5v.003l.003.01c.004.01.014.028.036.053a.86.86 0 0 0 .27.194C7.09 4.9 7.51 5 8 5c.492 0 .912-.1 1.19-.24a.86.86 0 0 0 .271-.194.213.213 0 0 0 .039-.063v-.009a.112.112 0 0 0-.012-.025.459.459 0 0 0-.115-.118c-.375-.287-.872-.773-.872-1.469V2.5A.5.5 0 0 1 9 2h2.395a1.5 1.5 0 0 1 1.493 1.645L12.645 6.5h.237c.195 0 .42-.147.675-.48.21-.274.528-.52.943-.52.568 0 .947.447 1.154.862C15.877 6.807 16 7.387 16 8s-.123 1.193-.346 1.638c-.207.415-.586.862-1.154.862-.415 0-.733-.246-.943-.52-.255-.333-.48-.48-.675-.48h-.237l.243 2.855A1.5 1.5 0 0 1 11.395 14H9a.5.5 0 0 1-.5-.5v-.382c0-.696.497-1.182.872-1.469a.459.459 0 0 0 .115-.118.113.113 0 0 0 .012-.025L9.5 11.5v-.003a.214.214 0 0 0-.039-.064.859.859 0 0 0-.27-.193C8.91 11.1 8.49 11 8 11c-.491 0-.912.1-1.19.24a.859.859 0 0 0-.271.194.214.214 0 0 0-.039.063v.003l.001.006a.113.113 0 0 0 .012.025c.016.027.05.068.115.118.375.287.872.773.872 1.469v.382a.5.5 0 0 1-.5.5H4.605a1.5 1.5 0 0 1-1.493-1.645L3.356 9.5h-.238c-.195 0-.42.147-.675.48-.21.274-.528.52-.943.52-.568 0-.947-.447-1.154-.862C.123 9.193 0 8.613 0 8s.123-1.193.346-1.638C.553 5.947.932 5.5 1.5 5.5c.415 0 .733.246.943.52.255.333.48.48.675.48h.238l-.244-2.855zM4.605 3a.5.5 0 0 0-.498.55l.001.007.29 3.4A.5.5 0 0 1 3.9 7.5h-.782c-.696 0-1.182-.497-1.469-.872a.459.459 0 0 0-.118-.115.112.112 0 0 0-.025-.012L1.5 6.5h-.003a.213.213 0 0 0-.064.039.86.86 0 0 0-.193.27C1.1 7.09 1 7.51 1 8c0 .491.1.912.24 1.19.07.14.14.225.194.271a.213.213 0 0 0 .063.039H1.5l.006-.001a.112.112 0 0 0 .025-.012.459.459 0 0 0 .118-.115c.287-.375.773-.872 1.469-.872H3.9a.5.5 0 0 1 .498.542l-.29 3.408a.5.5 0 0 0 .497.55h1.878c-.048-.166-.195-.352-.463-.557-.274-.21-.52-.528-.52-.943 0-.568.447-.947.862-1.154C6.807 10.123 7.387 10 8 10s1.193.123 1.638.346c.415.207.862.586.862 1.154 0 .415-.246.733-.52.943-.268.205-.415.39-.463.557h1.878a.5.5 0 0 0 .498-.55l-.001-.007-.29-3.4A.5.5 0 0 1 12.1 8.5h.782c.696 0 1.182.497 1.469.872.05.065.091.099.118.115.013.008.021.01.025.012a.02.02 0 0 0 .006.001h.003a.214.214 0 0 0 .064-.039.86.86 0 0 0 .193-.27c.14-.28.24-.7.24-1.191 0-.492-.1-.912-.24-1.19a.86.86 0 0 0-.194-.271.215.215 0 0 0-.063-.039H14.5l-.006.001a.113.113 0 0 0-.025.012.459.459 0 0 0-.118.115c-.287.375-.773.872-1.469.872H12.1a.5.5 0 0 1-.498-.543l.29-3.407a.5.5 0 0 0-.497-.55H9.517c.048.166.195.352.463.557.274.21.52.528.52.943 0 .568-.447.947-.862 1.154C9.193 5.877 8.613 6 8 6s-1.193-.123-1.638-.346C5.947 5.447 5.5 5.068 5.5 4.5c0-.415.246-.733.52-.943.268-.205.415-.39.463-.557H4.605z"></path>
+    </symbol>
+    <symbol id="search" viewBox="0 0 16 16">
+        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"></path>
+    </symbol>
+</svg>
+<header class="navbar sticky-top bg-dark flex-md-nowrap p-0 shadow" data-bs-theme="dark">
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-white" href="#">SIR RICHARD BOSS</a>
+    <input class="form-control form-control-dark w-100 p-1" type="text" placeholder="Search" aria-label="Search">
+    <ul class="navbar-nav px-3">
+        <li class="nav-item text-nowrap">
+            <a class="nav-link" href="#">Найти</a>
+        </li>
+    </ul>
+    <ul class="navbar-nav flex-row d-md-none">
+        <li class="nav-item text-nowrap">
+            <button class="nav-link px-3 text-white" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSearch" aria-controls="navbarSearch" aria-expanded="false"
+                    aria-label="Toggle search">
+                <svg class="bi" aria-hidden="true">
+                    <use xlink:href="#search"></use>
+                </svg>
+            </button>
+        </li>
+        <li class="nav-item text-nowrap">
+            <button class="nav-link px-3 text-white" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <svg class="bi" aria-hidden="true">
+                    <use xlink:href="#list"></use>
+                </svg>
+            </button>
+        </li>
+    </ul>
+    <div id="navbarSearch" class="navbar-search w-100 collapse">
+        <input class="form-control w-100 rounded-0 border-0" type="text" placeholder="Search" aria-label="Search">
+    </div>
+</header>
 <div class="container-fluid">
-	<div class="row">
-		  		<div class="col-sm-9">
-		  		</div>
-   				<div class="col-sm-3">
-   				
-	   				<ul class="list-group-flush">
-					    <li class="list-group-item text-right">Доход за период:&nbsp;<strong>111 550,00 ₽</strong></li>
-					    <li class="list-group-item text-right">Закуплено за период:&nbsp;<strong>69 000,00 ₽</strong></li>
-					    <li class="list-group-item text-right">Расходы на рекламу:&nbsp;<strong>0,00 ₽</strong></li>
-					    
-					    
-					    <li class="list-group-item text-right">Прибыль за период:&nbsp;<strong>33 362,50 ₽</strong></li>
-					    <li class="list-group-item text-right">Постоплата за период:&nbsp;
-				         	<strong 
-				         		data-container="body" data-toggle="tooltip" data-placement="bottom" title="" 
-				         		data-original-title="Наложенный платеж СДЭК: 0,00 ₽, 
-				         							 Наложенный платеж Почта России: 0,00 ₽,
-				         							 Постоплата по организациям: 115 500,00 ₽
-				         							 Постоплата по Яндекс.Маркет: 0,00 ₽
-				         							 Постоплата по ОЗОН: 0,00 ₽
-				         							 Постоплата по OZON.Rocket: 0,00 ₽
-				         							 Постоплата по Yandex.GO: 0,00 ₽				         							 
-				         							 ">
-				         		115 500,00 ₽
-				         	</strong>
-				         </li>
-					    
-					    <li class="list-group-item text-right">Лидов:&nbsp;1&nbsp;</li>
-					    <li class="list-group-item text-right">Из них действующие заказы:&nbsp;<strong>1&nbsp;</strong></li>
-					    <li class="list-group-item text-right">Конверсия в заказ:&nbsp;
-					    	<strong
-					    		data-container="body" data-toggle="tooltip" data-placement="bottom" title="" 
-				         		data-original-title="Конверсия в заявку:&nbsp;0,00 %">
-				         			0,00 %&nbsp;
-				         	</strong>
-				         </li>				    
-					</ul>  				
-   				
-   				</div>
-	</div>
-</div>
+    <div class="row">
+        <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+            <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
+                <div class="offcanvas-header"><h5 class="offcanvas-title" id="sidebarMenuLabel">SIR RICHARD BOSS</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu"
+                            aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
+                    <ul class="nav flex-column">
+                        <li class="nav-item"><a class="nav-link d-flex align-items-center gap-2 active"
+                                                aria-current="page" href="#">
+                            <svg class="bi" aria-hidden="true">
+                                <use xlink:href="#house-fill"></use>
+                            </svg>
+                            Главная
+                        </a></li>
+                        <li class="nav-item"><a class="nav-link d-flex align-items-center gap-2" href="#">
+                            <svg class="bi" aria-hidden="true">
+                                <use xlink:href="#file-earmark"></use>
+                            </svg>
+                            Заказы
+                        </a></li>
+                        <li class="nav-item"><a class="nav-link d-flex align-items-center gap-2" href="#">
+                            <svg class="bi" aria-hidden="true">
+                                <use xlink:href="#cart"></use>
+                            </svg>
+                            Товары
+                        </a></li>
+                        <li class="nav-item"><a class="nav-link d-flex align-items-center gap-2" href="#">
+                            <svg class="bi" aria-hidden="true">
+                                <use xlink:href="#people"></use>
+                            </svg>
+                            Покупатели
+                        </a></li>
+                        <li class="nav-item"><a class="nav-link d-flex align-items-center gap-2" href="#">
+                            <svg class="bi" aria-hidden="true">
+                                <use xlink:href="#graph-up"></use>
+                            </svg>
+                            Отчеты
+                        </a></li>
+                        <li class="nav-item"><a class="nav-link d-flex align-items-center gap-2" href="#">
+                            <svg class="bi" aria-hidden="true">
+                                <use xlink:href="#puzzle"></use>
+                            </svg>
+                            Интеграции
+                        </a></li>
+                    </ul>
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-body-secondary text-uppercase">
+                        <span>Отчеты</span> <a class="link-secondary" href="#" aria-label="Add a new report">
+                        <svg class="bi" aria-hidden="true">
+                            <use xlink:href="#plus-circle"></use>
+                        </svg>
+                    </a></h6>
+                    <ul class="nav flex-column mb-auto">
+                        <li class="nav-item"><a class="nav-link d-flex align-items-center gap-2" href="#">
+                            <svg class="bi" aria-hidden="true">
+                                <use xlink:href="#file-earmark-text"></use>
+                            </svg>
+                            Отчет по товарам за период
+                        </a></li>
+                        <li class="nav-item"><a class="nav-link d-flex align-items-center gap-2" href="#">
+                            <svg class="bi" aria-hidden="true">
+                                <use xlink:href="#file-earmark-text"></use>
+                            </svg>
+                            Агрегированный отчет по товарам
+                        </a></li>
+                        <li class="nav-item"><a class="nav-link d-flex align-items-center gap-2" href="#">
+                            <svg class="bi" aria-hidden="true">
+                                <use xlink:href="#file-earmark-text"></use>
+                            </svg>
+                            Отчет по товарам (по запросу)
+                        </a></li>
+                        <li class="nav-item"><a class="nav-link d-flex align-items-center gap-2" href="#">
+                            <svg class="bi" aria-hidden="true">
+                                <use xlink:href="#file-earmark-text"></use>
+                            </svg>
+                            Отчет "воронка продаж"
+                        </a></li>
+                    </ul>
+                    <hr class="my-3">
+                    <ul class="nav flex-column mb-auto">
+                        <li class="nav-item"><a class="nav-link d-flex align-items-center gap-2" href="#">
+                            <svg class="bi" aria-hidden="true">
+                                <use xlink:href="#gear-wide-connected"></use>
+                            </svg>
+                            Настройки
+                        </a></li>
+                        <li class="nav-item"><a class="nav-link d-flex align-items-center gap-2" href="#">
+                            <svg class="bi" aria-hidden="true">
+                                <use xlink:href="#door-closed"></use>
+                            </svg>
+                            Выйти
+                        </a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Dashboard</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <div class="btn-group me-2">
+                        <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+                    </div>
 
-<!-- Modal -->
-<div class="modal fade" id="confirm-modal-erase" tabindex="-1" role="dialog" aria-labelledby="confirm-modal-title" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="confirm-modal-title-erase">Удалить данные</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>Внимание! Данные по заказу будут удалены навсегда. Продолжить выполнение операции?</p>
-      </div>
-      <div class="modal-footer">
-        <button id="button-modal-confirm-cancel-1" type="button" class="btn btn-light" data-dismiss="modal">Отмена</button>
-        <button id="button-modal-confirm-ok-1" type="button" class="btn btn-primary">OK</button>
-      </div>
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1" type="button" id="btnGroupQueryFilterPeriod" data-bs-toggle="dropdown" aria-expanded="false">
+                            <svg class="bi" aria-hidden="true">
+                                <use xlink:href="#calendar3"></use>
+                            </svg>
+                            30 Дней
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="btnGroupQueryFilterPeriod">
+                            <li><a class="dropdown-item" href="#">Сегодня</a></li>
+                            <li><a class="dropdown-item" href="#">30 дней</a></li>
+                            <li><a class="dropdown-item" href="#">90 дней</a></li>
+
+                            <li><a class="dropdown-item" href="#">Текущий месяц</a></li>
+                            <li><a class="dropdown-item" href="#">Текущий квартал</a></li>
+                            <li><a class="dropdown-item" href="#">Последние 50 записей</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                You should check in on some of those fields below.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+            <div class="mb-3">
+                <button id="button-crm-load"
+                        class="btn btn-sm btn-light"
+                        onclick="onClickCrmLoad()"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="bottom"
+                        title="Загрузить заказы из лидов">
+                    <i class="bi bi-arrow-repeat text-dark"></i>
+                </button>
+                <button id="button-statuses-reload"
+                        class="btn btn-sm btn-light"
+                        onclick="onClickStatusesReload()"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="bottom"
+                        title="Обновить статусы заказов">
+                    <i class="bi bi-activity text-dark"></i>
+                </button>
+                <button id="button-statuses-today"
+                        class="btn btn-sm btn-light"
+                        onclick="onClickStatusesToday()"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="bottom"
+                        title="Заказы за сегодня">
+                    <i class="bi bi-calendar-date text-dark"></i>
+                </button>
+                <button id="button-orders-trouble"
+                        class="btn btn-sm btn-light"
+                        onclick="onClickTroubleOrdersLoad()"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="bottom"
+                        title="Проблемные заказы">
+                    <i class="bi bi-exclamation-triangle text-dark"></i>
+                </button>
+                <button id="button-orders-actualization-postpay"
+                        class="btn btn-sm btn-light"
+                        onclick="onClickActualizationOrdersPostay()"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="bottom"
+                        title="Завершение заказов по факту оплаты">
+                    <i class="bi bi-cash-stack text-dark"></i>
+                </button>
+
+                <button type="button" class="btn btn-primary btn-sm">Add</button>
+                <button type="button" class="btn btn-light btn-sm">Edit</button>
+                <button type="button" class="btn btn-danger btn-sm">Delete</button>
+
+                <div class="btn-group" role="group">
+                    <button class="btn btn-light dropdown-toggle btn-sm" type="button" id="dropdownMenuButton1"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                        Actions
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <li><a class="dropdown-item" href="#">Action</a></li>
+                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="table-responsive small">
+
+                <table class="table table-striped- table-sm">
+
+                    <thead>
+                    <tr>
+                        <th scope="col"><input id="checkbox-union" type="checkbox"></th>
+                        <th scope="col">#</th>
+                        <th scope="col">Дата</th>
+                        <th scope="col">Категория</th>
+                        <th scope="col">Клиент</th>
+                        <th scope="col">Телефон</th>
+                        <th scope="col">Адрес</th>
+                        <th scope="col">Доставка</th>
+                        <th scope="col">Итого</th>
+                        <th scope="col">Трэккод</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr class="table-">
+                        <td class="table-success"><input data-delivery-code="CDEK_PVZ_TYPICAL" data-delivery-category="CDEK" id="checkbox-11027" type="checkbox" data-no="14601"></td>
+                        <td id="td-id-11027" class="td-id table-danger" scope="row" data-id="11027"><a href="/sir-richard-boss-web/orders/11027/orders">14601</a></td>
+
+                        <td class="table-danger" data-original-title="счет на оплату, доставляется" data-container="body" data-toggle="tooltip" data-placement="bottom" title="">
+                            14.05.2024
+                        </td>
+                        <td>отпугиватели птиц</td>
+                        <td data-original-title="" data-toggle="tooltip" data-placement="bottom" title="">АО "ПРОДО ПТИЦЕФАБРИКА КАЛУЖСКАЯ"</td>
+                        <td>(000) 000-11-83</td>
+                        <td data-original-title="Калуга" data-toggle="tooltip" data-placement="bottom" title="">Калуга</td>
+                        <td>СДЭК, ПВЗ</td>
+                        <td class="text-right"
+                            data-original-title="Доход: 111 550,00 ₽,
+								Закупка: 69 000,00 ₽,
+								Прибыль: 33 362,50 ₽,
+								Постоплата: 115 500,00 ₽"
+                            data-container="body" data-toggle="tooltip" data-placement="bottom" title="">
+                            111 550,00 ₽
+                        <td id="td-trackcode-11027" class="text-center">1553729632З</td>
+
+
+                    </tr>
+
+                    <tr class="table-success">
+                        <td><input data-delivery-code="CDEK_PVZ_TYPICAL" data-delivery-category="CDEK" id="checkbox-11028" type="checkbox" data-no="14601"></td>
+                        <td id="td-id-11028" class="td-id" scope="row" data-id="11027"><a href="/sir-richard-boss-web/orders/11028/orders">14602</a></td>
+
+                        <td data-original-title="счет на оплату, доставляется" data-container="body" data-toggle="tooltip" data-placement="bottom" title="">
+                            14.05.2024
+                        </td>
+                        <td>отпугиватели птиц</td>
+                        <td data-original-title="" data-toggle="tooltip" data-placement="bottom" title="">Рассказов Леонид Анатольевич</td>
+                        <td>(000) 000-11-83</td>
+                        <td data-original-title="Калуга" data-toggle="tooltip" data-placement="bottom" title="">Каширское Шоссе д.2 к.1</td>
+                        <td>СДЭК, ПВЗ</td>
+                        <td class="text-right"
+                            data-original-title="Доход: 111 550,00 ₽,
+								Закупка: 69 000,00 ₽,
+								Прибыль: 33 362,50 ₽,
+								Постоплата: 115 500,00 ₽"
+                            data-container="body" data-toggle="tooltip" data-placement="bottom" title="">
+                            111 550,00 ₽
+                        <td id="td-trackcode-11028" class="text-center">15537296324</td>
+
+
+                    </tr>
+
+
+                    </tbody>
+                </table>
+            </div>
+            <p class="text-end">Прибыль за текущий месяц: <strong>1 125 124.30&nbsp;</strong></p>
+            <p class="text-end">Заказов: <strong>132&nbsp;</strong></p>
+
+            <canvas class="1my-4 1w-100" id="myChart1" width="900" height="380">
+
+            </canvas>
+        </main>
     </div>
-  </div>
 </div>
-
-<div class="modal fade" id="confirm-modal-actualization-postpay" tabindex="-1" role="dialog" aria-labelledby="confirm-modal-title" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="confirm-modal-title-actualization-postpay">Актуализация заказов по факту оплаты</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>Внимание! Изменение необратимо. Полученные заказы ОЗОН будут переведены в статус "ЗАВЕРШЕНО" т.к. оплата получена на наш счет. Продолжить выполнение операции?</p>
-      </div>
-      <div class="modal-footer">
-        <button id="button-modal-confirm-cancel-2" type="button" class="btn btn-light" data-dismiss="modal">Отмена</button>
-        <button id="button-modal-confirm-ok-2" type="button" class="btn btn-primary">OK</button>
-      </div>
-    </div>
-  </div>
-</div>
-   
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <!--  
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script>window.jQuery || document.write('<script src="/sir-richard-boss-web/resources/client/assets/js/vendor/jquery-3.3.1.min.js"><\/script>')</script>
-    -->
-    <script src="resources/assets/js/vendor/jquery-3.3.1.min.js" ></script>
-    <script src="resources/assets/js/vendor/popper.min.js"></script>
-    <script src="resources/js/bootstrap.min.js"></script>
-    
-    <script src="resources/js/bootstrap-datepicker.min.js"></script>
-	<script src="resources/js/locales/bootstrap-datepicker.ru.min.js"></script>
-	<script src="resources/js/datatables.js"></script>
-	
-	<script src="resources/js/jquery.mask.min.js"></script>
-
-    <!-- CDEK -->    
-    <script type="text/javascript" src="https://www.cdek.ru/website/edostavka/template/js/widjet.js" id="ISDEKscript" ></script>
-    
-    <script>     
-      //feather.replace();
-	  String.prototype.replaceAll = function(search, replace) {
-		  return this.split(search).join(replace);
-	  }
-	  String.prototype.toNumber = function() {
-		  return Number(this.replace(',00', '').replace(',', '.').replace(new RegExp('[^0-9,\.]'), ''));
-		  
-	  }	  
-	  String.prototype.toFloat = function() {
-		  return parseFloat(this.replace(',00', '').replace(',', '.'));
-	  }
-	  String.prototype.cleanTrashString = function() {
-		    var output = "";
-		    for (var i = 0; i < this.length; i++) {
-		        if (this.charCodeAt(i) <= 127) {
-		            output += this.charAt(i);
-		        }
-		    }
-		    return output;
-	  }
-	  
-	  Number.prototype.formatMoney = function(c, d, t) {
-		    var n = this, 
-		    c = isNaN(c = Math.abs(c)) ? 2 : c, 
-		    d = d == undefined ? "." : d, 
-		    t = t == undefined ? "," : t, 
-		    s = n < 0 ? "-" : "", 
-		    i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))), 
-		    j = (j = i.length) > 3 ? j % 3 : 0;
-		    
-		    if (n > 100000) {
-		    	return n;
-		    }		    
-		   return s + (j ? i.substr(0, j) + t : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, ' 1' + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : '');
-	  }
-	  
-	  function searchOrderByConditions() {
-		  var searchOrderNo = $('#input-search-by-order-conditions').val();
-		  var searchHref = '/sir-richard-boss-web/orders/show/by-conditions/' + searchOrderNo;
-		  document.location.href = searchHref;	
-	  }
-	  
-      $(function () {
-			$('[data-toggle="tooltip"]').tooltip();			
-			$('[data-toggle="popover"]').popover();		
-			
-			$('.input-mask-time').mask('00:00');
-			//$('.input-mask-phone').mask('(000) 000-00-00');
-			$(".datepicker").datepicker({
-				format: "dd.mm.yyyy",
-			    weekStart: 1,
-			    todayBtn: "linked",
-			    language: "ru",
-			    orientation: "auto",
-			    autoclose: true,
-			    todayHighlight: true
-			});
-		});
-      $(".nav-menus-item").removeClass('active');
-  	  $('.needs-validation').attr('novalidate', '');
-	  $('.form-control-required').attr('required', '');
-	  	  
-	  
-	  $('.search-by-order-no').on('keypress',function(e) {
-		  if(e.which == 13) {
-			  searchOrderByConditions();
-		  }
-		});
-	  
-	  $('#link-search-by-order-no').click(function() {
-		  searchOrderByConditions();
-	  });
-	  
-
-    </script>    
-
-<!-- local java script -->
-<script>
-		$('#nav-link-orders').addClass('active');
-		$('#nav-link-orders i').removeClass('text-dark').addClass('text-info');
-				
-		function onClickCrmLoad() {
-			window.location = '/sir-richard-boss-web/orders/import-crm';			
-		}
-		
-		function onClickStatusesReload() {
-			window.location = '/sir-richard-boss-web/orders/statuses/reload';			
-		}
-		
-		function onClickStatusesToday() {
-			window.location = '/sir-richard-boss-web/orders/statuses/today';			
-		}
-		
-		function onClickTroubleOrdersLoad() {
-			window.location = '/sir-richard-boss-web/orders/trouble-load';			
-		}
-		
-		function onClickActualizationOrdersPostay() {
-			$('#confirm-modal-actualization-postpay').modal({keyboard: false});				
-		}
-		
-		function onClickConditionsFilter() {
-			window.location = '/sir-richard-boss-web/orders/conditions/filter';			
-		}		
-		function onClickAddOrder() {
-			console.log('/sir-richard-boss-web/orders/add');			
-			window.location = '/sir-richard-boss-web/orders/add/orders';
-		}
-		function onClickUpdateOrder() {
-			console.log('onClickUpdateOrder: ' + $('#button-update').attr('href'));
-			window.location = $('#button-update').attr("href");			
-		}		
-		function onClickEraseOrder() {
-			console.log('onClickEraseOrder: ' + $('#button-erase').attr('href-data'));
-			$('#confirm-modal-erase').modal({keyboard: false});
-		}
-		function onClickApproveOrder() {
-			console.log('onClickApproveOrder: ' + $('#button-approve').attr('href'));
-			window.location = $('#button-approve').attr("href");
-		}
-		function onClickCancelOrder() {
-			console.log('onClickCancelOrder: ' + $('#button-cancel').attr('href'));
-			window.location = $('#button-cancel').attr("href");		
-		}			
-		function onClickChangeStatusOrder() {
-			console.log('onClickChangeStatusOrder: ' + $('#button-change-status').attr('href'));
-			//this.disabled = true;
-			window.location = $('#button-change-status').attr("href");	
-		}
-		
-		function onClickBillExpiredStatus() {
-			console.log('onClickBillExpiredStatus: ' + $('#button-bill-expired-status').attr('href'));			
-			window.location = $('#button-bill-expired-status').attr("href");	
-		}
-				
-		function onClickPrintOrderBill() {
-			console.log('onClickPrintOrderBill: ' + $('#button-report-bill').attr('href'));
-			window.location = $('#button-report-bill').attr("href");			
-		}
-		function onClickPrintOrderKKM() {
-			console.log('onClickPrintOrderKKM: ' + $('#button-report-kkm').attr('href'));
-			window.location = $('#button-report-kkm').attr("href");			
-		}
-		function onClickPrintOrderPKO() {
-			console.log('onClickPrintOrderPKO: ' + $('#button-report-pko').attr('href'));
-			window.location = $('#button-report-pko').attr("href");			
-		}			
-		function onClickPrintOrderSdekBill() {
-			console.log('onClickPrintOrderSdekBill: ' + $('#button-report-sdek-bill').attr('href'));
-			window.location = $('#button-report-sdek-bill').attr("href");			
-		}
-		function onClickPrintOrderPostRussiaAddressTicket() {
-			console.log('onClickPrintOrderPostRussiaAddressTicket: ' + $('#button-report-post-russia-address-ticket').attr('href'));
-			window.location = $('#button-report-post-russia-address-ticket').attr("href");			
-		}
-		function onClickPrintOrderPostRussiaAddressTicketWithPostpay() {
-			console.log('onClickPrintOrderPostRussiaAddressTicketWithPostpay: ' + $('#button-report-post-russia-address-ticket-postpay').attr('href'));
-			window.location =  $('#button-report-post-russia-address-ticket-postpay').attr("href");			
-		}
-		function onClickPrintOrderPostRussiaPostpay() {
-			console.log('onClickPrintOrderPostRussiaPostpay: ' + $('#button-report-post-russia-postpay').attr('href'));
-			window.location = $('#button-report-post-russia-postpay').attr("href");			
-		}
-		function onClickPrintGarantTicketAll() {
-			console.log('onClickPrintGarantTicketAll: ' + $('#button-report-garant-ticket-all').attr('href'));
-			window.location = $('#button-report-garant-ticket-all').attr("href");			
-		}
-		function onClickPrintGarantTicketAll() {
-			console.log('onClickPrintGarantTicketSititek: ' + $('#button-report-garant-ticket-sititek').attr('href'));
-			window.location = $('#button-report-garant-ticket-sititek').attr("href");			
-		}
-		
-		function onClickPrintOrderReturnForm() {
-			console.log('onClickPrintReturnForm: ' + $('#button-report-return-form').attr('href'));
-			window.location = $('#button-report-return-form').attr("href");			
-		}
-		
-		function onClickExportCdekExcel() {
-			console.log('onClickExpotCdekExcel: ' + $('#button-export-excel-cdek').attr('href'));
-			window.location = $('#button-export-excel-cdek').attr("href");			
-		}
-		
-		function onClickExportCdekApi() {
-			console.log('onClickExpotCdekApi: ' + $('#button-export-api-cdek').attr('href'));
-			window.location = $('#button-export-api-cdek').attr("href");			
-		}
-		
-		function onClickExportOzonRocketApi() {
-			console.log('onClickExportOzonRocketApi: ' + $('#button-export-api-ozon-rocket').attr('href'));
-			window.location = $('#button-export-api-ozon-rocket').attr("href");			
-		}
-				
-		$(document).ready(function() {
-			var $checkboxes = $('input[type="checkbox"]');
-			$checkboxes.click(function() {
-				var orderId,
-					updateHref,
-					deleteHref,
-					cloneHref,
-					approveHref,
-					cancelHref,
-					changeStatusHref,
-					bidExpiredHref,
-					eraseHref,
-					reportOrderBillHref,
-					reportOrderSdekBillHref,
-					reportPostRussiaAddressTicketHref,
-					reportPostRussiaAddressTicketPostpayHref,
-					reportPostRussiaPostpayHref,
-					reportGarantTicketAllHref,
-					reportGarantTicketSititekHref,
-					reportOrderKKMHref,
-					reportOrderPKOHref,
-					reportOrderReturnFormHref,
-					exportExcelCdekHref,
-					exportApiCdekHref,
-					exportApiOzonRocketHref;
-					
-				if (this.id == 'checkbox-union') {
-					console.log('checkbox-union: ' + $('#checkbox-union').prop('checked')); 
-					$checkboxes.prop('checked', $('#checkbox-union').prop('checked'));
-					
-					$('#button-update').attr('disabled', '').attr('href', '#');        	    	
-    				$('#button-delete').attr('disabled', '').attr('href', '#');    				
-    				$('#button-clone').attr('disabled', '').attr('href', '#');
-    				$('#button-operates').attr('disabled', '');    				
-    				$('#button-reportes').attr('disabled', '');
-    				
-    				exportExcelCdekHref = '/sir-richard-boss-web/orders/' + 0 + '/export/excel-cdek';
-    				exportApiCdekHref = '/sir-richard-boss-web/orders/' + 0 + '/export/api-cdek';
-    				exportApiOzonRocketHref = '/sir-richard-boss-web/orders/' + 0 + '/export/api-ozon-rocket';
-    				
-    				$('#button-export-excel-cdek').attr('href', exportExcelCdekHref);    				
-    				$('#button-export-api-cdek').attr('href', exportApiCdekHref);
-    				$('#button-export-api-ozon-rocket').attr('href', exportApiOzonRocketHref);
-    				
-					return;
-				}
-				if ($checkboxes.filter(':checked').length == 0) {
-					$('#button-update').attr('disabled', '').attr('href', '#');        	    	
-    				$('#button-delete').attr('disabled', '').attr('href', '#');
-    				$('#button-clone').attr('disabled', '').attr('href', '#');    				
-    				$('#button-operates').attr('disabled', '');    				
-    				$('#button-reportes').attr('disabled', '');
-    				//$('#button-exporters').attr('disabled', '');
-				}	
-				
-				$checkboxes.filter(':checked').not(this).prop('checked', false);
-				
-				if ($(this).prop('checked')) {
-					
-					var deliveryCode = $(this).attr('data-delivery-code');
-					var deliveryCategory = $(this).attr('data-delivery-category');
-					
-					$('#button-exporters').attr('disabled', '');
-					$('#button-export-excel-cdek').prop('hidden', true);
-					$('#button-export-api-cdek').prop('hidden', true);					
-					$('#button-export-api-ozon-rocket').prop('hidden', true);					
-					if (deliveryCategory == "OZON Rocket") {
-						$('#button-exporters').removeAttr('disabled');    
-						$('#button-export-api-ozon-rocket').prop('hidden', false);			
-					} else if (deliveryCategory == "CDEK" || deliveryCode == "PICKUP") {
-						$('#button-exporters').removeAttr('disabled');    
-						$('#button-export-excel-cdek').prop('hidden', false);
-						$('#button-export-api-cdek').prop('hidden', false);		
-					}
-					
-    				orderId = this.id.substring(9, this.id.length);    				
-        	    	updateHref = '/sir-richard-boss-web/orders/' + orderId + '/update/orders';        	    	        	    	
-        	    	cloneHref = '/sir-richard-boss-web/orders/' + orderId + '/clone';
-        	    	deleteHref = '/sir-richard-boss-web/orders/' + orderId + '/delete';
-        	    	cloneHref = '/sir-richard-boss-web/orders/' + orderId + '/clone';        	    	
-        	    	
-        	    	changeStatusHref = '/sir-richard-boss-web/orders/' + orderId + '/change-status/orders';
-        	    	bidExpiredHref = '/sir-richard-boss-web/orders/' + orderId + '/bill-expired-status/orders';
-        	    	eraseHref = '/sir-richard-boss-web/orders/' + orderId + '/erase';
-        	    	
-        	    	reportOrderBillHref = '/sir-richard-boss-web/orders/' + orderId + '/report/bill';
-        	    	reportOrderSdekBillHref = '/sir-richard-boss-web/orders/' + orderId + '/report/sdek-bill';
-        	    	reportPostRussiaAddressTicketHref = '/sir-richard-boss-web/orders/' + orderId + '/report/post-russia-address-ticket';
-        	    	reportPostRussiaAddressTicketPostpayHref = '/sir-richard-boss-web/orders/' + orderId + '/report/post-russia-address-ticket-postpay';
-        	    	reportPostRussiaPostpayHref = '/sir-richard-boss-web/orders/' + orderId + '/report/post-russia-postpay';
-        	    	
-        	    	reportGarantTicketAllHref = '/sir-richard-boss-web/orders/' + orderId + '/report/garant-ticket-all';
-        	    	reportGarantTicketSititekHref = '/sir-richard-boss-web/orders/' + orderId + '/report/garant-ticket-sititek';
-        	    	
-        	    	reportOrderKKMHref = '/sir-richard-boss-web/orders/' + orderId + '/report/kkm';
-        	    	reportOrderPKOHref = '/sir-richard-boss-web/orders/' + orderId + '/report/pko';
-        	    	
-        	    	reportOrderReturnFormHref = '/sir-richard-boss-web/orders/' + orderId + '/report/return-form';
-        	    	
-        	    	exportExcelCdekHref = '/sir-richard-boss-web/orders/' + orderId + '/export/excel-cdek';
-        	    	exportApiCdekHref = '/sir-richard-boss-web/orders/' + orderId + '/export/api-cdek';
-        	    	exportApiOzonRocketHref = '/sir-richard-boss-web/orders/' + orderId + '/export/api-ozon-rocket';
-        	    	        	    	      	           	    	        	    	        	    	
-        	    	console.log(updateHref);
-        	    	console.log(deleteHref);
-        	    	console.log(changeStatusHref);
-        	    	console.log(bidExpiredHref);
-        	    	console.log(eraseHref);
-        	    	console.log(reportOrderBillHref);
-        	    	        	    	
-        	    	$('#button-update').removeAttr('disabled').attr('href', updateHref);        	    	             	    	
-    				$('#button-erase').removeAttr('disabled').attr('href', eraseHref);
-    				
-    				$('#button-operates').removeAttr('disabled');
-    
-    				$('#button-change-status').attr('href', changeStatusHref);
-    				$('#button-bill-expired-status').attr('href', bidExpiredHref);
-    				
-    				$('#button-delete').attr('href', deleteHref);
-    				$('#button-clone').attr('href', cloneHref);
-    				    				
-    				$('#button-reportes').removeAttr('disabled');
-    				//$('#button-exporters').removeAttr('disabled');    			
-    				$('#button-report-bill').attr('href', reportOrderBillHref);
-    				$('#button-report-kkm').attr('href', reportOrderKKMHref);
-    				$('#button-report-pko').attr('href', reportOrderPKOHref);    				
-    				
-    				$('#button-report-sdek-bill').attr('href', reportOrderSdekBillHref);
-    				$('#button-report-post-russia-address-ticket').attr('href', reportPostRussiaAddressTicketHref);
-    				$('#button-report-post-russia-address-ticket-postpay').attr('href', reportPostRussiaAddressTicketPostpayHref);    				
-    				$('#button-report-post-russia-postpay').attr('href', reportPostRussiaPostpayHref);
-    				
-    				$('#button-report-garant-ticket-all').attr('href', reportGarantTicketAllHref);
-    				$('#button-report-garant-ticket-sititek').attr('href', reportGarantTicketSititekHref);
-    				
-    				$('#button-report-return-form').attr('href', reportOrderReturnFormHref);
-    				
-    				$('#button-export-excel-cdek').attr('href', exportExcelCdekHref);
-    				$('#button-export-api-cdek').attr('href', exportApiCdekHref);
-    				$('#button-export-api-ozon-rocket').attr('href', exportApiOzonRocketHref);
-    				    				
-    				    				  		
-    			} else {
-    				exportExcelCdekHref = '/sir-richard-boss-web/orders/' + 0 + '/export/excel-cdek';
-    				exportApiCdekHref = '/sir-richard-boss-web/orders/' + 0 + '/export/api-cdek';
-    				exportApiOzonRocketHref = '/sir-richard-boss-web/orders/' + 0 + '/export/api-ozon-rocket';
-    			}
-    	    });
-		});	
-		
-		$( 'td.td-id' ).mouseover(function() {			
-			var orderId = $(this).attr('data-id');
-			var tdOrderNo = $(this);			
-			var orderContainer = { id: orderId }		
-			
-			if (tdOrderNo.attr("data-toggle") == "tooltip") {
-				//console.log('AJAX YET}: ' + tdOrderNo.attr('title'));	
-				return;
-			}			
-			$.ajax({
-				type: 'POST',
-				contentType: 'application/json',
-				url: '/sir-richard-boss-web/ajax/orders/marketplace-info',
-				data : JSON.stringify(orderContainer),
-				dataType: 'json',
-				timeout: 100000,
-				success: function(data) {
-					console.log('SUCCESS: ', data.msg);	
-					if (data.msg != '') {
-						if ($('#td-trackcode-' + orderId).text().trim() == '') {
-							$('#td-trackcode-' + orderId).text(data.msg);	
-						} 
-						tdOrderNo.attr('title', data.msg).attr('data-toggle', 'tooltip').tooltip('show');
-						setTimeout(function() {							
-							var tdOrderNo = $(this);
-							tdOrderNo.tooltip('hide');
-							$('.td-id').tooltip('hide');
-						}, 4000);
-					} else {
-						tdOrderNo.attr('title', data.msg).attr('data-toggle', 'tooltip').tooltip('hide');
-					}					
-				},
-				error: function(e) {
-					console.log('ERROR: ', e);
-					},
-				done: function(e) {
-					console.log('DONE');					
-				}
-			});		
-		}).mouseout(function() {
-			  var tdOrderNo = $(this);
-			  tdOrderNo.tooltip('hide');
-			  $('.td-id').tooltip('hide');		  
-		});		
-		
-		$('#button-modal-confirm-ok-1').click(function() {
-			var eraseHref = $('#button-erase').attr('href');
-			console.log('#modal-confirm-ok click: ' + eraseHref);
-			document.location.href = eraseHref;							
-		});
-		
-		$('#button-modal-confirm-ok-2').click(function() {
-			window.location = '/sir-richard-boss-web/orders/actualization-postpay';	
-		});
-	</script>  	 
-  
-  </body>
-  
-<!-- Footer -->
-<footer class="page-footer font-small gray-dark pt-12">
-	<div class="container-fluid">			
-			<div class="row">
-				<label class="col-sm-2"></label>				
-				<div class="col-sm-5">© 2022 Copyright:<a target="blank" href="https://pribormaster.ru/">&nbsp;www.pribormaster.ru</a>&nbsp;|&nbsp;sir-richard-boss-web&nbsp;|&nbsp;4.3.0-SNAPSHOT</div>
-			</div>
-	</div>
- </footer>
+<script src="resources/assets/dist/js/bootstrap.bundle.min.js" class="astro-vvvwv3sm"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.2/dist/chart.umd.js"
+        integrity="sha384-eI7PSr3L1XLISH8JdDII5YN/njoSsxfbrkCTnJrzXt+ENP5MOVBxD+l6sEG4zoLp" crossorigin="anonymous"
+        class="astro-vvvwv3sm"></script>
+<script src="resources/all/dashboard.js" class="astro-vvvwv3sm"></script>
+</body>
 </html>
-
-

@@ -11,16 +11,17 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+
 @Slf4j
 @CrossOrigin
 @RequiredArgsConstructor
-@RequestMapping(ControllerConstants.INDEX)
-@Tag(name = "home", description = "Index controller")
+@RequestMapping(ControllerConstants.ROOT)
+@Tag(name = "root", description = "Root controller")
 @Controller
-public class IndexController extends BaseController{
+public class RootController extends BaseController{
 
-    @GetMapping("/")
-    public String index(final Model model) {
+    @GetMapping()
+    public String root(final Model model) {
 
         populateDefaultModel(model);
         model.addAttribute("customPageTitle", getMessageSource().getMessage("index.header", null,

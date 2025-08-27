@@ -7,6 +7,7 @@ public final class ControllerConstants {
     public static final String API_DOCS = "/v3/api-docs";
     public static final String SWAGGER = "/swagger-ui";
 
+    public static final String ROOT = "/";
     public static final String BASE_API = "/web";
 
     public static final String INDEX = BASE_API + "/index";

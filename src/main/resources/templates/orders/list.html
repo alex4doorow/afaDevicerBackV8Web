@@ -22,13 +22,12 @@
                 </div>
 
                 <div th:replace="fragments/header-left-panel :: header-left-panel"></div>
-
             </div>
         </div>
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2" th:text="#{main.menus.left.orders}"></h1>
+                <h1 class="h2" th:text="#{orders.header}"></h1>
                 <div class="btn-toolbar mb-2 mb-md-0">
                     <div class="btn-group me-2">
                         <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
@@ -43,136 +42,239 @@
                     </button>
                 </div>
             </div>
+            <div th:if="${msg}" class="alert alert-dismissible fade show"
+                 th:class="'alert alert-' + ${css} + ' alert-dismissible fade show'"
+                 role="alert">
+                <span th:text="${msg}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <div class="mb-3">
+                <button id="button-crm-load"
+                        class="btn btn-sm btn-light"
+                        onclick="onClickCrmLoad()"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="bottom"
+                        title="Загрузить заказы из лидов">
+                    <i class="bi bi-arrow-repeat text-dark"></i>
+                </button>
+                <button id="button-statuses-reload"
+                        class="btn btn-sm btn-light"
+                        onclick="onClickStatusesReload()"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="bottom"
+                        title="Обновить статусы заказов">
+                    <i class="bi bi-activity text-dark"></i>
+                </button>
+                <button id="button-statuses-today"
+                        class="btn btn-sm btn-light"
+                        onclick="onClickStatusesToday()"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="bottom"
+                        title="Заказы за сегодня">
+                    <i class="bi bi-calendar-date text-dark"></i>
+                </button>
+                <button id="button-orders-trouble"
+                        class="btn btn-sm btn-light"
+                        onclick="onClickTroubleOrdersLoad()"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="bottom"
+                        title="Проблемные заказы">
+                    <i class="bi bi-exclamation-triangle text-dark"></i>
+                </button>
+                <button id="button-orders-actualization-postpay"
+                        class="btn btn-sm btn-light"
+                        onclick="onClickActualizationOrdersPostay()"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="bottom"
+                        title="Завершение заказов по факту оплаты">
+                    <i class="bi bi-cash-stack text-dark"></i>
+                </button>
+
+                <button type="button" class="btn btn-primary btn-sm" th:text="#{main.btn.add}"></button>
+                <button type="button" class="btn btn-light btn-sm" th:text="#{main.btn.update}"></button>
+                <button type="button" class="btn btn-danger btn-sm" th:text="#{main.btn.delete}"></button>
+
+                <div class="btn-group" role="group">
+                    <button th:text="#{main.btn.operations}"
+                            class="btn btn-light dropdown-toggle btn-sm"
+                            type="button"
+                            id="dropdownMenuButton1"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <li><a class="dropdown-item" href="#" th:text="#{main.btn.statusData}"></a></li>
+                        <li><a class="dropdown-item" href="#" th:text="#{main.btn.queryActualData}"></a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#" th:text="#{main.btn.cloneData}"></a></li>
+                    </ul>
+                </div>
+            </div>
             <div class="table-responsive small">
+
                 <table class="table table-striped table-sm">
                     <thead>
                     <tr>
+                        <th scope="col"><input id="checkbox-union" type="checkbox"></th>
                         <th scope="col">#</th>
-                        <th scope="col">Header</th>
-                        <th scope="col">Header</th>
-                        <th scope="col">Header</th>
-                        <th scope="col">Header</th>
+                        <th scope="col">Дата</th>
+                        <th scope="col">Категория</th>
+                        <th scope="col">Клиент</th>
+                        <th scope="col">Телефон</th>
+                        <th scope="col">Адрес</th>
+                        <th scope="col">Доставка</th>
+                        <th scope="col">Итого</th>
+                        <th scope="col">Трэккод</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>1,001</td>
-                        <td>random</td>
-                        <td>data</td>
-                        <td>placeholder</td>
-                        <td>text</td>
-                    </tr>
-                    <tr>
-                        <td>1,002</td>
-                        <td>placeholder</td>
-                        <td>irrelevant</td>
-                        <td>visual</td>
-                        <td>layout</td>
-                    </tr>
-                    <tr>
-                        <td>1,003</td>
-                        <td>data</td>
-                        <td>rich</td>
-                        <td>dashboard</td>
-                        <td>tabular</td>
-                    </tr>
-                    <tr>
-                        <td>1,003</td>
-                        <td>information</td>
-                        <td>placeholder</td>
-                        <td>illustrative</td>
-                        <td>data</td>
-                    </tr>
-                    <tr>
-                        <td>1,004</td>
-                        <td>text</td>
-                        <td>random</td>
-                        <td>layout</td>
-                        <td>dashboard</td>
-                    </tr>
-                    <tr>
-                        <td>1,005</td>
-                        <td>dashboard</td>
-                        <td>irrelevant</td>
-                        <td>text</td>
-                        <td>placeholder</td>
-                    </tr>
-                    <tr>
-                        <td>1,006</td>
-                        <td>dashboard</td>
-                        <td>illustrative</td>
-                        <td>rich</td>
-                        <td>data</td>
-                    </tr>
-                    <tr>
-                        <td>1,007</td>
-                        <td>placeholder</td>
-                        <td>tabular</td>
-                        <td>information</td>
-                        <td>irrelevant</td>
-                    </tr>
-                    <tr>
-                        <td>1,008</td>
-                        <td>random</td>
-                        <td>data</td>
-                        <td>placeholder</td>
-                        <td>text</td>
-                    </tr>
-                    <tr>
-                        <td>1,009</td>
-                        <td>placeholder</td>
-                        <td>irrelevant</td>
-                        <td>visual</td>
-                        <td>layout</td>
-                    </tr>
-                    <tr>
-                        <td>1,010</td>
-                        <td>data</td>
-                        <td>rich</td>
-                        <td>dashboard</td>
-                        <td>tabular</td>
-                    </tr>
-                    <tr>
-                        <td>1,011</td>
-                        <td>information</td>
-                        <td>placeholder</td>
-                        <td>illustrative</td>
-                        <td>data</td>
-                    </tr>
-                    <tr>
-                        <td>1,012</td>
-                        <td>text</td>
-                        <td>placeholder</td>
-                        <td>layout</td>
-                        <td>dashboard</td>
-                    </tr>
-                    <tr>
-                        <td>1,013</td>
-                        <td>dashboard</td>
-                        <td>irrelevant</td>
-                        <td>text</td>
-                        <td>visual</td>
-                    </tr>
-                    <tr>
-                        <td>1,014</td>
-                        <td>dashboard</td>
-                        <td>illustrative</td>
-                        <td>rich</td>
-                        <td>data</td>
-                    </tr>
-                    <tr>
-                        <td>1,015</td>
-                        <td>random</td>
-                        <td>tabular</td>
-                        <td>information</td>
-                        <td>text</td>
+                        <tr th:each="order : ${orders}" th:class="|table-${order.presentation.union}|">
+                        <!-- Чекбокс -->
+                        <td th:class="|table-${order.presentation.orderId}|">
+                            <input type="checkbox"
+                                   th:id="'checkbox-' + ${order.id}"
+                                   th:data-no="${order.orderNum}">
+                        </td>
+
+                        <!-- ID заказа -->
+                        <td th:id="'td-id-' + ${order.id}"
+                            th:class="|td-id table-${order.presentation.orderNo}|"
+                            th:data-id="${order.id}">
+                            <a th:href="@{/web/orders/{id}/show(id=${order.id})}"
+                               th:text="${order.orderNum}"></a>
+                        </td>
+
+                        <!-- Дата -->
+                        <td th:class="|table-${order.presentation.orderDate}|"
+                            th:text="${#temporals.format(order.orderDate, 'dd.MM.yyyy')}"></td>
+
+                        <!-- Категория -->
+                        <td th:text="${order.productCategory != null ? order.productCategory.name : '-'}"></td>
+
+                        <!-- Клиент -->
+                        <td th:text="${order.customer != null ? order.customer.shortName : '-'}"></td>
+
+                        <!-- Телефон -->
+                        <td th:text="${order.customer != null ? order.customer.company.phoneNumber : '-'}"></td>
+
+                        <!-- Адрес -->
+                        <td th:text="${order.delivery != null ? order.delivery.address.addressLine : '-'}"></td>
+
+                        <!-- Доставка -->
+                        <td th:text="${order.delivery != null ? order.delivery.deliveryType.annotation : '-'}"></td>
+
+                        <!-- Итого -->
+<!--                        <td class="text-right" th:text="${order.items != null ? #numbers.formatDecimal(order.items.sum(price), 0, 'POINT', 2, 'COMMA') + ' ₽' : '—'}"></td>-->
+<!--                        <td class="text-right" th:text="${order.items != null ? '100.00' + ' ₽' : '—'}"></td>-->
+
+                        <td class="text-right"
+                            th:text="${order.amounts != null && order.amounts[T(com.afa.core.enums.AmountTypes).TOTAL] != null ? #numbers.formatDecimal(order.amounts[T(com.afa.core.enums.AmountTypes).TOTAL], 1, 'POINT', 2, 'COMMA') + ' ₽' : '—'}">
+                        </td>
+
+
+
+                        <!-- Трэккод -->
+                        <td id="td-trackcode" class="text-center" th:text="${order.delivery != null ? order.delivery.trackCode : '-'}"></td>
                     </tr>
                     </tbody>
                 </table>
+
+
             </div>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-9">
+                    </div>
+                    <div class="col-sm-3">
+
+                        <ul class="list-group list-group-flush">
+                            <!-- BILL -->
+                            <li class="list-group-item text-end">
+                                <span th:text="#{orders.table.footers.amount.bill}"></span>
+                                &nbsp;<strong th:text="${#numbers.formatCurrency(totalAmounts[T(com.afa.core.enums.AmountTypes).BILL])}"></strong>
+                            </li>
+
+                            <!-- SUPPLIER -->
+                            <li class="list-group-item text-end">
+                                <span th:text="#{orders.table.footers.amount.supplier}"></span>
+                                &nbsp;<strong th:text="${#numbers.formatCurrency(totalAmounts[T(com.afa.core.enums.AmountTypes).SUPPLIER])}"></strong>
+                            </li>
+
+                            <!-- ADVERT -->
+                            <li class="list-group-item text-end">
+                                <span th:text="#{orders.table.footers.amount.advert}"></span>
+                                &nbsp;<strong th:text="${#numbers.formatCurrency(totalAmounts[T(com.afa.core.enums.AmountTypes).ADVERT_BUDGET])}"></strong>
+                            </li>
+
+                            <!-- MARGIN -->
+                            <li class="list-group-item text-end">
+                                <span th:text="#{orders.table.footers.amount.margin}"></span>
+                                &nbsp;<strong th:text="${#numbers.formatCurrency(totalAmounts[T(com.afa.core.enums.AmountTypes).MARGIN])}"></strong>
+                            </li>
+
+                            <!-- POSTPAY + Tooltip -->
+                            <li class="list-group-item text-end">
+                                <span th:text="#{orders.table.footers.amount.postpay}"></span>
+                                &nbsp;
+<!--                                <strong-->
+<!--                                        data-bs-toggle="tooltip"-->
+<!--                                        data-bs-placement="bottom"-->
+<!--                                        th:attr="title=-->
+<!--                            #{orders.table.footers.amount.postpayCDEK} + ' ' + ${#numbers.formatCurrency(totalAmounts[T(com.afa.core.enums.AmountTypes).POSTPAY_CDEK])} + ', '-->
+<!--                            + #{orders.table.footers.amount.postpayPost} + ' ' + ${#numbers.formatCurrency(totalAmounts[T(com.afa.core.enums.AmountTypes).POSTPAY_POST])} + ', '-->
+<!--                            + #{orders.table.footers.amount.postpayCompany} + ' ' + ${#numbers.formatCurrency(totalAmounts[T(com.afa.core.enums.AmountTypes).POSTPAY_COMPANY])} + ', '-->
+<!--                            + #{orders.table.footers.amount.postpayYandexMarket} + ' ' + ${#numbers.formatCurrency(totalAmounts[T(com.afa.core.enums.AmountTypes).POSTPAY_YANDEX_MARKET])} + ', '-->
+<!--                            + #{orders.table.footers.amount.postpayOzonMarket} + ' ' + ${#numbers.formatCurrency(totalAmounts[T(com.afa.core.enums.AmountTypes).POSTPAY_OZON_MARKET])} + ', '-->
+<!--                            + #{orders.table.footers.amount.postpayYandexGo} + ' ' + ${#numbers.formatCurrency(totalAmounts[T(com.afa.core.enums.AmountTypes).POSTPAY_YANDEX_GO])}">-->
+<!--                                    <span th:text="${#numbers.formatCurrency(totalAmounts[T(com.afa.core.enums.AmountTypes).POSTPAY])}"></span>-->
+<!--                                </strong>-->
+                            </li>
+
+                            <!-- TOTAL ORDERS -->
+                            <li class="list-group-item text-end">
+                                <span th:text="#{orders.table.footers.count.total}"></span>
+                                &nbsp;<span th:text="${orders.size()}"></span>&nbsp;
+                            </li>
+
+                            <!-- REAL ORDERS -->
+                            <li class="list-group-item text-end">
+                                <span th:text="#{orders.table.footers.count.real}"></span>
+                                &nbsp;<strong th:text="${#numbers.formatDecimal(totalAmounts[T(com.afa.core.enums.AmountTypes).COUNT_REAL_ORDERS], 0, 'COMMA', 0, 'POINT')}"></strong>
+                            </li>
+
+                            <!-- CONVERSION APPROVED + Tooltip -->
+                            <li class="list-group-item text-end">
+                                <span th:text="#{orders.table.footers.percent.conversionApproved}"></span>
+                                &nbsp;
+                                <strong
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="bottom"
+                                        th:attr="title=${#messages.msg('orders.table.footers.percent.conversionBid')} + ' ' + ${#numbers.formatPercent(amountConversionBid, 1, 2)}">
+                                </strong>
+                                <span th:text="${#numbers.formatPercent(amountConversionApproved, 1, 2)}"></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
             <canvas class="1my-4 1w-100" id="myChart1" width="900" height="380">
 
             </canvas>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         </main>
     </div>
 </div>
