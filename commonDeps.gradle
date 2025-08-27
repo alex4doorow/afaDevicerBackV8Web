@@ -42,6 +42,9 @@ dependencies {
     // Thymeleaf шаблонизатор
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
+    // afa lib modules
+    implementation 'com.afa.core:afa-core:8.0.1-SNAPSHOT'
+
     // Tests
     testImplementation "org.springframework.boot:spring-boot-starter-test"
 

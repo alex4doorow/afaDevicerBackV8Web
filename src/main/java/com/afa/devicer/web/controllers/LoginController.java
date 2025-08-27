@@ -15,7 +15,7 @@ import java.io.IOException;
 @CrossOrigin
 @RequiredArgsConstructor
 @Controller
-@SuppressWarnings("PMD")
+@SuppressWarnings({"PMD.LawOfDemeter"})
 public class LoginController {
 
     @Value("${keycloak.login.url}")
