@@ -1,0 +1,57 @@
+application:
+  version: "@appVersion@"
+debug: false
+server:
+  port: 8100
+  tomcat:
+    threads:
+      max: 10
+  error:
+    whitelabel:
+      enabled: false
+spring:
+  thymeleaf:
+    cache: false
+    enabled: true
+    prefix: classpath:/templates/
+    suffix: .html
+    encoding: UTF-8
+    mode: HTML
+  messages:
+    basename: messages/messages
+    encoding: UTF-8
+    fallback-to-system-locale: false
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: devicer-web
+            client-secret: ${W_1}
+            scope:
+              - openid
+              - profile
+              - email
+            authorization-grant-type: authorization_code
+            redirect-uri: ${W_2}
+            client-authentication-method: client_secret_post
+        provider:
+          keycloak:
+            authorization-uri:
+            token-uri: ${W_3}
+            user-info-uri: ${W_4}
+            jwk-set-uri: ${W_5}
+            user-name-attribute: preferred_username
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+    org.springframework.boot.context: DEBUG
+keycloak:
+  login:
+    url: ${W_6}
+  logout:
+    url: ${W_7}
+app:
+  backend:
+    url: ${BACKEND_URL}
