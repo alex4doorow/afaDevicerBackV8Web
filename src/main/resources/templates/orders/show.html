@@ -44,7 +44,6 @@
             </div>
 
             <div class="d-flex justify-content-start flex-wrap flex-md-nowrap align-items-start">
-
                 <h1 class="h4">
                     <span th:text="#{order.show.headers.h1(${order.viewNum}, ${#temporals.format(order.orderDate, 'dd.MM.yyyy')})}">
                         Заказ № XXX от XX.XX.XXXX
@@ -61,15 +60,20 @@
 
             <div class="d-flex gap-2">
                 <button id="btn-update-order" type="button" class="btn btn-primary"
+                        th:data-update-url="@{/web/orders/{id}/update/{listType}(id=${order.id}, listType=${listType})}"
                         th:text="#{main.btn.updateData}"></button>
 
                 <button id="btn-show-order" type="button" class="btn btn-light"
+                        th:data-show-url="@{/web/orders/{id}/{listType}(id=${order.id}, listType=${listType})}"
                         th:text="#{main.btn.showData}" disabled></button>
 
-                <button id="btn-status-order" type="button" class="btn btn-light"
-                        th:text="#{main.btn.statusData}"></button>
+                <a class="btn btn-light"
+                   th:href="@{/web/orders/{id}/change-status/{listType}(id=${order.id}, listType=${listType})}"
+                   th:text="#{main.btn.statusData}">
+                </a>
 
                 <button id="btn-clone-order" type="button" class="btn btn-light"
+                        th:data-clone-url="@{/web/orders/{id}/clone(id=${order.id})}"
                         th:text="#{main.btn.cloneData}"></button>
             </div>
             <br>
@@ -143,6 +147,32 @@
                     <div class="container-fluid">
                         <h5 th:text="#{order.show.tabs.order}">Заказ</h5>
                         <!-- Здесь будет контент для вкладки "Заказ" -->
+
+                        <div class="row">
+                            <label class="col-sm-3" th:text="#{order.show.fields.id}"></label>
+                            <div class="col-sm-9" th:text="${order.id}"></div>
+                        </div>
+
+                        <div class="row">
+                            <label class="col-sm-3" th:text="#{order.show.fields.no}"></label>
+                            <div class="col-sm-9">
+                                <strong th:text="${order.viewNum}"></strong>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <label class="col-sm-3" th:text="#{order.show.fields.orderDate}"></label>
+                            <div class="col-sm-9">
+                                <strong th:text="${#temporals.format(order.orderDate, 'dd.MM.yyyy')}"></strong>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <label class="col-sm-3" th:text="#{order.show.fields.status}"></label>
+                            <div class="col-sm-9">
+                                <strong th:text="${order.status.annotation}"></strong>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -151,10 +181,82 @@
                      id="customer"
                      role="tabpanel"
                      aria-labelledby="customer-tab">
+
                     <div class="container-fluid">
                         <h5 th:text="#{order.show.tabs.customer}">Клиент</h5>
                         <!-- Контент вкладки "Клиент" -->
+                        <br/>
+
+                        <div class="row">
+                            <label class="col-sm-3"
+                                   th:text="#{order.show.customer.fields.type}"></label>
+                            <div class="col-sm-9" th:text="${order.customer.type.longName}"></div>
+                        </div>
+
+                        <div th:if="${order.customer.type == T(com.afa.core.enums.CustomerTypes).PERSON || order.customer.type == T(com.afa.core.enums.CustomerTypes).FOREIGNER_PERSON}">
+
+                            <div class="row">
+                                <label class="col-sm-3"
+                                       th:text="#{order.show.customer.fields.lastName}"></label>
+                                <div class="col-sm-9" th:text="${order.customer.lastName}"></div>
+                            </div>
+
+                            <div class="row">
+                                <label class="col-sm-3"
+                                       th:text="#{order.show.customer.fields.firstName}"></label>
+                                <div class="col-sm-9">
+                                    <strong th:text="${order.customer.firstName}"></strong>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <label class="col-sm-3"
+                                       th:text="#{order.show.customer.fields.middleName}"></label>
+                                <div class="col-sm-9" th:text="${order.customer.middleName}"></div>
+                            </div>
+
+                            <div class="row">
+                                <label class="col-sm-3"
+                                       th:text="#{order.show.customer.fields.telephone}"></label>
+                                <div class="col-sm-9">
+                                    <strong th:text="${order.customer.phoneNumber}"></strong>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <label class="col-sm-3"
+                                       th:text="#{order.show.customer.fields.email}"></label>
+                                <div class="col-sm-9" th:text="${order.customer.email}"></div>
+                            </div>
+                        </div>
+
+                        <div th:if="${order.customer.type == T(com.afa.core.enums.CustomerTypes).COMPANY || order.customer.type == T(com.afa.core.enums.CustomerTypes).BUSINESSMAN || order.customer.type == T(com.afa.core.enums.CustomerTypes).FOREIGNER_COMPANY}">
+
+                            <h6 th:text="#{order.show.customer.company.header}"></h6>
+                            <div class="row">
+                                <label class="col-sm-3"
+                                       th:text="#{order.show.customer.fields.company.inn}"></label>
+                                <div class="col-sm-9" th:text="${order.customer.inn}"></div>
+                            </div>
+                            <div class="row">
+                                <label class="col-sm-3"
+                                       th:text="#{order.show.customer.fields.company.shortName}"></label>
+                                <div class="col-sm-9">
+                                    <strong th:text="${order.customer.shortName}"></strong>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label class="col-sm-3"
+                                       th:text="#{order.show.customer.fields.company.longName}"></label>
+                                <div class="col-sm-9 mb-4" th:text="${order.customer.longName}"></div>
+                            </div>
+
+                            <h6 th:text="#{order.show.customer.company.contact.header}"></h6>
+
+
+                        </div>
                     </div>
+
                 </div>
 
                 <!-- Вкладка Доставка -->
@@ -165,6 +267,12 @@
                     <div class="container-fluid">
                         <h5 th:text="#{order.show.tabs.delivery}">Доставка</h5>
                         <!-- Контент вкладки "Доставка" -->
+                        <div class="row">
+                            <label class="col-sm-3" th:text="#{order.show.delivery.fields.trackCode}"></label>
+                            <div class="col-sm-9">
+                                <strong th:text="${order.delivery.trackCode}"></strong>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -173,13 +281,60 @@
                      id="amount"
                      role="tabpanel"
                      aria-labelledby="amount-tab">
+
                     <div class="container-fluid">
-                        <h5 th:text="#{order.show.tabs.calculate}">Доставка</h5>
-                        <!-- Контент вкладки "Доставка" -->
+                        <h5 th:text="#{order.show.tabs.calculate}"></h5>
+                        <!-- Контент вкладки "Calculate" -->
+                        <br/>
+
+                        <div class="row">
+                            <label class="col-sm-2" th:text="#{order.show.calculate.fields.totalAmount}"></label>
+                            <div class="col-sm-2 text-end">
+                                <strong th:text="${#numbers.formatCurrency(order.amounts[T(com.afa.core.enums.AmountTypes).TOTAL_WITH_DELIVERY])}"></strong>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <label class="col-sm-2" th:text="#{order.show.calculate.fields.billAmount}"></label>
+                            <div class="col-sm-2 text-end">
+                                <strong th:text="${#numbers.formatCurrency(order.amounts[T(com.afa.core.enums.AmountTypes).BILL])}"></strong>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <label class="col-sm-2" th:text="#{order.show.calculate.fields.supplierAmount}"></label>
+                            <div class="col-sm-2 text-end">
+                                <strong th:text="${#numbers.formatCurrency(order.amounts[T(com.afa.core.enums.AmountTypes).SUPPLIER])}"></strong>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <label class="col-sm-2" th:text="#{order.show.calculate.fields.marginAmount}"></label>
+                            <div class="col-sm-2 text-end">
+                                <strong th:text="${#numbers.formatCurrency(order.amounts[T(com.afa.core.enums.AmountTypes).MARGIN])}"></strong>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <label class="col-sm-2" th:text="#{order.show.calculate.fields.postpayAmount}"></label>
+                            <div class="col-sm-2 text-end">
+                                <strong th:text="${#numbers.formatCurrency(order.amounts[T(com.afa.core.enums.AmountTypes).POSTPAY])}"></strong>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <label class="col-sm-2"
+                                   th:text="#{order.show.calculate.fields.postpayType}">
+                                Postpay type
+                            </label>
+                            <div class="col-sm-2 text-end"
+                                 th:text="${order.paymentType.annotation}">
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
-
         </main>
     </div>
 </div>

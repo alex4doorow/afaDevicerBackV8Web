@@ -1,12 +1,13 @@
 package com.afa.devicer.web.controllers;
 
 import com.afa.core.dto.employee.EmployeeSettingsResponse;
-import com.afa.core.dto.orders.OrderPagedFilter;
-import com.afa.core.dto.orders.OrderPagedResponse;
-import com.afa.core.dto.orders.OrderSingleResponse;
+import com.afa.core.dto.orders.*;
 import com.afa.core.enums.AmountTypes;
+import com.afa.core.enums.OrderPaymentTypes;
+import com.afa.core.enums.OrderSourceTypes;
+import com.afa.core.enums.OrderTypes;
 import com.afa.devicer.web.controllers.internal.ControllerConstants;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.afa.devicer.web.dto.FormOrderDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -16,11 +17,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Slf4j
 @CrossOrigin
@@ -33,7 +34,7 @@ public class OrderController extends BaseController {
 
     private final WebClient webClient;
 
-    @GetMapping("/")
+    @GetMapping()
     public String list(final Model model) {
 
         final EmployeeSettingsResponse settings = webClient.get()
@@ -65,8 +66,9 @@ public class OrderController extends BaseController {
 
     @GetMapping("/{orderId}/show")
     @Operation(summary = "Order по идентификатору")
-    public String getOrder4Show(@NotNull @Valid @PathVariable final Long orderId,
-                                final Model model) throws JsonProcessingException {
+    public String getOrder4Show(
+            @NotNull @Valid @PathVariable final Long orderId,
+            final Model model) {
 
         final OrderSingleResponse result = webClient.get()
                 .uri("/api/v8/orders/" + orderId)
@@ -76,27 +78,80 @@ public class OrderController extends BaseController {
 
         populateDefaultModel(model);
         model.addAttribute("order", result.getOrder());
+        model.addAttribute("listType", "typical");
 
         return "orders/show.html";
     }
 
     @GetMapping("/{orderId}/update")
-    @Operation(summary = "Order по идентификатору")
-    public String getOrder4Edit(@NotNull @Valid @PathVariable final Long orderId,
-                                final Model model) {
-
+    public String getOrder4Edit(
+            @NotNull @Valid @PathVariable final Long orderId,
+            final Model model) {
 
         populateDefaultModel(model);
         return "orders/orderForm.html";
 
     }
 
-    @GetMapping("/{orderId}/change-status")
-    @Operation(summary = "Order по идентификатору")
-    public String getOrder4ChangeStatus(@NotNull @Valid @PathVariable final Long orderId,
-                                        final Model model) {
+    @GetMapping("/{orderId}/change-status/{list-type}")
+    public String getOrder4ChangeStatus(
+            @NotNull @Valid @PathVariable final Long orderId,
+            @PathVariable("list-type") String listType,
+            final Model model) {
+
+        final OrderSingleResponse response = webClient.get()
+                .uri("/api/v8/orders/" + orderId)
+                .retrieve()
+                .bodyToMono(OrderSingleResponse.class)
+                .block();
+        final FormOrderDto form = new FormOrderDto(response.getOrder());
 
         populateDefaultModel(model);
-        return "orders/orderForm.html";
+        model.addAttribute("listType", listType);
+        model.addAttribute("order", response.getOrder());
+        model.addAttribute("formOrder", form);
+        return "orders/orderStatusForm.html";
+    }
+
+    @PostMapping("/{orderId}/change-status/{list-type}")
+    public String saveOrder4ChangeStatus(
+            @NotNull @Valid @PathVariable final Long orderId,
+            @PathVariable("list-type") String listType,
+            @ModelAttribute("orderForm") @Validated FormOrderDto form,
+            BindingResult bindingResult,
+            Model model,
+            final RedirectAttributes redirectAttributes) {
+
+        if (bindingResult.hasErrors()) {
+            final OrderSingleResponse response = webClient.get()
+                    .uri("/api/v8/orders/" + orderId)
+                    .retrieve()
+                    .bodyToMono(OrderSingleResponse.class)
+                    .block();
+            model.addAttribute("listType", listType);
+            model.addAttribute("order", response.getOrder());
+            model.addAttribute("formOrder", form);
+            return "orders/orderStatusForm.html";
+        }
+
+        final OrderChangeStatusSaveRequest request = OrderChangeStatusSaveRequest.builder()
+                .type(OrderTypes.ORDER)
+                .sourceType(OrderSourceTypes.LID)
+                .paymentType(OrderPaymentTypes.PREPAYMENT)
+                .productCategoryId(101L)
+                .status(form.getOrderStatusType())
+                .annotation(form.getAnnotation())
+                .trackCode(form.getDelivery().getTrackCode())
+                .build();
+        final String uri = "/api/v8/orders/%d/change-status".formatted(orderId);
+        final OrderDto result = webClient.patch()
+                .uri(uri)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(request)
+                .retrieve()
+                .bodyToMono(OrderDto.class)
+                .block();
+        log.info("{}", result.getId());
+        return "redirect:/web/orders";
     }
 }

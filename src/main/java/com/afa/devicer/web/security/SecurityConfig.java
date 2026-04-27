@@ -53,7 +53,7 @@ public class SecurityConfig {
                 )
                 .oauth2Login(Customizer.withDefaults())
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/web/orders/")
+                        .logoutSuccessUrl("/web/orders")
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
                 )

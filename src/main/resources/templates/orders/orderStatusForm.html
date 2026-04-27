@@ -13,7 +13,6 @@
 
 <div class="container-fluid">
     <div class="row">
-
         <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
             <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
                 <div class="offcanvas-header">
@@ -43,6 +42,118 @@
                 </div>
             </div>
 
+            <div class="d-flex justify-content-start flex-wrap flex-md-nowrap align-items-start">
+                <h1 class="h4">
+                    <span th:text="#{order.form.changeStatus.headers.h1(${order.viewNum}, ${#temporals.format(order.orderDate, 'dd.MM.yyyy')})}">
+                        Заказ № XXX от XX.XX.XXXX
+                    </span>
+                </h1>
+            </div>
+
+            <div class="d-flex justify-content-start flex-wrap flex-md-nowrap align-items-start border-bottom mb-2">
+                <h2 class="h5">
+                    <span th:text="${order.customer.viewLongNameWithContactInfo}"></span>&nbsp;
+                    <span class="badge bg-secondary" th:text="${order.customer.id}"></span>
+                </h2>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button id="btn-update-order" type="button" class="btn btn-primary"
+                        th:text="#{main.btn.updateData}"></button>
+
+                <button id="btn-show-order" type="button" class="btn btn-light"
+                        th:text="#{main.btn.showData}"></button>
+
+                <button id="btn-status-order" type="button" class="btn btn-light"
+                        th:text="#{main.btn.statusData}" disabled></button>
+
+                <button id="btn-clone-order" type="button" class="btn btn-light"
+                        th:text="#{main.btn.cloneData}"></button>
+            </div>
+            <br>
+
+            <form th:action="@{/web/orders/{orderId}/change-status/{listType}(orderId=${order.id}, listType=${listType})}"
+                  th:object="${formOrder}"
+                  method="post">
+
+                <input type="hidden" th:field="*{id}"/>
+
+                <div class="row mb-3">
+                    <div class="col-4">
+                        <label for="select-order-status"
+                               class="form-label"
+                               th:text="#{order.form.fields.orderStatus}">
+                            Order status
+                        </label>
+
+                        <select th:field="*{orderStatusType}"
+                                id="select-order-status"
+                                class="form-select form-select-sm">
+                            <option th:each="statusItem : ${orderStatusTypes}"
+                                    th:value="${statusItem.code}"
+                                    th:text="${statusItem.annotation}">
+                            </option>
+                        </select>
+
+                        <div class="text-danger small"
+                             th:if="${#fields.hasErrors('orderStatusType')}"
+                             th:errors="*{orderStatusType}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-4">
+                        <label for="input-payment-annotation"
+                               class="form-label"
+                               th:text="#{order.form.fields.annotation}">
+                            Annotation
+                        </label>
+                        <textarea id="input-payment-annotation"
+                                  th:field="*{annotation}"
+                                  class="form-control form-control-sm"
+                                  th:classappend="${#fields.hasErrors('annotation')} ? 'is-invalid'">
+                        </textarea>
+                        <div class="text-danger small"
+                             th:if="${#fields.hasErrors('annotation')}"
+                             th:errors="*{annotation}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-4">
+                        <label for="input-delivery-trackCode"
+                               class="form-label"
+                               th:text="#{order.form.delivery.fields.trackCode}">
+                            Track Code
+                        </label>
+
+                        <input type="text"
+                               th:field="*{delivery.trackCode}"
+                               id="input-delivery-trackCode"
+                               class="form-control form-control-sm"/>
+
+                        <div class="text-danger small"
+                             th:if="${#fields.hasErrors('delivery.trackCode')}"
+                             th:errors="*{delivery.trackCode}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit"
+                            class="btn btn-primary"
+                            th:text="#{main.btn.save}">
+                        Save
+                    </button>
+                    <a class="btn btn-light"
+                       th:href="@{/web/orders/{orderId}/{listType}(orderId=${order.id}, listType=${listType})}"
+                       th:text="#{main.btn.cancel}">
+                        Cancel
+                    </a>
+                </div>
+            </form>
         </main>
     </div>
 </div>

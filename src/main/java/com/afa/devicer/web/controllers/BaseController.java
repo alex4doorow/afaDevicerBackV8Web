@@ -10,6 +10,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.ui.Model;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,16 +23,26 @@ public class BaseController {
     protected MessageSource messageSource;
 
     protected void populateDefaultModel(final Model model) {
+
+        final List<OrderStatusTypes> orderStatusTypes = Arrays.stream(OrderStatusTypes.values())
+                .filter(s -> s == OrderStatusTypes.BID
+                        || s == OrderStatusTypes.APPROVED
+                        || s == OrderStatusTypes.DELIVERED
+                        || s == OrderStatusTypes.CANCELED
+                        || s == OrderStatusTypes.FINISHED)
+                .sorted(Comparator.comparing(OrderStatusTypes::getId))
+                .toList();
+        model.addAttribute("orderStatusTypes", orderStatusTypes);
+
         final List<String> allViewStatuses = Arrays.stream(OrderStatusTypes.values())
                 .map(OrderStatusTypes::getAnnotation)
                 .collect(Collectors.toList());
         model.addAttribute("allViewStatusTypes", allViewStatuses);
-//        model.addAttribute("environment", environment);
 
         final String brandSite = messageSource.getMessage("app.brand.site", null, LocaleContextHolder.getLocale());
         model.addAttribute("brandSite", brandSite);
         model.addAttribute("urlHome", "/web/index/");
-        model.addAttribute("urlOrders", "/web/orders/");
+        model.addAttribute("urlOrders", "/web/orders");
         model.addAttribute("urlLogout", "/login");
         model.addAttribute("msg", null);
     }
