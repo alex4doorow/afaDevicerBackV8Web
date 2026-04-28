@@ -77,21 +77,18 @@ public class SecurityConfig {
 
     @Bean
     public OAuth2AuthorizedClientManager authorizedClientManager(
-            ClientRegistrationRepository clientRegistrationRepository,
-            OAuth2AuthorizedClientRepository authorizedClientRepository) {
+            final ClientRegistrationRepository clientRegistrationRepository,
+            final OAuth2AuthorizedClientRepository authorizedClientRepository) {
 
-        OAuth2AuthorizedClientProvider authorizedClientProvider = OAuth2AuthorizedClientProviderBuilder.builder()
+        final OAuth2AuthorizedClientProvider authorizedClientProvider = OAuth2AuthorizedClientProviderBuilder.builder()
                 .authorizationCode()
                 .refreshToken()
                 .build();
-
-        DefaultOAuth2AuthorizedClientManager manager = new DefaultOAuth2AuthorizedClientManager(
+        final DefaultOAuth2AuthorizedClientManager manager = new DefaultOAuth2AuthorizedClientManager(
                 clientRegistrationRepository,
                 authorizedClientRepository
         );
-
         manager.setAuthorizedClientProvider(authorizedClientProvider);
-
         return manager;
     }
 }

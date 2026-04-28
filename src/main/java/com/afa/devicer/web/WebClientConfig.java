@@ -16,10 +16,9 @@ public class WebClientConfig {
     private String backendUrl;
 
     @Bean
-    public WebClient backendWebClient(
-            OAuth2AuthorizedClientManager authorizedClientManager) {
+    public WebClient backendWebClient(final OAuth2AuthorizedClientManager authorizedClientManager) {
 
-        ServletOAuth2AuthorizedClientExchangeFilterFunction oauth2 =
+        final ServletOAuth2AuthorizedClientExchangeFilterFunction oauth2 =
                 new ServletOAuth2AuthorizedClientExchangeFilterFunction(authorizedClientManager);
         oauth2.setDefaultOAuth2AuthorizedClient(true);
 

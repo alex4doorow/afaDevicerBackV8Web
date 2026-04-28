@@ -2,12 +2,10 @@ package com.afa.devicer.web.controllers;
 
 import com.afa.core.dto.employee.EmployeeSettingsResponse;
 import com.afa.core.dto.orders.*;
-import com.afa.core.enums.AmountTypes;
-import com.afa.core.enums.OrderPaymentTypes;
-import com.afa.core.enums.OrderSourceTypes;
-import com.afa.core.enums.OrderTypes;
+import com.afa.core.enums.*;
 import com.afa.devicer.web.controllers.internal.ControllerConstants;
 import com.afa.devicer.web.dto.FormOrderDto;
+import com.afa.devicer.web.mappers.OrderDtoMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -33,6 +31,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class OrderController extends BaseController {
 
     private final WebClient webClient;
+    private final OrderDtoMapper orderDtoMapper;
 
     @GetMapping()
     public String list(final Model model) {
@@ -104,7 +103,7 @@ public class OrderController extends BaseController {
                 .retrieve()
                 .bodyToMono(OrderSingleResponse.class)
                 .block();
-        final FormOrderDto form = new FormOrderDto(response.getOrder());
+        final FormOrderDto form = orderDtoMapper.fromOrder(response.getOrder());
 
         populateDefaultModel(model);
         model.addAttribute("listType", listType);
@@ -133,13 +132,12 @@ public class OrderController extends BaseController {
             model.addAttribute("formOrder", form);
             return "orders/orderStatusForm.html";
         }
-
         final OrderChangeStatusSaveRequest request = OrderChangeStatusSaveRequest.builder()
                 .type(OrderTypes.ORDER)
                 .sourceType(OrderSourceTypes.LID)
                 .paymentType(OrderPaymentTypes.PREPAYMENT)
                 .productCategoryId(101L)
-                .status(form.getOrderStatusType())
+                .status(OrderStatusTypes.valueOf(form.getFormStatusCode()))
                 .annotation(form.getAnnotation())
                 .trackCode(form.getDelivery().getTrackCode())
                 .build();

@@ -80,25 +80,15 @@
 
                 <div class="row mb-3">
                     <div class="col-4">
-                        <label for="select-order-status"
-                               class="form-label"
-                               th:text="#{order.form.fields.orderStatus}">
-                            Order status
-                        </label>
-
-                        <select th:field="*{orderStatusType}"
+                        <label for="select-order-status" class="form-label" th:text="#{order.form.fields.orderStatus}"></label>
+                        <select th:field="*{formStatusCode}"
                                 id="select-order-status"
                                 class="form-select form-select-sm">
-                            <option th:each="statusItem : ${orderStatusTypes}"
+                            <option th:each="statusItem : ${orderStatuses}"
                                     th:value="${statusItem.code}"
                                     th:text="${statusItem.annotation}">
                             </option>
                         </select>
-
-                        <div class="text-danger small"
-                             th:if="${#fields.hasErrors('orderStatusType')}"
-                             th:errors="*{orderStatusType}">
-                        </div>
                     </div>
                 </div>
 
@@ -114,10 +104,6 @@
                                   class="form-control form-control-sm"
                                   th:classappend="${#fields.hasErrors('annotation')} ? 'is-invalid'">
                         </textarea>
-                        <div class="text-danger small"
-                             th:if="${#fields.hasErrors('annotation')}"
-                             th:errors="*{annotation}">
-                        </div>
                     </div>
                 </div>
 

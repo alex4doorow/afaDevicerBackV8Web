@@ -1,5 +1,6 @@
 package com.afa.devicer.web.controllers;
 
+import com.afa.core.dto.dictionaries.OrderStatusTypeDto;
 import com.afa.core.enums.OrderStatusTypes;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -24,15 +25,21 @@ public class BaseController {
 
     protected void populateDefaultModel(final Model model) {
 
-        final List<OrderStatusTypes> orderStatusTypes = Arrays.stream(OrderStatusTypes.values())
+        final List<OrderStatusTypeDto> orderStatuses = Arrays.stream(OrderStatusTypes.values())
                 .filter(s -> s == OrderStatusTypes.BID
                         || s == OrderStatusTypes.APPROVED
                         || s == OrderStatusTypes.DELIVERED
                         || s == OrderStatusTypes.CANCELED
                         || s == OrderStatusTypes.FINISHED)
-                .sorted(Comparator.comparing(OrderStatusTypes::getId))
+                .map(s -> OrderStatusTypeDto.builder()
+                        .id(s.getId())
+                        .code(s.getCode())
+                        .annotation(s.getAnnotation())
+                        .view(s.getView())
+                        .build())
+                .sorted(Comparator.comparing(OrderStatusTypeDto::getId))
                 .toList();
-        model.addAttribute("orderStatusTypes", orderStatusTypes);
+        model.addAttribute("orderStatuses", orderStatuses);
 
         final List<String> allViewStatuses = Arrays.stream(OrderStatusTypes.values())
                 .map(OrderStatusTypes::getAnnotation)
