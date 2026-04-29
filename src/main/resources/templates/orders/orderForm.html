@@ -13,11 +13,10 @@
 
 <div class="container-fluid">
     <div class="row">
-
         <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
             <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
                 <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="sidebarMenuLabel">SIR RICHARD BOSS</h5>
+                    <h5 class="offcanvas-title" id="sidebarMenuLabel"></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu" aria-label="Close"></button>
                 </div>
 
@@ -26,24 +25,183 @@
         </div>
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2" th:text="#{order.form.update.header}"></h1>
-                <div class="btn-toolbar mb-2 mb-md-0">
-                    <div class="btn-group me-2">
-                        <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
-                    </div>
-                    <button type="button"
-                            class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1">
-                        <svg class="bi" aria-hidden="true">
-                            <use xlink:href="#calendar3"></use>
-                        </svg>
-                        This week
-                    </button>
-                </div>
+            <div class="d-flex justify-content-start flex-wrap flex-md-nowrap align-items-start">
+                <h1 class="mt-2 h4">
+                    <span th:text="#{order.form.update.headers.h1(${order.viewNum}, ${#temporals.format(order.orderDate, 'dd.MM.yyyy')})}">
+                        Заказ № XXX от XX.XX.XXXX
+                    </span>
+                </h1>
+            </div>
+            <div class="d-flex justify-content-start flex-wrap flex-md-nowrap align-items-start border-bottom mb-2">
+                <h2 class="h5">
+                    <span th:text="${order.customer.viewLongNameWithContactInfo}"></span>&nbsp;
+                    <span class="badge bg-secondary" th:text="${order.customer.id}"></span>
+                </h2>
             </div>
 
+
+            <div class="small col-xl-8 col-lg-10 col-md-12">
+
+                <form th:action="@{/web/orders/{orderId}/update(orderId=${order.id})}"
+                      th:object="${formOrder}"
+                      method="post">
+
+                    <div class="d-flex gap-2">
+                        <a disabled class="btn btn-light" th:text="#{main.btn.updateData}"></a>
+                        <a class="btn btn-primary"
+                           th:href="@{/web/orders/{id}/show(id=${order.id})}"
+                           th:text="#{main.btn.showData}">
+                        </a>
+                        <a id="btn-status-order" class="btn btn-light"
+                           th:href="@{/web/orders/{id}/change-status/{listType}(id=${order.id}, listType=${listType})}"
+                           th:text="#{main.btn.statusData}">
+                        </a>
+                        <button id="btn-clone-order" type="button" class="btn btn-light" th:text="#{main.btn.cloneData}"></button>
+                        <button type="submit"
+                                class="btn btn-light"
+                                th:text="#{main.btn.save}">
+                            Save
+                        </button>
+                    </div>
+
+                    <input type="hidden" th:field="*{id}"/>
+
+                    <!-- Заказ -->
+                    <div class="row g-3 mt-2 mb-3 align-items-start">
+                        <div class="col-md-2">
+                            <label for="input-order-no"
+                                   class="form-label"
+                                   th:text="#{order.form.fields.no}">
+                            </label>
+
+                            <input id="input-order-no"
+                                   type="text"
+                                   class="form-control form-control-sm"
+                                   th:field="*{orderNum}"
+                                   th:placeholder="#{order.form.fields.placeholder.no}"
+                                   th:classappend="${#fields.hasErrors('orderNum')} ? ' is-invalid' : ''"/>
+
+                            <div class="invalid-feedback"
+                                 th:if="${#fields.hasErrors('orderNum')}"
+                                 th:errors="*{orderNum}">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="input-order-orderDate" class="form-label">Дата заказа *</label>
+                            <div class="input-group input-group-sm">
+                                <input id="input-order-orderDate"
+                                       name="orderDate"
+                                       placeholder="Дата заказа"
+                                       type="text"
+                                       class="form-control datepicker"
+                                       value="31.08.2021"
+                                       maxlength="10"
+                                       required>
+                                <button class="btn btn-outline-secondary"
+                                        onclick="$('#input-order-orderDate').datepicker('show');"
+                                        type="button">
+                                    <i class="bi bi-calendar2-date text-dark"></i>
+                                </button>
+                                <div class="invalid-feedback">Укажите дату заказа</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="select-store" class="form-label">Сайт</label>
+                            <select id="select-store" name="store" class="form-select form-select-sm">
+                                <option value="SR">sir-richard.ru</option>
+                                <option value="PM" selected>pribormaster.ru</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3 align-items-start">
+                        <div class="col-md-3">
+                            <label for="select-order-type" class="form-label">Тип</label>
+                            <select id="select-order-type" name="orderType" class="form-select form-select-sm">
+                                <option value="UNKNOWN">неопределен</option>
+                                <option value="ORDER">заказ</option>
+                                <option value="BILL">счет на оплату</option>
+                                <option value="KP" selected>коммерческое предложение</option>
+                                <option value="CONSULTATION">консультация</option>
+                                <option value="CHANGE">замена</option>
+                                <option value="REFUND">возврат</option>
+                                <option value="GIFT">подарок</option>
+                                <option value="TEST_DIVE">тест-драйв</option>
+                                <option value="REPAIR">ремонт</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-2">
+                            <label for="select-source-type" class="form-label">Источник</label>
+                            <select id="select-source-type" name="sourceType" class="form-select form-select-sm">
+                                <option value="UNKNOWN">неопределен</option>
+                                <option value="CALL">звонок</option>
+                                <option value="CHAT">чат</option>
+                                <option value="EMAIL" selected>письмо</option>
+                                <option value="LID">лид</option>
+                                <option value="FAST_LID">быстрый заказ</option>
+                                <option value="CALL_BACK">обратный звонок</option>
+                                <option value="TENDER">тендер</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-2">
+                            <label for="select-advert-type" class="form-label">Канал привлечения</label>
+                            <select id="select-advert-type" name="advertType" class="form-select form-select-sm">
+                                <option value="UNKNOWN">неопределен</option>
+                                <option value="ADVERT" selected>реклама</option>
+                                <option value="CONTEXT">поиск</option>
+                                <option value="YOUTUBE">youTube</option>
+                                <option value="LOYALTY">сарафанное радио</option>
+                                <option value="REPEAT_CALL">повторное обращение</option>
+                                <option value="COLD_CALL">холодный звонок</option>
+                                <option value="TENDER">тендер</option>
+                                <option value="YANDEX_MARKET">яндекс.маркет</option>
+                                <option value="CDEK_MARKET">сдэк.маркет</option>
+                                <option value="OZON">озон</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="select-product-category" class="form-label">Категория</label>
+                            <select id="select-product-category" name="productCategory.id" class="form-select form-select-sm">
+                                <option value="108" selected>отпугиватели собак</option>
+                                <option value="0">не определена</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-1">
+                            <label for="input-order-offer-count-day" class="form-label">31.08.2021</label>
+                            <input id="input-order-offer-count-day"
+                                   name="offer.countDay"
+                                   min="0"
+                                   max="90"
+                                   type="number"
+                                   class="form-control form-control-sm"
+                                   value="0">
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-12">
+                            <label for="input-payment-annotation" class="form-label">Дополнительно</label>
+                            <textarea id="input-payment-annotation"
+                                      name="annotation"
+                                      maxlength="255"
+                                      class="form-control form-control-sm"
+                                      rows="2"></textarea>
+                        </div>
+                    </div>
+
+
+
+
+
+
+                </form>
+            </div>
         </main>
+
     </div>
 </div>
 

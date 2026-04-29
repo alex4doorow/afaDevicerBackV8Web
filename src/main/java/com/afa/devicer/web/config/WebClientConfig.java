@@ -1,4 +1,4 @@
-package com.afa.devicer.web;
+package com.afa.devicer.web.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

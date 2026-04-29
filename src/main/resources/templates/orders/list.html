@@ -31,7 +31,13 @@
                 <div class="btn-toolbar mb-2 mb-md-0">
                     <div class="btn-group me-2">
                         <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+<!--                        <button type="button" class="btn btn-sm btn-outline-secondary" th:text="#{orders.conditions.btn.filter}">Filter</button>-->
+
+                        <a class="btn btn-sm btn-outline-secondary"
+                           th:href="@{/web/persons/settings/conditions/order-list/filter}"
+                           th:text="#{orders.conditions.btn.filter}">
+                        </a>
+
                     </div>
                     <button type="button"
                             class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1">
@@ -260,20 +266,6 @@
             <canvas class="1my-4 1w-100" id="myChart1" width="900" height="380">
 
             </canvas>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         </main>
     </div>

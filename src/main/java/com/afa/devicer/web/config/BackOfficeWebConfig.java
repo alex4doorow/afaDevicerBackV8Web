@@ -1,4 +1,4 @@
-package com.afa.devicer.web;
+package com.afa.devicer.web.config;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonParser;

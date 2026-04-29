@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="auto">
+
+<head th:replace="~{fragments/header-head :: header-head((customPageTitle=#{index.title}))}"></head>
+
+<body>
+
+<div th:replace="fragments/theme-switcher :: theme-switcher"></div>
+
+<svg th:replace="fragments/theme-sprite-ico :: theme-sprite-ico"></svg>
+
+<header th:replace="fragments/header-search-panel :: header-search-panel"></header>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+            <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="sidebarMenuLabel">SIR RICHARD BOSS</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu" aria-label="Close"></button>
+                </div>
+                <div th:replace="fragments/header-left-panel :: header-left-panel"></div>
+            </div>
+        </div>
+
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2" th:text="#{orders.conditions.form.filter.header}"></h1>
+            </div>
+
+            <form th:action="@{/web/persons/settings/conditions/order-list/filter}"
+                  th:object="${formSettings}"
+                  method="post">
+
+                <div class="d-flex gap-2">
+                    <button type="reset" class="btn btn-light" th:text="#{main.btn.clear}"></button>
+                    <button type="submit"
+                            class="btn btn-primary"
+                            th:text="#{main.btn.execute}">
+                        Save
+                    </button>
+                    <a class="btn btn-light"
+                       th:href="@{/web/orders}"
+                       th:text="#{main.btn.cancel}">
+                        Cancel
+                    </a>
+                </div>
+                <h4 class="mt-4 mb-2" th:text="#{order.conditions.form.headers.periods}">Периоды</h4>
+
+                <!-- Блок выбора типа периода, месяца и года -->
+                <!--
+                <div class="row g-3 mb-3">
+                    <div class="col-md-2">
+                        <select th:field="*{reportPeriodType}" id="select-period-type" class="form-select form-select-sm">
+                            <option th:each="type : ${reportPeriodTypes}"
+                                    th:value="${type}"
+                                    th:text="${type.annotation}"></option>
+                        </select>
+                    </div>
+                    <div class="col-md-1">
+                        <select th:field="*{reportPeriodMonth}" id="select-period-month" class="form-select form-select-sm">
+                            <option th:each="month : ${reportPeriodMonths}"
+                                    th:value="${month}"
+                                    th:text="${month}"></option>
+                        </select>
+                    </div>
+                    <div class="col-md-1">
+                        <input type="text" th:field="*{reportPeriodYear}" id="input-period-year" class="form-control form-control-sm" />
+                    </div>
+                </div>
+                -->
+
+                <!-- Блок выбора дат (Start и End) -->
+                <div class="row g-3 mb-3 align-items-start">
+                    <!-- Начало периода -->
+                    <div class="col-md-2">
+                        <label for="input-period-start"
+                               class="form-label"
+                               th:text="#{order.conditions.form.fields.period.start}"></label>
+                        <div class="input-group input-group-sm">
+                            <input type="text"
+                                   th:field="*{formStartDate}"
+                                   id="input-period-start"
+                                   class="form-control datepicker"
+                                   th:placeholder="#{order.conditions.form.fields.placeholder.period.start}"
+                                   th:classappend="${#fields.hasErrors('formStartDate')} ? 'is-invalid' : ''"/>
+
+                            <button class="btn btn-outline-secondary"
+                                    onclick="$('#input-period-start').datepicker('show');"
+                                    type="button">
+                                <i class="bi bi-calendar-date text-dark"></i>
+                            </button>
+                        </div>
+                        <div class="text-danger small mt-1"
+                             th:if="${#fields.hasErrors('formStartDate')}"
+                             th:errors="*{formStartDate}">
+                        </div>
+                    </div>
+
+                    <!-- Конец периода -->
+                    <div class="col-md-2">
+                        <label for="input-period-end"
+                               class="form-label"
+                               th:text="#{order.conditions.form.fields.period.end}"></label>
+                        <div class="input-group input-group-sm">
+                            <input type="text"
+                                   th:field="*{formEndDate}"
+                                   id="input-period-end"
+                                   class="form-control datepicker"
+                                   th:placeholder="#{order.conditions.form.fields.placeholder.period.end}"
+                                   th:classappend="${#fields.hasErrors('formEndDate')} ? 'is-invalid' : ''" />
+                            <button class="btn btn-sm btn-outline-secondary"
+                                    onclick="$('#input-period-end').datepicker('show');"
+                                    type="button">
+                                <i class="bi bi-calendar-date text-dark"></i>
+                            </button>
+                            <div class="text-danger small mt-1"
+                                 th:if="${#fields.hasErrors('formEndDate')}"
+                                 th:errors="*{formEndDate}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Чекбокс -->
+                <div class="row g-2 mb-3 align-items-end">
+                    <div class="col-md-4">
+                        <div class="form-check">
+                            <input type="checkbox" th:field="*{orders.periodExist}" class="form-check-input" id="checkbox-period-exist" />
+                            <label class="form-check-label" for="checkbox-period-exist" th:text="#{order.conditions.form.fields.period.isPeriod}">
+                                Это период
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="mb-2" th:text="#{order.conditions.form.headers.orders}">Заказы, клиенты</h4>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-3">
+                        <label for="input-order-num"
+                               class="form-label"
+                               th:text="#{order.conditions.form.fields.no}">
+                            Номер заказа
+                        </label>
+                        <input type="text"
+                               th:field="*{orders.orderNum}"
+                               id="input-order-num"
+                               class="form-control form-control-sm"/>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="input-delivery-trackCode"
+                               class="form-label"
+                               th:text="#{order.conditions.form.fields.trackCode}">
+                            Track Code
+                        </label>
+                        <input type="text"
+                               th:field="*{orders.trackCode}"
+                               id="input-delivery-trackCode"
+                               class="form-control form-control-sm"/>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="input-delivery-address"
+                               class="form-label"
+                               th:text="#{order.conditions.form.fields.deliveryAddress}">
+                            Адрес доставки
+                        </label>
+                        <input type="text"
+                               th:field="*{orders.deliveryAddress}"
+                               id="input-delivery-address"
+                               class="form-control form-control-sm"/>
+                    </div>
+                </div>
+
+                <h6 class="mb-2" th:text="#{order.conditions.form.headers.statuses}"></h6>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div id="form-checks-statuses">
+
+                            <div class="form-check mb-2"
+                                 th:each="status : ${orderStatuses}">
+
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       th:field="*{formOrderStatuses}"
+                                       th:value="${status.code}"
+                                       th:id="'status-' + ${status.id}" />
+
+                                <label class="form-check-label"
+                                       th:for="'status-' + ${status.id}"
+                                       th:text="${status.annotation}">
+                                    Статус
+                                </label>
+
+                            </div>
+                            <div class="text-danger"
+                                 th:if="${#fields.hasErrors('formOrderStatuses')}"
+                                 th:errors="*{formOrderStatuses}">
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </main>
+    </div>
+</div>
+
+<div th:replace="fragments/footer-scripts :: footer-scripts"></div>
+
+</body>
+</html>

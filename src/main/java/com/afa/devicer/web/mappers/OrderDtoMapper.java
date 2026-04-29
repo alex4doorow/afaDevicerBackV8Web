@@ -1,7 +1,7 @@
 package com.afa.devicer.web.mappers;
 
 import com.afa.core.dto.orders.OrderDto;
-import com.afa.devicer.web.dto.FormOrderDto;
+import com.afa.devicer.web.dto.orders.FormOrderDto;
 import org.mapstruct.Builder;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -12,9 +12,14 @@ import org.mapstruct.ReportingPolicy;
 public interface OrderDtoMapper {
 
     @Mapping(target = "formStatusCode", expression = "java(getFormStatusCode(dto))")
+    @Mapping(target = "formProductCategoryId", expression = "java(getFormProductCategoryId(dto))")
     FormOrderDto fromOrder(OrderDto dto);
 
     default String getFormStatusCode(final OrderDto dto) {
         return dto.getStatus().getCode();
+    }
+
+    default Long getFormProductCategoryId(final OrderDto dto) {
+        return dto.getProductCategory().getId();
     }
 }

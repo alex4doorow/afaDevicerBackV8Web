@@ -17,7 +17,7 @@
         <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
             <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
                 <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="sidebarMenuLabel">SIR RICHARD BOSS</h5>
+                    <h5 class="offcanvas-title" id="sidebarMenuLabel"></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu" aria-label="Close"></button>
                 </div>
 
@@ -26,23 +26,6 @@
         </div>
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2" th:text="#{order.show.header}"></h1>
-                <div class="btn-toolbar mb-2 mb-md-0">
-                    <div class="btn-group me-2">
-                        <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
-                    </div>
-                    <button type="button"
-                            class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1">
-                        <svg class="bi" aria-hidden="true">
-                            <use xlink:href="#calendar3"></use>
-                        </svg>
-                        This week
-                    </button>
-                </div>
-            </div>
-
             <div class="d-flex justify-content-start flex-wrap flex-md-nowrap align-items-start">
                 <h1 class="h4">
                     <span th:text="#{order.show.headers.h1(${order.viewNum}, ${#temporals.format(order.orderDate, 'dd.MM.yyyy')})}">
@@ -50,11 +33,10 @@
                     </span>
                 </h1>
             </div>
-
             <div class="d-flex justify-content-start flex-wrap flex-md-nowrap align-items-start border-bottom mb-2">
                 <h2 class="h5">
-                    <span th:text="${order.customer.viewLongNameWithContactInfo}">Иванов Иван Иванович</span>&nbsp;
-                    <span class="badge bg-secondary" th:text="${order.customer.id}">XXX</span>
+                    <span th:text="${order.customer.viewLongNameWithContactInfo}"></span>&nbsp;
+                    <span class="badge bg-secondary" th:text="${order.customer.id}"></span>
                 </h2>
             </div>
 
@@ -90,7 +72,6 @@
                             aria-controls="order"
                             aria-selected="true"
                             th:text="#{order.show.tabs.order}">
-                        Заказ
                     </button>
                 </li>
 
@@ -104,7 +85,6 @@
                             aria-controls="customer"
                             aria-selected="false"
                             th:text="#{order.show.tabs.customer}">
-                        Клиент
                     </button>
                 </li>
 
@@ -118,7 +98,6 @@
                             aria-controls="delivery"
                             aria-selected="false"
                             th:text="#{order.show.tabs.delivery}">
-                        Доставка
                     </button>
                 </li>
 
@@ -132,7 +111,6 @@
                             aria-controls="amount"
                             aria-selected="false"
                             th:text="#{order.show.tabs.calculate}">
-                        Суммы
                     </button>
                 </li>
             </ul>
@@ -145,32 +123,173 @@
                      role="tabpanel"
                      aria-labelledby="order-tab">
                     <div class="container-fluid">
-                        <h5 th:text="#{order.show.tabs.order}">Заказ</h5>
-                        <!-- Здесь будет контент для вкладки "Заказ" -->
 
                         <div class="row">
                             <label class="col-sm-3" th:text="#{order.show.fields.id}"></label>
                             <div class="col-sm-9" th:text="${order.id}"></div>
                         </div>
-
                         <div class="row">
                             <label class="col-sm-3" th:text="#{order.show.fields.no}"></label>
                             <div class="col-sm-9">
                                 <strong th:text="${order.viewNum}"></strong>
                             </div>
                         </div>
-
                         <div class="row">
                             <label class="col-sm-3" th:text="#{order.show.fields.orderDate}"></label>
                             <div class="col-sm-9">
                                 <strong th:text="${#temporals.format(order.orderDate, 'dd.MM.yyyy')}"></strong>
                             </div>
                         </div>
-
+                        <div class="row">
+                            <label class="col-sm-3" th:text="#{order.show.fields.orderType}"></label>
+                            <div class="col-sm-9" th:text="${order.type.annotation}"></div>
+                        </div>
+                        <div class="row">
+                            <label class="col-sm-3" th:text="#{order.show.fields.sourceType}"></label>
+                            <div class="col-sm-9" th:text="${order.sourceType.annotation}"></div>
+                        </div>
+                        <div class="row">
+                            <label class="col-sm-3" th:text="#{order.show.fields.advertType}"></label>
+                            <div class="col-sm-9" th:text="${order.advertType.annotation}"></div>
+                        </div>
+                        <div class="row">
+                            <label class="col-sm-3" th:text="#{order.show.fields.paymentType}"></label>
+                            <div class="col-sm-9" th:text="${order.paymentType.annotation}"></div>
+                        </div>
+                        <div class="row">
+                            <label class="col-sm-3" th:text="#{order.show.fields.productCategory}"></label>
+                            <div class="col-sm-9" th:text="${order.productCategory.name}"></div>
+                        </div>
+                        <div class="row">
+                            <label class="col-sm-3" th:text="#{order.show.fields.store}"></label>
+                            <div class="col-sm-9" th:text="${order.store.site}"></div>
+                        </div>
+                        <div class="row">
+                            <label class="col-sm-3" th:text="#{order.show.fields.annotation}"></label>
+                            <div class="col-sm-9" th:text="${order.annotation}"></div>
+                        </div>
                         <div class="row">
                             <label class="col-sm-3" th:text="#{order.show.fields.status}"></label>
                             <div class="col-sm-9">
                                 <strong th:text="${order.status.annotation}"></strong>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label class="col-sm-3" th:text="#{order.show.fields.addedDate}"></label>
+                            <div class="col-sm-9" th:text="${#temporals.format(order.dateAdded, 'dd.MM.yyyy HH:mm:ss')}"></div>
+                        </div>
+                    </div>
+                    <br>
+                    <h6 th:text="#{order.show.items.header}"></h6>
+                    <div class="container-fluid small">
+                        <table class="table table-striped table-sm" style="width:100%; table-layout:auto;">
+                            <colgroup>
+                                <col style="width:4%">
+                                <col style="width:56%">
+                                <col style="width:6%">
+                                <col style="width:6%">
+                                <col style="width:9%">
+                                <col style="width:7%">
+                                <col style="width:6%">
+                                <col style="width:6%">
+                            </colgroup>
+                            <thead>
+                            <tr>
+                                <th scope="col" th:text="#{order.show.items.table.headers.no}"></th>
+                                <th scope="col" th:text="#{order.show.items.table.headers.product}"></th>
+                                <th scope="col" th:text="#{order.show.items.table.headers.unit}"></th>
+                                <th scope="col" th:text="#{order.show.items.table.headers.quantity}"></th>
+                                <th scope="col" th:text="#{order.show.items.table.headers.price}"></th>
+                                <th scope="col" th:text="#{order.show.items.table.headers.discountRate}"></th>
+                                <th scope="col" th:text="#{order.show.items.table.headers.supplierAmount}"></th>
+                                <th scope="col" th:text="#{order.show.items.table.headers.amount}"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="orderItem : ${order.items}">
+                                <td th:text="${orderItem.itemNum}"></td>
+                                <td th:text="${orderItem.product.viewName}"></td>
+                                <td th:text="#{order.show.items.table.headers.unit.value}"></td>
+                                <td class="text-center" th:text="${orderItem.quantity}"></td>
+                                <td class="text-end" th:text="${#numbers.formatDecimal(orderItem.price, 1, 'COMMA', 2, 'POINT')}">
+                                </td>
+                                <td class="text-end">
+                                    <span th:text="${#numbers.formatDecimal(orderItem.discountRate, 1, 'COMMA', 2, 'POINT')}"></span>%
+                                </td>
+                                <td class="text-end" th:text="${#numbers.formatDecimal(orderItem.amountSupplier, 1, 'COMMA', 2, 'POINT')}">
+                                </td>
+                                <td class="text-end" th:text="${#numbers.formatDecimal(orderItem.amount, 1, 'COMMA', 2, 'POINT')}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td class="text-end">
+                                    <strong th:text="${#numbers.formatCurrency(order.amounts[T(com.afa.core.enums.AmountTypes).SUPPLIER])}"></strong>
+                                </td>
+                                <td class="text-end">
+                                    <strong th:text="${#numbers.formatCurrency(order.amounts[T(com.afa.core.enums.AmountTypes).TOTAL])}"></strong>
+                                </td>
+                            </tr>
+                            </tbody>
+
+                            <tfoot>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td th:text="#{order.show.items.table.footer.delivery}"></td>
+                                <td></td>
+                                <td class="text-end" th:text="${#numbers.formatDecimal(order.delivery.price, 1, 'COMMA', 2, 'POINT')}"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <strong th:text="#{order.show.items.table.footer.totalWithDelivery}"></strong>
+                                </td>
+                                <td></td>
+                                <td class="text-end">
+                                    <strong th:text="${#numbers.formatCurrency(order.amounts[T(com.afa.core.enums.AmountTypes).TOTAL_WITH_DELIVERY])}"></strong>
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <br>
+                    <h6 th:text="#{order.show.statuses.header}"></h6>
+                    <div class="container-fluid small">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <table class="table table-striped table-sm">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col" th:text="#{order.show.statuses.table.headers.no}"></th>
+                                        <th scope="col" th:text="#{order.show.statuses.table.headers.status}"></th>
+                                        <th scope="col" th:text="#{order.show.statuses.table.headers.crmStatus}"></th>
+                                        <th scope="col" th:text="#{order.show.statuses.table.headers.crmSubStatus}"></th>
+                                        <th scope="col" th:text="#{order.show.statuses.table.headers.addedDate}"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="orderStatusItem : ${order.statusHistory}">
+                                        <th scope="row" th:text="${orderStatusItem.num}"></th>
+                                        <td th:text="${orderStatusItem.status.annotation}"></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td th:text="${#temporals.format(orderStatusItem.dateAdded, 'dd.MM.yyyy HH:mm:ss')}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -183,80 +302,81 @@
                      aria-labelledby="customer-tab">
 
                     <div class="container-fluid">
-                        <h5 th:text="#{order.show.tabs.customer}">Клиент</h5>
-                        <!-- Контент вкладки "Клиент" -->
-                        <br/>
 
                         <div class="row">
-                            <label class="col-sm-3"
-                                   th:text="#{order.show.customer.fields.type}"></label>
-                            <div class="col-sm-9" th:text="${order.customer.type.longName}"></div>
+                            <label class="col-sm-3" th:text="#{order.show.customer.fields.type}"></label>
+                            <div class="col-sm-9 mb-4" th:text="${order.customer.type.longName}"></div>
+                        </div>
+                        <div class="row">
+                            <label class="col-sm-3" th:text="#{order.show.customer.fields.country}"></label>
+                            <div class="col-sm-9" th:text="${order.customer.country.name}"></div>
+                        </div>
+                        <div class="row">
+                            <label class="col-sm-3" th:text="#{order.show.customer.fields.address}"></label>
+                            <div class="col-sm-9" th:text="${order.customer.mainAddress.address.addressLine}"></div>
                         </div>
 
-                        <div th:if="${order.customer.type == T(com.afa.core.enums.CustomerTypes).PERSON || order.customer.type == T(com.afa.core.enums.CustomerTypes).FOREIGNER_PERSON}">
-
+                        <div th:if="${order.customer.type == T(com.afa.core.enums.CustomerTypes).PERSON
+                                        || order.customer.type == T(com.afa.core.enums.CustomerTypes).FOREIGNER_PERSON}">
                             <div class="row">
-                                <label class="col-sm-3"
-                                       th:text="#{order.show.customer.fields.lastName}"></label>
+                                <label class="col-sm-3" th:text="#{order.show.customer.fields.lastName}"></label>
                                 <div class="col-sm-9" th:text="${order.customer.person.lastName}"></div>
                             </div>
-
                             <div class="row">
-                                <label class="col-sm-3"
-                                       th:text="#{order.show.customer.fields.firstName}"></label>
+                                <label class="col-sm-3" th:text="#{order.show.customer.fields.firstName}"></label>
                                 <div class="col-sm-9">
                                     <strong th:text="${order.customer.person.firstName}"></strong>
                                 </div>
                             </div>
-
                             <div class="row">
-                                <label class="col-sm-3"
-                                       th:text="#{order.show.customer.fields.middleName}"></label>
+                                <label class="col-sm-3" th:text="#{order.show.customer.fields.middleName}"></label>
                                 <div class="col-sm-9" th:text="${order.customer.person.middleName}"></div>
                             </div>
-
                             <div class="row">
-                                <label class="col-sm-3"
-                                       th:text="#{order.show.customer.fields.telephone}"></label>
+                                <label class="col-sm-3" th:text="#{order.show.customer.fields.telephone}"></label>
                                 <div class="col-sm-9">
-                                    <strong th:text="${order.customer.phoneNumber}"></strong>
+                                    <strong th:text="${order.customer.fullPhoneNumber}"></strong>
                                 </div>
                             </div>
-
                             <div class="row">
-                                <label class="col-sm-3"
-                                       th:text="#{order.show.customer.fields.email}"></label>
+                                <label class="col-sm-3" th:text="#{order.show.customer.fields.email}"></label>
                                 <div class="col-sm-9" th:text="${order.customer.email}"></div>
                             </div>
                         </div>
 
-                        <div th:if="${order.customer.type == T(com.afa.core.enums.CustomerTypes).COMPANY || order.customer.type == T(com.afa.core.enums.CustomerTypes).BUSINESSMAN || order.customer.type == T(com.afa.core.enums.CustomerTypes).FOREIGNER_COMPANY}">
-
-                            <h6 th:text="#{order.show.customer.company.header}"></h6>
+                        <div th:if="${order.customer.type == T(com.afa.core.enums.CustomerTypes).COMPANY
+                                        || order.customer.type == T(com.afa.core.enums.CustomerTypes).BUSINESSMAN
+                                        || order.customer.type == T(com.afa.core.enums.CustomerTypes).FOREIGNER_COMPANY}">
                             <div class="row">
-                                <label class="col-sm-3"
-                                       th:text="#{order.show.customer.fields.company.inn}"></label>
+                                <label class="col-sm-3" th:text="#{order.show.customer.fields.company.inn}"></label>
                                 <div class="col-sm-9" th:text="${order.customer.inn}"></div>
                             </div>
                             <div class="row">
-                                <label class="col-sm-3"
-                                       th:text="#{order.show.customer.fields.company.shortName}"></label>
+                                <label class="col-sm-3" th:text="#{order.show.customer.fields.company.shortName}"></label>
                                 <div class="col-sm-9">
                                     <strong th:text="${order.customer.shortName}"></strong>
                                 </div>
                             </div>
                             <div class="row">
-                                <label class="col-sm-3"
-                                       th:text="#{order.show.customer.fields.company.longName}"></label>
-                                <div class="col-sm-9 mb-4" th:text="${order.customer.longName}"></div>
+                                <label class="col-sm-3" th:text="#{order.show.customer.fields.company.longName}"></label>
+                                <div class="col-sm-9" th:text="${order.customer.longName}"></div>
                             </div>
-
+                            <br>
                             <h6 th:text="#{order.show.customer.company.contact.header}"></h6>
-
-
+                            <div class="row">
+                                <label class="col-sm-3" th:text="#{order.show.customer.fields.company.contact.fullName}"></label>
+                                <div class="col-sm-9" th:text="${order.customer.mainContact.person.fullName}"></div>
+                            </div>
+                            <div class="row">
+                                <label class="col-sm-3" th:text="#{order.show.customer.fields.company.contact.telephone}"></label>
+                                <div class="col-sm-9" th:text="${order.customer.mainContact.person.fullPhoneNumber}"></div>
+                            </div>
+                            <div class="row">
+                                <label class="col-sm-3" th:text="#{order.show.customer.fields.company.contact.email}"></label>
+                                <div class="col-sm-9" th:text="${order.customer.mainContact.person.email}"></div>
+                            </div>
                         </div>
                     </div>
-
                 </div>
 
                 <!-- Вкладка Доставка -->
@@ -267,6 +387,36 @@
                     <div class="container-fluid">
                         <h5 th:text="#{order.show.tabs.delivery}">Доставка</h5>
                         <!-- Контент вкладки "Доставка" -->
+                        <div class="row">
+                            <label class="col-sm-3" th:text="#{order.show.delivery.fields.type}"></label>
+                            <div class="col-sm-9" th:text="${order.delivery.deliveryType.annotation}"></div>
+                        </div>
+                        <div class="row">
+                            <label class="col-sm-3" th:text="#{order.show.delivery.fields.paymentType}"></label>
+                            <div class="col-sm-9" th:text="${order.delivery.deliveryPaymentType.annotation}"></div>
+                        </div>
+                        <div class="row">
+                            <label class="col-sm-3" th:text="#{order.show.delivery.fields.country}"></label>
+                            <div class="col-sm-9" th:text="${order.delivery.recipient.country.name}"></div>
+                        </div>
+                        <div class="row">
+                            <label class="col-sm-3" th:text="#{order.show.delivery.fields.address}"></label>
+                            <div class="col-sm-9" th:text="${order.delivery.address.addressLine}"></div>
+                        </div>
+                        <div class="row">
+                            <label class="col-sm-3" th:text="#{order.show.delivery.fields.price}"></label>
+                            <div class="col-sm-9" th:text="${#numbers.formatDecimal(order.delivery.price, 1, 'COMMA', 2, 'POINT')}"></div>
+                        </div>
+                        <div class="row">
+                            <label class="col-sm-3" th:text="#{order.show.delivery.fields.annotation}"></label>
+                            <div class="col-sm-9" th:text="${order.delivery.annotation}"></div>
+                        </div>
+                        <div class="row">
+                            <label class="col-sm-3" th:text="#{order.show.delivery.fields.postpayAmount}"></label>
+                            <div class="col-sm-2">
+                                <strong th:text="${#numbers.formatCurrency(order.amounts[T(com.afa.core.enums.AmountTypes).POSTPAY])}"></strong>
+                            </div>
+                        </div>
                         <div class="row">
                             <label class="col-sm-3" th:text="#{order.show.delivery.fields.trackCode}"></label>
                             <div class="col-sm-9">
@@ -323,12 +473,8 @@
                         </div>
 
                         <div class="row">
-                            <label class="col-sm-2"
-                                   th:text="#{order.show.calculate.fields.postpayType}">
-                                Postpay type
-                            </label>
-                            <div class="col-sm-2 text-end"
-                                 th:text="${order.paymentType.annotation}">
+                            <label class="col-sm-2" th:text="#{order.show.calculate.fields.postpayType}"></label>
+                            <div class="col-sm-2 text-end" th:text="${order.paymentType.annotation}">
                             </div>
                         </div>
 

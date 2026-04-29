@@ -1,7 +1,11 @@
 package com.afa.devicer.web.controllers;
 
 import com.afa.core.dto.dictionaries.OrderStatusTypeDto;
+import com.afa.core.enums.OrderPaymentTypes;
+import com.afa.core.enums.OrderSourceTypes;
 import com.afa.core.enums.OrderStatusTypes;
+import com.afa.core.enums.OrderTypes;
+import com.afa.devicer.web.services.DictionaryService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,15 +26,28 @@ public class BaseController {
 
     @Autowired
     protected MessageSource messageSource;
+    @Autowired
+    protected DictionaryService dictionaryService;
 
     protected void populateDefaultModel(final Model model) {
 
-        final List<OrderStatusTypeDto> orderStatuses = Arrays.stream(OrderStatusTypes.values())
-                .filter(s -> s == OrderStatusTypes.BID
-                        || s == OrderStatusTypes.APPROVED
-                        || s == OrderStatusTypes.DELIVERED
-                        || s == OrderStatusTypes.CANCELED
-                        || s == OrderStatusTypes.FINISHED)
+        final String brandSite = messageSource.getMessage("app.brand.site", null, LocaleContextHolder.getLocale());
+        model.addAttribute("brandSite", brandSite);
+        model.addAttribute("urlHome", "/web/index/");
+        model.addAttribute("urlOrders", "/web/orders");
+        model.addAttribute("urlLogout", "/login");
+        model.addAttribute("msg", null);
+
+        model.addAttribute("orderTypes", OrderTypes.values());
+        model.addAttribute("orderSourceTypes", OrderSourceTypes.values());
+        model.addAttribute("orderPaymentTypes", OrderPaymentTypes.values());
+        model.addAttribute("productCategories", dictionaryService.getProductCategories());
+        model.addAttribute("orderStatuses", getOrderStatuses());
+    }
+
+    private List<OrderStatusTypeDto> getOrderStatuses() {
+        return Arrays.stream(OrderStatusTypes.values())
+                .filter(s -> s != OrderStatusTypes.UNKNOWN)
                 .map(s -> OrderStatusTypeDto.builder()
                         .id(s.getId())
                         .code(s.getCode())
@@ -39,19 +56,5 @@ public class BaseController {
                         .build())
                 .sorted(Comparator.comparing(OrderStatusTypeDto::getId))
                 .toList();
-        model.addAttribute("orderStatuses", orderStatuses);
-
-        final List<String> allViewStatuses = Arrays.stream(OrderStatusTypes.values())
-                .map(OrderStatusTypes::getAnnotation)
-                .collect(Collectors.toList());
-        model.addAttribute("allViewStatusTypes", allViewStatuses);
-
-        final String brandSite = messageSource.getMessage("app.brand.site", null, LocaleContextHolder.getLocale());
-        model.addAttribute("brandSite", brandSite);
-        model.addAttribute("urlHome", "/web/index/");
-        model.addAttribute("urlOrders", "/web/orders");
-        model.addAttribute("urlLogout", "/login");
-        model.addAttribute("msg", null);
     }
-
 }

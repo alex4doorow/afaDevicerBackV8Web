@@ -16,7 +16,7 @@
         <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
             <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
                 <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="sidebarMenuLabel">SIR RICHARD BOSS</h5>
+                    <h5 class="offcanvas-title" id="sidebarMenuLabel"></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu" aria-label="Close"></button>
                 </div>
 
@@ -25,31 +25,13 @@
         </div>
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2" th:text="#{order.show.header}"></h1>
-                <div class="btn-toolbar mb-2 mb-md-0">
-                    <div class="btn-group me-2">
-                        <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
-                    </div>
-                    <button type="button"
-                            class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1">
-                        <svg class="bi" aria-hidden="true">
-                            <use xlink:href="#calendar3"></use>
-                        </svg>
-                        This week
-                    </button>
-                </div>
-            </div>
-
             <div class="d-flex justify-content-start flex-wrap flex-md-nowrap align-items-start">
-                <h1 class="h4">
+                <h1 class="mt-2 h4">
                     <span th:text="#{order.form.changeStatus.headers.h1(${order.viewNum}, ${#temporals.format(order.orderDate, 'dd.MM.yyyy')})}">
                         Заказ № XXX от XX.XX.XXXX
                     </span>
                 </h1>
             </div>
-
             <div class="d-flex justify-content-start flex-wrap flex-md-nowrap align-items-start border-bottom mb-2">
                 <h2 class="h5">
                     <span th:text="${order.customer.viewLongNameWithContactInfo}"></span>&nbsp;
@@ -58,20 +40,20 @@
             </div>
 
             <div class="d-flex gap-2">
-                <button id="btn-update-order" type="button" class="btn btn-primary"
-                        th:text="#{main.btn.updateData}"></button>
-
-                <button id="btn-show-order" type="button" class="btn btn-light"
-                        th:text="#{main.btn.showData}"></button>
-
+                <a id="btn-update-order" class="btn btn-primary"
+                   th:href="@{/web/orders/{id}/update(id=${order.id})}"
+                   th:text="#{main.btn.updateData}">
+                </a>
+                <a class="btn btn-light"
+                   th:href="@{/web/orders/{id}/show(id=${order.id})}"
+                   th:text="#{main.btn.showData}">
+                </a>
                 <button id="btn-status-order" type="button" class="btn btn-light"
                         th:text="#{main.btn.statusData}" disabled></button>
 
                 <button id="btn-clone-order" type="button" class="btn btn-light"
                         th:text="#{main.btn.cloneData}"></button>
             </div>
-            <br>
-
             <form th:action="@{/web/orders/{orderId}/change-status/{listType}(orderId=${order.id}, listType=${listType})}"
                   th:object="${formOrder}"
                   method="post">
@@ -80,18 +62,69 @@
 
                 <div class="row mb-3">
                     <div class="col-4">
-                        <label for="select-order-status" class="form-label" th:text="#{order.form.fields.orderStatus}"></label>
-                        <select th:field="*{formStatusCode}"
-                                id="select-order-status"
+                        <label for="select-order-type" class="form-label" th:text="#{order.form.fields.orderType}"></label>
+                        <select th:field="*{type}"
+                                id="select-order-type"
                                 class="form-select form-select-sm">
-                            <option th:each="statusItem : ${orderStatuses}"
-                                    th:value="${statusItem.code}"
-                                    th:text="${statusItem.annotation}">
+                            <option th:each="item : ${orderTypes}"
+                                    th:value="${item.code}"
+                                    th:text="${item.annotation}">
                             </option>
                         </select>
                     </div>
                 </div>
-
+                <div class="row mb-3">
+                    <div class="col-4">
+                        <label for="select-order-source-type" class="form-label" th:text="#{order.form.fields.sourceType}"></label>
+                        <select th:field="*{sourceType}"
+                                id="select-order-source-type"
+                                class="form-select form-select-sm">
+                            <option th:each="item : ${orderSourceTypes}"
+                                    th:value="${item.code}"
+                                    th:text="${item.annotation}">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-4">
+                        <label for="select-order-payment-type" class="form-label" th:text="#{order.form.delivery.fields.paymentType}"></label>
+                        <select th:field="*{paymentType}"
+                                id="select-order-payment-type"
+                                class="form-select form-select-sm">
+                            <option th:each="item : ${orderPaymentTypes}"
+                                    th:value="${item.code}"
+                                    th:text="${item.annotation}">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-4">
+                        <label for="select-order-product-category-type" class="form-label" th:text="#{order.form.fields.productCategory}"></label>
+                        <select th:field="*{formProductCategoryId}"
+                                id="select-order-product-category-type"
+                                class="form-select form-select-sm">
+                            <option th:each="item : ${productCategories}"
+                                    th:value="${item.id}"
+                                    th:text="${item.name}">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-4">
+                        <label for="select-order-status" class="form-label" th:text="#{order.form.fields.orderStatus}"></label>
+                        <select th:field="*{formStatusCode}"
+                                id="select-order-status"
+                                class="form-select form-select-sm">
+                            <option th:each="item : ${orderStatuses}"
+                                    th:value="${item.code}"
+                                    th:text="${item.annotation}">
+                            </option>
+                        </select>
+                    </div>
+                </div>
                 <div class="row mb-3">
                     <div class="col-4">
                         <label for="input-payment-annotation"
@@ -106,7 +139,6 @@
                         </textarea>
                     </div>
                 </div>
-
                 <div class="row mb-3">
                     <div class="col-4">
                         <label for="input-delivery-trackCode"
@@ -114,12 +146,10 @@
                                th:text="#{order.form.delivery.fields.trackCode}">
                             Track Code
                         </label>
-
                         <input type="text"
                                th:field="*{delivery.trackCode}"
                                id="input-delivery-trackCode"
                                class="form-control form-control-sm"/>
-
                         <div class="text-danger small"
                              th:if="${#fields.hasErrors('delivery.trackCode')}"
                              th:errors="*{delivery.trackCode}">
@@ -139,6 +169,7 @@
                         Cancel
                     </a>
                 </div>
+
             </form>
         </main>
     </div>

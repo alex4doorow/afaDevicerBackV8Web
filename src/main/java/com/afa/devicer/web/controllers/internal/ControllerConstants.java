@@ -13,6 +13,7 @@ public final class ControllerConstants {
     public static final String INDEX = BASE_API + "/index";
     public static final String CUSTOMERS = BASE_API + "/customers";
     public static final String ORDERS = BASE_API + "/orders";
+    public static final String PERSON_SETTINGS = BASE_API + "/persons/settings";
 
     public static final String ROLE_ADMIN = "ROLE_ADMIN";
     public static final String ROLE_CUSTOMER = "ROLE_CUSTOMER";

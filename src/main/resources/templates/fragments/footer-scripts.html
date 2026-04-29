@@ -8,7 +8,41 @@
                 integrity="sha384-eI7PSr3L1XLISH8JdDII5YN/njoSsxfbrkCTnJrzXt+ENP5MOVBxD+l6sEG4zoLp" crossorigin="anonymous"
                 class="astro-vvvwv3sm"></script>
         <script th:src="@{/js/dashboard.js}" class="astro-vvvwv3sm"></script>
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/i18n/datepicker-ru.min.js"></script>
 
+        <script>
+            $(function () {
+                $.datepicker.regional["ru"] = {
+                    closeText: "Закрыть",
+                    prevText: "Пред",
+                    nextText: "След",
+                    currentText: "Сегодня",
+                    monthNames: ["Январь","Февраль","Март","Апрель","Май","Июнь",
+                        "Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"],
+                    monthNamesShort: ["Янв","Фев","Мар","Апр","Май","Июн",
+                        "Июл","Авг","Сен","Окт","Ноя","Дек"],
+                    dayNames: ["воскресенье","понедельник","вторник","среда","четверг","пятница","суббота"],
+                    dayNamesShort: ["вск","пнд","втр","срд","чтв","птн","сбт"],
+                    dayNamesMin: ["Вс","Пн","Вт","Ср","Чт","Пт","Сб"],
+                    weekHeader: "Нед",
+                    dateFormat: "dd.mm.yy",
+                    firstDay: 1,
+                    isRTL: false,
+                    showMonthAfterYear: false,
+                    yearSuffix: ""
+                };
+
+                $.datepicker.setDefaults($.datepicker.regional["ru"]);
+
+                $(".datepicker").datepicker({
+                    dateFormat: "dd.mm.yy",
+                    changeMonth: true,
+                    changeYear: true
+                });
+            });
+        </script>
     </div>
 </body>
 </html>
