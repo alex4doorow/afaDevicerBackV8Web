@@ -2,7 +2,7 @@ package com.afa.devicer.web.controllers;
 
 import com.afa.core.dto.persons.PersonSettingsResponse;
 import com.afa.devicer.web.controllers.internal.ControllerConstants;
-import com.afa.devicer.web.dto.employees.FormPersonSettingsDto;
+import com.afa.devicer.web.dto.persons.FormPersonSettingsDto;
 import com.afa.devicer.web.mappers.PersonSettingsDtoMapper;
 import com.afa.devicer.web.services.PersonSettingService;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +31,7 @@ public class PersonSettingController extends BaseController {
         final FormPersonSettingsDto form = personSettingsDtoMapper.fromPersonSettings(settings.getSettings());
 
         populateDefaultModel(model);
+        model.addAttribute("activeMenu", "orders");
         model.addAttribute("formSettings", form);
         return "persons/orderConditionForm.html";
     }
@@ -43,6 +44,7 @@ public class PersonSettingController extends BaseController {
 
         if (bindingResult.hasErrors()) {
             populateDefaultModel(model);
+            model.addAttribute("activeMenu", "orders");
             model.addAttribute("formSettings", form);
             return "persons/orderConditionForm.html";
         }

@@ -39,7 +39,6 @@
                 </h2>
             </div>
 
-
             <div class="small col-xl-8 col-lg-10 col-md-12">
 
                 <form th:action="@{/web/orders/{orderId}/update(orderId=${order.id})}"
@@ -73,36 +72,41 @@
                                    class="form-label"
                                    th:text="#{order.form.fields.no}">
                             </label>
-
                             <input id="input-order-no"
                                    type="text"
                                    class="form-control form-control-sm"
-                                   th:field="*{orderNum}"
+                                   th:field="*{formOrderNum}"
                                    th:placeholder="#{order.form.fields.placeholder.no}"
-                                   th:classappend="${#fields.hasErrors('orderNum')} ? ' is-invalid' : ''"/>
+                                   th:classappend="${#fields.hasErrors('formOrderNum')} ? ' is-invalid' : ''"/>
 
                             <div class="invalid-feedback"
-                                 th:if="${#fields.hasErrors('orderNum')}"
-                                 th:errors="*{orderNum}">
+                                 th:if="${#fields.hasErrors('formOrderNum')}"
+                                 th:errors="*{formOrderNum}">
                             </div>
                         </div>
+
                         <div class="col-md-2">
-                            <label for="input-order-orderDate" class="form-label">Дата заказа *</label>
+                            <label for="input-order-orderDate"
+                                   class="form-label"
+                                   th:text="#{order.form.fields.orderDate}"></label>
                             <div class="input-group input-group-sm">
-                                <input id="input-order-orderDate"
-                                       name="orderDate"
-                                       placeholder="Дата заказа"
-                                       type="text"
+                                <input type="text"
+                                       th:field="*{orderDate}"
+                                       id="input-order-orderDate"
                                        class="form-control datepicker"
-                                       value="31.08.2021"
                                        maxlength="10"
-                                       required>
+                                       required
+                                       th:placeholder="#{order.form.fields.placeholder.orderDate}"
+                                       th:classappend="${#fields.hasErrors('orderDate')} ? 'is-invalid' : ''"/>
                                 <button class="btn btn-outline-secondary"
                                         onclick="$('#input-order-orderDate').datepicker('show');"
                                         type="button">
-                                    <i class="bi bi-calendar2-date text-dark"></i>
+                                    <i class="bi bi-calendar-date text-dark"></i>
                                 </button>
-                                <div class="invalid-feedback">Укажите дату заказа</div>
+                            </div>
+                            <div class="text-danger small mt-1"
+                                 th:if="${#fields.hasErrors('orderDate')}"
+                                 th:errors="*{orderDate}">
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -116,60 +120,57 @@
 
                     <div class="row g-3 mb-3 align-items-start">
                         <div class="col-md-3">
-                            <label for="select-order-type" class="form-label">Тип</label>
-                            <select id="select-order-type" name="orderType" class="form-select form-select-sm">
-                                <option value="UNKNOWN">неопределен</option>
-                                <option value="ORDER">заказ</option>
-                                <option value="BILL">счет на оплату</option>
-                                <option value="KP" selected>коммерческое предложение</option>
-                                <option value="CONSULTATION">консультация</option>
-                                <option value="CHANGE">замена</option>
-                                <option value="REFUND">возврат</option>
-                                <option value="GIFT">подарок</option>
-                                <option value="TEST_DIVE">тест-драйв</option>
-                                <option value="REPAIR">ремонт</option>
+                            <label for="select-order-type"
+                                   class="form-label"
+                                   th:text="#{order.form.fields.orderType}"></label>
+                            <select th:field="*{type}"
+                                    id="select-order-type"
+                                    class="form-select form-select-sm">
+                                <option th:each="item : ${orderTypes}"
+                                        th:value="${item.code}"
+                                        th:text="${item.annotation}">
+                                </option>
                             </select>
                         </div>
-
                         <div class="col-md-2">
-                            <label for="select-source-type" class="form-label">Источник</label>
-                            <select id="select-source-type" name="sourceType" class="form-select form-select-sm">
-                                <option value="UNKNOWN">неопределен</option>
-                                <option value="CALL">звонок</option>
-                                <option value="CHAT">чат</option>
-                                <option value="EMAIL" selected>письмо</option>
-                                <option value="LID">лид</option>
-                                <option value="FAST_LID">быстрый заказ</option>
-                                <option value="CALL_BACK">обратный звонок</option>
-                                <option value="TENDER">тендер</option>
+                            <label for="select-order-source-type"
+                                   class="form-label"
+                                   th:text="#{order.form.fields.sourceType}"></label>
+                            <select th:field="*{sourceType}"
+                                    id="select-order-source-type"
+                                    class="form-select form-select-sm">
+                                <option th:each="item : ${orderSourceTypes}"
+                                        th:value="${item.code}"
+                                        th:text="${item.annotation}">
+                                </option>
                             </select>
                         </div>
-
                         <div class="col-md-2">
-                            <label for="select-advert-type" class="form-label">Канал привлечения</label>
-                            <select id="select-advert-type" name="advertType" class="form-select form-select-sm">
-                                <option value="UNKNOWN">неопределен</option>
-                                <option value="ADVERT" selected>реклама</option>
-                                <option value="CONTEXT">поиск</option>
-                                <option value="YOUTUBE">youTube</option>
-                                <option value="LOYALTY">сарафанное радио</option>
-                                <option value="REPEAT_CALL">повторное обращение</option>
-                                <option value="COLD_CALL">холодный звонок</option>
-                                <option value="TENDER">тендер</option>
-                                <option value="YANDEX_MARKET">яндекс.маркет</option>
-                                <option value="CDEK_MARKET">сдэк.маркет</option>
-                                <option value="OZON">озон</option>
+                            <label for="select-order-advert-type"
+                                   class="form-label"
+                                   th:text="#{order.form.fields.advertType}"></label>
+                            <select th:field="*{advertType}"
+                                    id="select-order-advert-type"
+                                    class="form-select form-select-sm">
+                                <option th:each="item : ${orderAdvertTypes}"
+                                        th:value="${item.code}"
+                                        th:text="${item.annotation}">
+                                </option>
                             </select>
                         </div>
-
                         <div class="col-md-4">
-                            <label for="select-product-category" class="form-label">Категория</label>
-                            <select id="select-product-category" name="productCategory.id" class="form-select form-select-sm">
-                                <option value="108" selected>отпугиватели собак</option>
-                                <option value="0">не определена</option>
+                            <label for="select-order-product-category"
+                                   class="form-label"
+                                   th:text="#{order.form.fields.productCategory}"></label>
+                            <select th:field="*{formProductCategoryId}"
+                                    id="select-order-product-category"
+                                    class="form-select form-select-sm">
+                                <option th:each="item : ${productCategories}"
+                                        th:value="${item.id}"
+                                        th:text="${item.name}">
+                                </option>
                             </select>
                         </div>
-
                         <div class="col-md-1">
                             <label for="input-order-offer-count-day" class="form-label">31.08.2021</label>
                             <input id="input-order-offer-count-day"
@@ -184,18 +185,20 @@
 
                     <div class="row g-3 mb-4">
                         <div class="col-12">
-                            <label for="input-payment-annotation" class="form-label">Дополнительно</label>
+                            <label for="input-payment-annotation"
+                                   class="form-label"
+                                   th:text="#{order.form.fields.annotation}">
+                                Annotation
+                            </label>
                             <textarea id="input-payment-annotation"
-                                      name="annotation"
-                                      maxlength="255"
+                                      th:field="*{annotation}"
                                       class="form-control form-control-sm"
-                                      rows="2"></textarea>
+                                      rows="2"
+                                      maxlength="255"
+                                      th:classappend="${#fields.hasErrors('annotation')} ? 'is-invalid'">
+                            </textarea>
                         </div>
                     </div>
-
-
-
-
 
 
                 </form>

@@ -25,8 +25,13 @@
     font-weight: 500;
 }
 
+/*.sidebar .nav-link.active {*/
+/*    color: #084098;*/
+/*}*/
+
 .sidebar .nav-link.active {
-    color: #2470dc;
+    color: #0953bd;
+    font-weight: 600;
 }
 
 .sidebar-heading {

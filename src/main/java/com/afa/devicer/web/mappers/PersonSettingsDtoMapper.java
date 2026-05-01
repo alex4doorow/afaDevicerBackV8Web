@@ -2,7 +2,7 @@ package com.afa.devicer.web.mappers;
 
 import com.afa.core.dto.persons.PersonSettingsDto;
 import com.afa.core.enums.OrderStatusTypes;
-import com.afa.devicer.web.dto.employees.FormPersonSettingsDto;
+import com.afa.devicer.web.dto.persons.FormPersonSettingsDto;
 import org.mapstruct.Builder;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

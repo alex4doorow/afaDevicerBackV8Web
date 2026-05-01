@@ -1,4 +1,4 @@
-package com.afa.devicer.web.dto.employees;
+package com.afa.devicer.web.dto.persons;
 
 import com.afa.core.dto.customers.CustomerConditionsDto;
 import com.afa.core.dto.persons.PersonSettingsDto;
@@ -31,7 +31,7 @@ public class FormPersonSettingsDto extends PersonSettingsDto {
 
     private List<String> formOrderStatuses = new ArrayList<>();
 
-    public void convertFromForm() {
+    public void convertForm() {
         if (getOrders().getProductConditions() == null) {
             getOrders().setProductConditions(new ProductConditionsDto());
         }
@@ -44,7 +44,7 @@ public class FormPersonSettingsDto extends PersonSettingsDto {
         } else {
             getOrders().setPeriod(null);
         }
-        Set<OrderStatusTypes> orderStatuses = formOrderStatuses.stream()
+        final Set<OrderStatusTypes> orderStatuses = formOrderStatuses.stream()
                 .map(OrderStatusTypes::valueOf)
                 .collect(Collectors.toSet());
         getOrders().setStatuses(orderStatuses);

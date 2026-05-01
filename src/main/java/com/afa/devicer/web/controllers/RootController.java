@@ -28,4 +28,9 @@ public class RootController extends BaseController{
                 LocaleContextHolder.getLocale()));
         return "index.html";
     }
+
+    @Override
+    protected void setActiveMenu(final Model model) {
+        model.addAttribute("activeMenu", "home");
+    }
 }

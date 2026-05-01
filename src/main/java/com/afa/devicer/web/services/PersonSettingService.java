@@ -3,7 +3,7 @@ package com.afa.devicer.web.services;
 import com.afa.core.dto.BaseResponse;
 import com.afa.core.dto.persons.PersonSettingsResponse;
 import com.afa.core.dto.persons.PersonSettingsSaveRequest;
-import com.afa.devicer.web.dto.employees.FormPersonSettingsDto;
+import com.afa.devicer.web.dto.persons.FormPersonSettingsDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -14,6 +14,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@SuppressWarnings({"PMD.LawOfDemeter"})
 public class PersonSettingService {
 
     private final WebClient webClient;
@@ -35,7 +36,7 @@ public class PersonSettingService {
 
     @Transactional
     public PersonSettingsSaveRequest createRequestByOrderConditions(final FormPersonSettingsDto form) {
-        form.convertFromForm();
+        form.convertForm();
         final PersonSettingsSaveRequest request = PersonSettingsSaveRequest.builder()
                 .settings(loadSettings().getSettings())
                 .build();

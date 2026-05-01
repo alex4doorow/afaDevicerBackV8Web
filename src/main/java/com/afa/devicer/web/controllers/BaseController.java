@@ -1,10 +1,7 @@
 package com.afa.devicer.web.controllers;
 
 import com.afa.core.dto.dictionaries.OrderStatusTypeDto;
-import com.afa.core.enums.OrderPaymentTypes;
-import com.afa.core.enums.OrderSourceTypes;
-import com.afa.core.enums.OrderStatusTypes;
-import com.afa.core.enums.OrderTypes;
+import com.afa.core.enums.*;
 import com.afa.devicer.web.services.DictionaryService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +14,6 @@ import org.springframework.ui.Model;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Getter
@@ -40,9 +36,11 @@ public class BaseController {
 
         model.addAttribute("orderTypes", OrderTypes.values());
         model.addAttribute("orderSourceTypes", OrderSourceTypes.values());
+        model.addAttribute("orderAdvertTypes", OrderAdvertTypes.values());
         model.addAttribute("orderPaymentTypes", OrderPaymentTypes.values());
         model.addAttribute("productCategories", dictionaryService.getProductCategories());
         model.addAttribute("orderStatuses", getOrderStatuses());
+        setActiveMenu(model);
     }
 
     private List<OrderStatusTypeDto> getOrderStatuses() {
@@ -56,5 +54,9 @@ public class BaseController {
                         .build())
                 .sorted(Comparator.comparing(OrderStatusTypeDto::getId))
                 .toList();
+    }
+
+    protected void setActiveMenu(final Model model) {
+        model.addAttribute("activeMenu", "");
     }
 }

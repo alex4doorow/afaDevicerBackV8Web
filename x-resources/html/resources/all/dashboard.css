@@ -26,7 +26,8 @@
 }
 
 .sidebar .nav-link.active {
-    color: #2470dc;
+    color: #0953bd;
+    font-weight: 600;
 }
 
 .sidebar-heading {
@@ -47,3 +48,30 @@
 .navbar .form-control {
     padding: .75rem 1rem;
 }
+
+/*
+.sidebar .nav-link {
+    color: #0d6efd;
+    border-radius: 8px;
+    margin: 2px 8px;
+    padding: 10px 12px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.sidebar .nav-link:hover {
+    background-color: #e9f2ff;
+    color: #0a58ca;
+}
+
+.sidebar .nav-link.active {
+    background-color: #dbeafe;
+    color: #084298;
+    font-weight: 600;
+    box-shadow: inset 3px 0 0 #0d6efd;
+}
+
+.sidebar .nav-link.active svg {
+    color: #084298;
+}
+*/

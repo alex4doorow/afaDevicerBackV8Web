@@ -5,18 +5,28 @@
 <div th:fragment="header-left-panel" class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
 
     <ul class="nav flex-column">
-        <li class="nav-item"><a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" th:href="@{(${urlHome})}">
-            <svg class="bi" aria-hidden="true">
-                <use xlink:href="#house-fill"></use>
-            </svg>
-            <span th:text="#{main.menus.left.home}"></span>
-        </a></li>
-        <li class="nav-item"><a class="nav-link d-flex align-items-center gap-2" th:href="@{(${urlOrders})}">
-            <svg class="bi" aria-hidden="true">
-                <use xlink:href="#file-earmark"></use>
-            </svg>
-            <span th:text="#{main.menus.left.orders}"></span>
-        </a></li>
+        <li class="nav-item">
+            <a class="nav-link d-flex align-items-center gap-2"
+               th:classappend="${activeMenu == 'home'} ? ' active' : ''"
+               th:attr="aria-current=${activeMenu == 'home'} ? 'page' : null"
+               th:href="@{(${urlHome})}">
+                <svg class="bi" aria-hidden="true">
+                    <use xlink:href="#house-fill"></use>
+                </svg>
+                <span th:text="#{main.menus.left.home}"></span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link d-flex align-items-center gap-2"
+               th:classappend="${activeMenu == 'orders'} ? ' active' : ''"
+               th:attr="aria-current=${activeMenu == 'orders'} ? 'page' : null"
+               th:href="@{(${urlOrders})}">
+                <svg class="bi" aria-hidden="true">
+                    <use xlink:href="#file-earmark"></use>
+                </svg>
+                <span th:text="#{main.menus.left.orders}"></span>
+            </a>
+        </li>
         <li class="nav-item"><a class="nav-link d-flex align-items-center gap-2" href="#">
             <svg class="bi" aria-hidden="true">
                 <use xlink:href="#cart"></use>

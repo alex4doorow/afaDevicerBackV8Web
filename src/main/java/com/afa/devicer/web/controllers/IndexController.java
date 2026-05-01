@@ -23,8 +23,14 @@ public class IndexController extends BaseController{
     public String index(final Model model) {
 
         populateDefaultModel(model);
+        model.addAttribute("activeMenu", "home");
         model.addAttribute("customPageTitle", getMessageSource().getMessage("index.header", null,
                 LocaleContextHolder.getLocale()));
         return "index.html";
+    }
+
+    @Override
+    protected void setActiveMenu(final Model model) {
+        model.addAttribute("activeMenu", "home");
     }
 }

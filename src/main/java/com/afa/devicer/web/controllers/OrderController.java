@@ -1,9 +1,10 @@
 package com.afa.devicer.web.controllers;
 
+import com.afa.core.dto.dictionaries.AddressSaveRequest;
 import com.afa.core.dto.orders.*;
+import com.afa.core.dto.persons.PersonSaveRequest;
 import com.afa.core.dto.persons.PersonSettingsResponse;
-import com.afa.core.enums.AmountTypes;
-import com.afa.core.enums.OrderStatusTypes;
+import com.afa.core.enums.*;
 import com.afa.devicer.web.controllers.internal.ControllerConstants;
 import com.afa.devicer.web.dto.orders.FormOrderDto;
 import com.afa.devicer.web.mappers.OrderDtoMapper;
@@ -21,6 +22,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.math.BigDecimal;
+import java.util.Set;
+import java.util.UUID;
 
 @Slf4j
 @CrossOrigin
@@ -73,7 +78,7 @@ public class OrderController extends BaseController {
             final Model model) {
 
         final OrderSingleResponse response = orderService.getOrderById(orderId);
-        final FormOrderDto form = orderDtoMapper.fromOrder(response.getOrder());
+        final FormOrderDto form = orderDtoMapper.fromOrderToForm(response.getOrder());
 
         populateDefaultModel(model);
         model.addAttribute("listType", "list");
@@ -85,29 +90,58 @@ public class OrderController extends BaseController {
     @PostMapping("/{orderId}/update")
     public String saveOrder4Edit(
             @NotNull @Valid @PathVariable final Long orderId,
-            @ModelAttribute("orderForm") @Validated FormOrderDto form,
+            @ModelAttribute("formOrder") @Validated FormOrderDto form,
             BindingResult bindingResult,
             Model model,
             final RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
-
             final OrderSingleResponse response = orderService.getOrderById(orderId);
             model.addAttribute("listType", "list");
             model.addAttribute("order", response.getOrder());
             model.addAttribute("formOrder", form);
             return "orders/orderForm.html";
         }
-
-        final OrderSaveRequest request = OrderSaveRequest.builder()
+        form.convertForm();
+        final OrderDto order = orderService.getOrderById(orderId).getOrder();
+        OrderSaveRequest request = OrderSaveRequest.builder()
+                .orderNum(form.getOrderNum())
+                .orderDate(form.getOrderDate())
                 .type(form.getType())
                 .sourceType(form.getSourceType())
-                .paymentType(form.getPaymentType())
-                .productCategoryId(form.getFormProductCategoryId())
+                .advertType(form.getAdvertType())
+                .store(form.getStore())
+                .productCategoryId(form.getProductCategory().getId())
                 .annotation(form.getAnnotation())
+                .paymentType(order.getPaymentType())
+                .customerId(order.getCustomer().getId())
+                .delivery(OrderDeliverySaveRequest.builder()
+                        .deliveryType(DeliveryTypes.CDEK_COURIER)
+                        .deliveryPaymentType(DeliveryPaymentTypes.CUSTOMER)
+                        .deliveryPriceType(DeliveryPriceTypes.COURIER_MO_TYPICAL_MKAD_15_KM)
+                        .price(order.getDelivery().getPrice())
+                        .address(AddressSaveRequest.builder()
+                                .countryId(UUID.fromString("65f87394-9c99-4492-9364-76f5e45f6837"))
+                                .type(AddressTypes.MAIN)
+                                .addressLine(order.getDelivery().getAddress().getAddressLine())
+                                .build())
+                        .recipient(PersonSaveRequest.builder()
+                                .firstName("Константин")
+                                .phoneNumber("(999) 888-90-80")
+                                .build())
+                        .deliveryDate(order.getDelivery().getDeliveryDate())
+                        .build())
+                .items(Set.of(OrderItemSaveRequest.builder()
+                        .itemNum(1)
+                        .productId(32L)
+                        .price(BigDecimal.valueOf(4725))
+                        .quantity(2)
+                        .discountRate(BigDecimal.ZERO)
+                        .build()))
                 .build();
-        //final OrderDto result = orderService.update(orderId, request);
-        //log.info("{}", result.getId());
+
+        final OrderDto result = orderService.update(orderId, request);
+        log.info("{}", result.getId());
         return "redirect:/web/orders";
     }
 
@@ -118,7 +152,7 @@ public class OrderController extends BaseController {
             final Model model) {
 
         final OrderSingleResponse response = orderService.getOrderById(orderId);
-        final FormOrderDto form = orderDtoMapper.fromOrder(response.getOrder());
+        final FormOrderDto form = orderDtoMapper.fromOrderToForm(response.getOrder());
 
         populateDefaultModel(model);
         model.addAttribute("listType", listType);
@@ -131,7 +165,7 @@ public class OrderController extends BaseController {
     public String saveOrder4ChangeStatus(
             @NotNull @Valid @PathVariable final Long orderId,
             @PathVariable("list-type") String listType,
-            @ModelAttribute("orderForm") @Validated FormOrderDto form,
+            @ModelAttribute("formOrder") @Validated FormOrderDto form,
             BindingResult bindingResult,
             Model model,
             final RedirectAttributes redirectAttributes) {
@@ -158,4 +192,10 @@ public class OrderController extends BaseController {
         log.info("{}", result.getId());
         return "redirect:/web/orders";
     }
+
+    @Override
+    protected void setActiveMenu(final Model model) {
+        model.addAttribute("activeMenu", "orders");
+    }
+
 }

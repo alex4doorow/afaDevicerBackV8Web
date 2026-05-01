@@ -11,9 +11,16 @@ import org.mapstruct.ReportingPolicy;
 @SuppressWarnings({"PMD.LawOfDemeter"})
 public interface OrderDtoMapper {
 
+    @Mapping(target = "formOrderNum", expression = "java(getFormOrderNum(dto))")
     @Mapping(target = "formStatusCode", expression = "java(getFormStatusCode(dto))")
     @Mapping(target = "formProductCategoryId", expression = "java(getFormProductCategoryId(dto))")
-    FormOrderDto fromOrder(OrderDto dto);
+    FormOrderDto fromOrderToForm(OrderDto dto);
+
+    //OrderSaveRequest fromOrderToSaveRequest(OrderDto dto);
+
+    default Long getFormOrderNum(final OrderDto dto) {
+        return dto.getOrderNum();
+    }
 
     default String getFormStatusCode(final OrderDto dto) {
         return dto.getStatus().getCode();
@@ -22,4 +29,5 @@ public interface OrderDtoMapper {
     default Long getFormProductCategoryId(final OrderDto dto) {
         return dto.getProductCategory().getId();
     }
+
 }

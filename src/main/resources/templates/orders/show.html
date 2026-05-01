@@ -27,7 +27,7 @@
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             <div class="d-flex justify-content-start flex-wrap flex-md-nowrap align-items-start">
-                <h1 class="h4">
+                <h1 class="mt-2 h4">
                     <span th:text="#{order.show.headers.h1(${order.viewNum}, ${#temporals.format(order.orderDate, 'dd.MM.yyyy')})}">
                         Заказ № XXX от XX.XX.XXXX
                     </span>
@@ -41,10 +41,10 @@
             </div>
 
             <div class="d-flex gap-2">
-                <button id="btn-update-order" type="button" class="btn btn-primary"
-                        th:data-update-url="@{/web/orders/{id}/update/{listType}(id=${order.id}, listType=${listType})}"
-                        th:text="#{main.btn.updateData}"></button>
-
+                <a id="btn-update-order" class="btn btn-primary"
+                   th:href="@{/web/orders/{id}/update(id=${order.id})}"
+                   th:text="#{main.btn.updateData}">
+                </a>
                 <button id="btn-show-order" type="button" class="btn btn-light"
                         th:data-show-url="@{/web/orders/{id}/{listType}(id=${order.id}, listType=${listType})}"
                         th:text="#{main.btn.showData}" disabled></button>
@@ -53,7 +53,6 @@
                    th:href="@{/web/orders/{id}/change-status/{listType}(id=${order.id}, listType=${listType})}"
                    th:text="#{main.btn.statusData}">
                 </a>
-
                 <button id="btn-clone-order" type="button" class="btn btn-light"
                         th:data-clone-url="@{/web/orders/{id}/clone(id=${order.id})}"
                         th:text="#{main.btn.cloneData}"></button>
