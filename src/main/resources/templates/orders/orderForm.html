@@ -46,7 +46,7 @@
                       method="post">
 
                     <div class="d-flex gap-2">
-                        <a disabled class="btn btn-light" th:text="#{main.btn.updateData}"></a>
+                        <button type="button" class="btn btn-light" th:text="#{main.btn.updateData}" disabled></button>
                         <a class="btn btn-primary"
                            th:href="@{/web/orders/{id}/show(id=${order.id})}"
                            th:text="#{main.btn.showData}">
@@ -64,6 +64,10 @@
                     </div>
 
                     <input type="hidden" th:field="*{id}"/>
+                    <input type="hidden" th:field="*{formCustomerType}"/>
+                    <input type="hidden" th:field="*{formCustomerId}"/>
+                    <input type="hidden" th:field="*{formCustomerCompanyId}"/>
+                    <input type="hidden" th:field="*{formCustomerPersonId}"/>
 
                     <!-- Заказ -->
                     <div class="row g-3 mt-2 mb-3 align-items-start">
@@ -199,6 +203,443 @@
                             </textarea>
                         </div>
                     </div>
+
+                    <!-- Покупатель -->
+                    <h4 id="header-group-customer" class="mt-4 mb-3">Юридическое лицо</h4>
+                    <hr class="mb-4">
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <div class="form-check">
+                                <input class="form-check-input radio-customer-type"
+                                       type="radio"
+                                       name="gridRadiosCustomerType"
+                                       id="customer-types-CUSTOMER"
+                                       value="CUSTOMER">
+                                <label class="form-check-label" for="customer-types-CUSTOMER">физическое лицо</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-check">
+                                <input class="form-check-input radio-customer-type"
+                                       type="radio"
+                                       name="gridRadiosCustomerType"
+                                       id="customer-types-COMPANY"
+                                       value="COMPANY">
+                                <label class="form-check-label" for="customer-types-COMPANY">юридическое лицо</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-check">
+                                <input class="form-check-input radio-customer-type"
+                                       type="radio"
+                                       name="gridRadiosCustomerType"
+                                       id="customer-types-BUSINESSMAN"
+                                       value="BUSINESSMAN">
+                                <label class="form-check-label" for="customer-types-BUSINESSMAN">индивидуальный предприниматель</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-check">
+                                <input class="form-check-input radio-customer-type"
+                                       type="radio"
+                                       name="gridRadiosCustomerType"
+                                       id="customer-types-FOREIGNER_CUSTOMER"
+                                       value="FOREIGNER_CUSTOMER">
+                                <label class="form-check-label" for="customer-types-FOREIGNER_CUSTOMER">нерезидент, физическое лицо</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-check">
+                                <input class="form-check-input radio-customer-type"
+                                       type="radio"
+                                       name="gridRadiosCustomerType"
+                                       id="customer-types-FOREIGNER_COMPANY"
+                                       value="FOREIGNER_COMPANY">
+                                <label class="form-check-label" for="customer-types-FOREIGNER_COMPANY">нерезидент, юридическое лицо</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label for="select-customer-country"
+                                   class="form-label"
+                                   th:text="#{order.form.customer.fields.country}"></label>
+                            <select th:field="*{formCustomerCountryId}"
+                                    id="select-customer-country"
+                                    class="form-select form-select-sm">
+                                <option th:each="item : ${countries}"
+                                        th:value="${item.id}"
+                                        th:text="${item.name}">
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Юридическое лицо -->
+                    <div class="form-group-company">
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-2">
+                                <label for="input-customer-inn"
+                                       class="form-label"
+                                       th:text="#{order.form.customer.fields.inn}"></label>
+                                <input id="input-customer-inn"
+                                       th:field="*{formCustomerInn}"
+                                       th:placeholder="#{order.form.customer.fields.placeholder.inn}"
+                                       type="text"
+                                       class="form-control form-control-sm"
+                                       maxlength="12"
+                                       th:classappend="${#fields.hasErrors('formCustomerInn')} ? ' is-invalid' : ''"/>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label for="input-customer-short-name"
+                                       class="form-label"
+                                       th:text="#{order.form.customer.fields.shortName}"></label>
+                                <input id="input-customer-short-name"
+                                       th:field="*{formCustomerShortName}"
+                                       th:placeholder="#{order.form.customer.fields.placeholder.shortName}"
+                                       type="text"
+                                       class="form-control form-control-sm"
+                                       maxlength="12"
+                                       th:classappend="${#fields.hasErrors('formCustomerShortName')} ? ' is-invalid' : ''"/>
+                            </div>
+
+                            <div class="col-md-7">
+                                <label for="input-customer-long-name"
+                                       class="form-label"
+                                       th:text="#{order.form.customer.fields.longName}"></label>
+                                <input id="input-customer-long-name"
+                                       th:field="*{formCustomerLongName}"
+                                       th:placeholder="#{order.form.customer.fields.placeholder.longName}"
+                                       type="text"
+                                       class="form-control form-control-sm"
+                                       maxlength="12"
+                                       th:classappend="${#fields.hasErrors('formCustomerLongName')} ? ' is-invalid' : ''"/>
+                            </div>
+                        </div>
+
+                        <h5 class="mt-3 mb-3">Контактное лицо</h5>
+
+                        <div class="row g-3 mb-3">
+
+                             <div class="col-md-3">
+                                <label for="input-customer-contact-first-name" class="form-label">Имя *</label>
+                                <input id="input-customer-contact-first-name"
+                                       name="formCustomer.mainContact.firstName"
+                                       placeholder="Имя контактного лица"
+                                       type="text"
+                                       class="form-control form-control-sm"
+                                       value="Юлия">
+                                <div class="invalid-feedback">Укажите имя контактного лица</div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="input-customer-contact-middle-name" class="form-label">Отчество</label>
+                                <input id="input-customer-contact-middle-name"
+                                       name="formCustomer.mainContact.middleName"
+                                       placeholder="Отчество контактного лица"
+                                       type="text"
+                                       class="form-control form-control-sm"
+                                       value="Александровна">
+                                <div class="invalid-feedback">Укажите отчество контактного лица</div>
+                            </div>
+
+                            <div class="col-md-5">
+                                <label for="input-customer-contact-last-name" class="form-label">Фамилия</label>
+                                <input id="input-customer-contact-last-name"
+                                       name="formCustomer.mainContact.lastName"
+                                       placeholder="Фамилия контактного лица"
+                                       type="text"
+                                       class="form-control form-control-sm"
+                                       value="Ткачева">
+                                <div class="invalid-feedback">Укажите фамилию контактного лица</div>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3 align-items-start">
+                            <div class="col-md-3">
+                                <label for="input-customer-contact-phone" class="form-label">Телефон *</label>
+                                <div class="input-group input-group-sm">
+                                    <input id="input-customer-contact-phone"
+                                           name="formCustomer.mainContact.phoneNumber"
+                                           placeholder="Телефон контактного лица"
+                                           type="text"
+                                           class="form-control phone input-mask-phone form-control-customer-find"
+                                           value="(483) 271-61-23"
+                                           maxlength="15">
+                                    <button id="btn-find-customer-contact-phone"
+                                            class="btn btn-outline-secondary"
+                                            type="button">
+                                        <i class="bi bi-search text-dark"></i>
+                                    </button>
+                                </div>
+                                <div class="invalid-feedback">Укажите телефон контактного лица</div>
+                            </div>
+
+                            <div class="col-md-9">
+                                <label for="input-customer-contact-email" class="form-label">Email *</label>
+                                <input id="input-customer-contact-email"
+                                       name="formCustomer.mainContact.email"
+                                       type="text"
+                                       class="form-control form-control-sm form-control-customer-find"
+                                       value="u.tkachyova@bkenergo.ru">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Доставка и оплата -->
+                    <h4 class="mt-4 mb-3">Доставка и оплата</h4>
+                    <hr class="mb-4">
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-2">
+                            <label for="select-payment-type"
+                                   class="form-label"
+                                   th:text="#{order.form.payment.fields.type}"></label>
+                            <select th:field="*{paymentType}"
+                                    id="select-payment-type"
+                                    class="form-select form-select-sm">
+                                <option th:each="item : ${orderPaymentTypes}"
+                                        th:value="${item.code}"
+                                        th:text="${item.annotation}">
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-2">
+                            <label for="select-payment-delivery-type"
+                                   class="form-label"
+                                   th:text="#{order.form.delivery.fields.paymentType}"></label>
+                            <select th:field="*{delivery.deliveryPaymentType}"
+                                    id="select-payment-delivery-type"
+                                    class="form-select form-select-sm">
+                                <option th:each="item : ${deliveryPaymentTypes}"
+                                        th:value="${item.code}"
+                                        th:text="${item.annotation}">
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="select-delivery-type"
+                                   class="form-label"
+                                   th:text="#{order.form.delivery.fields.type}"></label>
+                            <select th:field="*{delivery.deliveryType.code}"
+                                    id="select-delivery-type"
+                                    class="form-select form-select-sm">
+                                <option th:each="item : ${deliveryTypes}"
+                                        th:value="${item.code}"
+                                        th:text="${item.annotation}">
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-2">
+                            <label for="select-delivery-price-type"
+                                   class="form-label"
+                                   th:text="#{order.form.delivery.fields.priceType}"></label>
+                            <select th:field="*{delivery.deliveryPriceType}"
+                                    id="select-delivery-price-type"
+                                    class="form-select form-select-sm">
+                                <option th:each="item : ${deliveryPriceTypes}"
+                                        th:value="${item.code}"
+                                        th:text="${item.annotation}">
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="select-delivery-address-country"
+                                   class="form-label"
+                                   th:text="#{order.form.delivery.fields.country}"></label>
+                            <select th:field="*{delivery.recipient.country.id}"
+                                    id="select-delivery-address-country"
+                                    class="form-select form-select-sm">
+                                <option th:each="item : ${countries}"
+                                        th:value="${item.id}"
+                                        th:text="${item.name}">
+                                </option>
+                            </select>
+                        </div>
+<!--
+
+                        <div class="col-md-3">
+                            <label for="select-delivery-address-country" class="form-label">Страна</label>
+                            <select id="select-delivery-address-country" name="delivery.address.country" class="form-select form-select-sm">
+                                <option value="RUSSIA" selected>Российская Федерация</option>
+                                <option value="BELARUS">Республика Беларусь</option>
+                                <option value="KAZAKHSTAN">Республика Казахстан</option>
+                                <option value="UNKNOWN">Имя ее неизвестно</option>
+                            </select>
+                        </div>
+-->
+                    </div>
+<!--
+                    <div class="row g-3 mb-3">
+                        <div class="col-12">
+                            <label for="input-delivery-address" class="form-label">Адрес доставки</label>
+                            <textarea id="input-delivery-address"
+                                      name="delivery.address.address"
+                                      maxlength="255"
+                                      class="form-control form-control-sm"
+                                      rows="2">Брянск, ул. Калинина, 58</textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-check mb-3">
+                        <input id="check-delivery-customer-equals-recipient"
+                               name="customerEqualsRecipient"
+                               class="form-check-input"
+                               type="checkbox"
+                               value="true"
+                               checked>
+                        <input type="hidden" name="_customerEqualsRecipient" value="on">
+                        <label for="check-delivery-customer-equals-recipient" class="form-check-label">
+                            Заказчик и получатель являются одним лицом
+                        </label>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-3">
+                            <label for="input-delivery-recipient-first-name" class="form-label">Имя</label>
+                            <input id="input-delivery-recipient-first-name"
+                                   name="delivery.recipient.firstName"
+                                   type="text"
+                                   class="form-control form-control-sm input-delivery-recipient">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="input-delivery-recipient-middle-name" class="form-label">Отчество</label>
+                            <input id="input-delivery-recipient-middle-name"
+                                   name="delivery.recipient.middleName"
+                                   type="text"
+                                   class="form-control form-control-sm input-delivery-recipient">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="input-delivery-recipient-last-name" class="form-label">Фамилия</label>
+                            <input id="input-delivery-recipient-last-name"
+                                   name="delivery.recipient.lastName"
+                                   type="text"
+                                   class="form-control form-control-sm input-delivery-recipient">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="input-delivery-recipient-phone-number" class="form-label">Телефон</label>
+                            <input id="input-delivery-recipient-phone-number"
+                                   name="delivery.recipient.phoneNumber"
+                                   type="text"
+                                   class="form-control form-control-sm input-delivery-recipient">
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3 align-items-start">
+                        <div class="col-md-3">
+                            <label for="input-delivery-price" class="form-label">Стоимость доставки</label>
+                            <div class="input-group input-group-sm">
+                                <input id="input-delivery-price"
+                                       name="delivery.price"
+                                       type="text"
+                                       class="form-control"
+                                       value="210,00">
+                                <button id="btn-calc-parcel-delivery-amounts-1"
+                                        class="btn btn-outline-secondary btn-calc-parcel-delivery-amounts"
+                                        type="button">
+                                    <i class="bi bi-truck text-dark"></i>
+                                </button>
+                                <button id="btn-cdek-widjet-1"
+                                        class="btn btn-outline-secondary btn-cdek-widjet"
+                                        type="button">
+                                    <i class="bi bi-map text-dark"></i>
+                                </button>
+                                <button id="btn-cdek-pvzs"
+                                        class="btn btn-outline-secondary"
+                                        type="button">
+                                    <i class="bi bi-list text-dark"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <label for="input-delivery-courier-date" class="form-label">Дата доставки</label>
+                            <div class="input-group input-group-sm">
+                                <input id="input-delivery-courier-date"
+                                       name="delivery.address.carrierInfo.courierInfo.deliveryDate"
+                                       type="text"
+                                       class="form-control datepicker">
+                                <button class="btn btn-outline-secondary"
+                                        onclick="$('#input-delivery-courier-date').datepicker('show');"
+                                        type="button">
+                                    <i class="bi bi-calendar2-date text-dark"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="col-md-1">
+                            <label for="input-delivery-courier-period-start" class="form-label">Временной</label>
+                            <input id="input-delivery-courier-period-start"
+                                   name="delivery.address.carrierInfo.courierInfo.startTime"
+                                   type="text"
+                                   class="form-control form-control-sm input-mask-time">
+                        </div>
+
+                        <div class="col-md-1">
+                            <label for="input-delivery-courier-period-end" class="form-label">интервал</label>
+                            <input id="input-delivery-courier-period-end"
+                                   name="delivery.address.carrierInfo.courierInfo.endTime"
+                                   type="text"
+                                   class="form-control form-control-sm input-mask-time">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="input-amounts-postpay" class="form-label">Постоплата</label>
+                            <div class="input-group input-group-sm">
+                                <input id="input-amounts-postpay"
+                                       name="amounts.postpay"
+                                       type="text"
+                                       class="form-control"
+                                       value="0,00"
+                                       maxlength="12">
+                                <button id="btn-calc-parcel-delivery-amounts-info"
+                                        class="btn btn-outline-secondary"
+                                        type="button"
+                                        data-bs-toggle="popover"
+                                        data-bs-title="СДЭК, ПВЗ"
+                                        data-bs-trigger="focus"
+                                        data-bs-placement="right"
+                                        data-bs-content="Брянск, ул. Калинина, 58">
+                                    <i class="bi bi-cash-coin text-dark"></i>
+                                </button>
+                            </div>
+                            <div class="invalid-feedback">Укажите номер телефона покупателя</div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <label for="input-delivery-trackCode" class="form-label">Трэккод</label>
+                            <input id="input-delivery-trackCode"
+                                   name="delivery.trackCode"
+                                   type="text"
+                                   class="form-control form-control-sm">
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-12">
+                            <label for="input-delivery-courier-annotation" class="form-label">Дополнительная информация по доставке</label>
+                            <input id="input-delivery-courier-annotation"
+                                   name="delivery.annotation"
+                                   type="text"
+                                   class="form-control form-control-sm">
+                        </div>
+                    </div>
+
+-->
 
 
                 </form>

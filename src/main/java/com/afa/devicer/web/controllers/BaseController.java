@@ -38,7 +38,12 @@ public class BaseController {
         model.addAttribute("orderSourceTypes", OrderSourceTypes.values());
         model.addAttribute("orderAdvertTypes", OrderAdvertTypes.values());
         model.addAttribute("orderPaymentTypes", OrderPaymentTypes.values());
+        model.addAttribute("deliveryTypes", DeliveryTypes.values());
+        model.addAttribute("deliveryPaymentTypes", DeliveryPaymentTypes.values());
+        model.addAttribute("deliveryPriceTypes", DeliveryPriceTypes.values());
+
         model.addAttribute("productCategories", dictionaryService.getProductCategories());
+        model.addAttribute("countries", dictionaryService.getCountries());
         model.addAttribute("orderStatuses", getOrderStatuses());
         setActiveMenu(model);
     }

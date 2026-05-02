@@ -1,5 +1,7 @@
 package com.afa.devicer.web.services;
 
+import com.afa.core.dto.dictionaries.CountryDto;
+import com.afa.core.dto.dictionaries.CountryResponse;
 import com.afa.core.dto.products.ProductCategoryDto;
 import com.afa.core.dto.products.ProductCategoryResponse;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,17 @@ public class DictionaryService {
                 .uri("api/v8/products/productCategories")
                 .retrieve()
                 .bodyToMono(ProductCategoryResponse.class)
+                .block();
+        return response.getItems();
+    }
+
+    @Transactional(readOnly = true)
+    public List<CountryDto> getCountries() {
+
+        final CountryResponse response = webClient.get()
+                .uri("api/v8/dictionaries/countries")
+                .retrieve()
+                .bodyToMono(CountryResponse.class)
                 .block();
         return response.getItems();
     }
