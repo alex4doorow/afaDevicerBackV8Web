@@ -47,15 +47,16 @@
                 </a>
                 <button id="btn-show-order" type="button" class="btn btn-light"
                         th:data-show-url="@{/web/orders/{id}/{listType}(id=${order.id}, listType=${listType})}"
-                        th:text="#{main.btn.showData}" disabled></button>
-
+                        th:text="#{main.btn.showData}" disabled>
+                </button>
                 <a class="btn btn-light"
                    th:href="@{/web/orders/{id}/change-status/{listType}(id=${order.id}, listType=${listType})}"
                    th:text="#{main.btn.statusData}">
                 </a>
                 <button id="btn-clone-order" type="button" class="btn btn-light"
                         th:data-clone-url="@{/web/orders/{id}/clone(id=${order.id})}"
-                        th:text="#{main.btn.cloneData}"></button>
+                        th:text="#{main.btn.cloneData}">
+                </button>
             </div>
             <br>
 

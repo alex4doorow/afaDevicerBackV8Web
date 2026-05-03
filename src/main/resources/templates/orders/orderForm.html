@@ -457,7 +457,8 @@
                         <div class="col-md-3">
                             <label for="select-delivery-address-country"
                                    class="form-label"
-                                   th:text="#{order.form.delivery.fields.country}"></label>
+                                   th:text="#{order.form.delivery.fields.country}">
+                            </label>
                             <select th:field="*{delivery.recipient.country.id}"
                                     id="select-delivery-address-country"
                                     class="form-select form-select-sm">
@@ -467,31 +468,24 @@
                                 </option>
                             </select>
                         </div>
-<!--
-
-                        <div class="col-md-3">
-                            <label for="select-delivery-address-country" class="form-label">Страна</label>
-                            <select id="select-delivery-address-country" name="delivery.address.country" class="form-select form-select-sm">
-                                <option value="RUSSIA" selected>Российская Федерация</option>
-                                <option value="BELARUS">Республика Беларусь</option>
-                                <option value="KAZAKHSTAN">Республика Казахстан</option>
-                                <option value="UNKNOWN">Имя ее неизвестно</option>
-                            </select>
-                        </div>
--->
                     </div>
-<!--
+
                     <div class="row g-3 mb-3">
                         <div class="col-12">
+                            <label for="select-delivery-address-country"
+                                   class="form-label"
+                                   th:text="#{order.form.delivery.fields.address}">
+                            </label>
                             <label for="input-delivery-address" class="form-label">Адрес доставки</label>
                             <textarea id="input-delivery-address"
+                                      th:field="*{delivery.address.addressLine}"
                                       name="delivery.address.address"
                                       maxlength="255"
                                       class="form-control form-control-sm"
-                                      rows="2">Брянск, ул. Калинина, 58</textarea>
+                                      rows="2">
+                            </textarea>
                         </div>
                     </div>
-
                     <div class="form-check mb-3">
                         <input id="check-delivery-customer-equals-recipient"
                                name="customerEqualsRecipient"
@@ -540,39 +534,62 @@
                     </div>
 
                     <div class="row g-3 mb-3 align-items-start">
+
+                        <!-- Стоимость доставки -->
                         <div class="col-md-3">
-                            <label for="input-delivery-price" class="form-label">Стоимость доставки</label>
+                            <label for="input-delivery-price"
+                                   class="form-label"
+                                   th:text="#{order.form.delivery.fields.price}">
+                                Стоимость доставки
+                            </label>
+
                             <div class="input-group input-group-sm">
                                 <input id="input-delivery-price"
-                                       name="delivery.price"
+                                       th:field="*{delivery.price}"
                                        type="text"
                                        class="form-control"
-                                       value="210,00">
+                                       maxlength="12"
+                                       th:classappend="${#fields.hasErrors('delivery.price')} ? ' is-invalid' : ''"/>
+
                                 <button id="btn-calc-parcel-delivery-amounts-1"
                                         class="btn btn-outline-secondary btn-calc-parcel-delivery-amounts"
                                         type="button">
                                     <i class="bi bi-truck text-dark"></i>
                                 </button>
+
                                 <button id="btn-cdek-widjet-1"
                                         class="btn btn-outline-secondary btn-cdek-widjet"
                                         type="button">
                                     <i class="bi bi-map text-dark"></i>
                                 </button>
+
                                 <button id="btn-cdek-pvzs"
                                         class="btn btn-outline-secondary"
                                         type="button">
                                     <i class="bi bi-list text-dark"></i>
                                 </button>
+
+                                <div class="invalid-feedback"
+                                     th:if="${#fields.hasErrors('delivery.price')}"
+                                     th:errors="*{delivery.price}">
+                                </div>
                             </div>
                         </div>
 
+                        <!-- Дата доставки -->
                         <div class="col-md-2">
-                            <label for="input-delivery-courier-date" class="form-label">Дата доставки</label>
+                            <label for="input-delivery-courier-date"
+                                   class="form-label"
+                                   th:text="#{order.form.delivery.fields.courier.deliveryDate}">
+                                Дата доставки
+                            </label>
+
                             <div class="input-group input-group-sm">
                                 <input id="input-delivery-courier-date"
-                                       name="delivery.address.carrierInfo.courierInfo.deliveryDate"
+                                       th:field="*{delivery.deliveryDate}"
                                        type="text"
-                                       class="form-control datepicker">
+                                       class="form-control datepicker"/>
+
                                 <button class="btn btn-outline-secondary"
                                         onclick="$('#input-delivery-courier-date').datepicker('show');"
                                         type="button">
@@ -581,31 +598,51 @@
                             </div>
                         </div>
 
+                        <!-- Начало интервала -->
                         <div class="col-md-1">
-                            <label for="input-delivery-courier-period-start" class="form-label">Временной</label>
+                            <label for="input-delivery-courier-period-start"
+                                   class="form-label"
+                                   th:text="#{order.form.delivery.fields.courier.period.start}">
+                                Временной
+                            </label>
+
                             <input id="input-delivery-courier-period-start"
-                                   name="delivery.address.carrierInfo.courierInfo.startTime"
+                                   th:field="*{delivery.timeIn}"
                                    type="text"
-                                   class="form-control form-control-sm input-mask-time">
+                                   class="form-control form-control-sm input-mask-time"/>
                         </div>
 
+                        <!-- Конец интервала -->
                         <div class="col-md-1">
-                            <label for="input-delivery-courier-period-end" class="form-label">интервал</label>
+                            <label for="input-delivery-courier-period-end"
+                                   class="form-label"
+                                   th:text="#{order.form.delivery.fields.courier.period.end}">
+                                интервал
+                            </label>
+
                             <input id="input-delivery-courier-period-end"
-                                   name="delivery.address.carrierInfo.courierInfo.endTime"
+                                   th:field="*{delivery.timeOut}"
                                    type="text"
-                                   class="form-control form-control-sm input-mask-time">
+                                   class="form-control form-control-sm input-mask-time"/>
                         </div>
 
+                        <!-- Постоплата -->
+                        <!--
                         <div class="col-md-3">
-                            <label for="input-amounts-postpay" class="form-label">Постоплата</label>
+                            <label for="input-amounts-postpay"
+                                   class="form-label"
+                                   th:text="#{order.form.amounts.fields.postpay}">
+                                Постоплата
+                            </label>
+
                             <div class="input-group input-group-sm">
                                 <input id="input-amounts-postpay"
-                                       name="amounts.postpay"
+                                       th:field="*{amounts.postpay}"
                                        type="text"
                                        class="form-control"
-                                       value="0,00"
-                                       maxlength="12">
+                                       maxlength="12"
+                                       th:classappend="${#fields.hasErrors('amounts.postpay')} ? ' is-invalid' : ''"/>
+
                                 <button id="btn-calc-parcel-delivery-amounts-info"
                                         class="btn btn-outline-secondary"
                                         type="button"
@@ -613,21 +650,42 @@
                                         data-bs-title="СДЭК, ПВЗ"
                                         data-bs-trigger="focus"
                                         data-bs-placement="right"
-                                        data-bs-content="Брянск, ул. Калинина, 58">
+                                        th:attr="data-bs-content=${delivery != null && delivery.address != null ? delivery.address.addressLine : ''}">
                                     <i class="bi bi-cash-coin text-dark"></i>
                                 </button>
+
+                                <div class="invalid-feedback"
+                                     th:if="${#fields.hasErrors('amounts.postpay')}"
+                                     th:errors="*{amounts.postpay}">
+                                </div>
                             </div>
-                            <div class="invalid-feedback">Укажите номер телефона покупателя</div>
+
+                        </div>
+                        -->
+
+                        <!-- Трэккод -->
+                        <div class="col-md-2">
+                            <label for="input-delivery-trackCode"
+                                   class="form-label"
+                                   th:text="#{order.form.delivery.fields.trackCode}">
+                                Трэккод
+                            </label>
+
+                            <input id="input-delivery-trackCode"
+                                   th:field="*{delivery.trackCode}"
+                                   type="text"
+                                   class="form-control form-control-sm"
+                                   th:classappend="${#fields.hasErrors('delivery.trackCode')} ? ' is-invalid' : ''"/>
+
+                            <div class="invalid-feedback"
+                                 th:if="${#fields.hasErrors('delivery.trackCode')}"
+                                 th:errors="*{delivery.trackCode}">
+                            </div>
                         </div>
 
-                        <div class="col-md-2">
-                            <label for="input-delivery-trackCode" class="form-label">Трэккод</label>
-                            <input id="input-delivery-trackCode"
-                                   name="delivery.trackCode"
-                                   type="text"
-                                   class="form-control form-control-sm">
-                        </div>
                     </div>
+
+<!--
 
                     <div class="row g-3 mb-4">
                         <div class="col-12">
@@ -641,6 +699,243 @@
 
 -->
 
+                    <h4 class="mt-4 mb-3">Детализация</h4>
+                    <hr class="mb-3">
+
+                    <div id="order-items-block">
+
+                        <div class="row g-2 mb-2 fw-semibold small">
+                            <div class="col-md-3">Наименование товара</div>
+                            <div class="col-md-1">Кол-во</div>
+                            <div class="col-md-2">Цена</div>
+                            <div class="col-md-2">Опт</div>
+                            <div class="col-md-1">Скидка</div>
+                            <div class="col-md-2">Сумма</div>
+                            <div class="col-md-1"></div>
+                        </div>
+
+                        <div id="order-items-container">
+
+                            <div class="order-item-row row g-2 mb-2 align-items-start" th:each="item, stat : *{items}">
+
+                                <input type="hidden"
+                                       th:name="|items[${stat.index}].id|"
+                                       th:value="${item.id}"/>
+                                <input type="hidden"
+                                       th:name="|items[${stat.index}].product.id|"
+                                       th:value="${item.product != null ? item.product.id : ''}"
+                                       class="input-product-id"/>
+                                <input type="hidden"
+                                       th:name="|items[${stat.index}].product.sku|"
+                                       th:value="${item.product != null ? item.product.sku : ''}"
+                                       class="input-product-sku"/>
+
+                                <div class="col-md-3">
+                                    <div class="input-group input-group-sm">
+                                        <input type="text"
+                                               class="form-control"
+                                               th:name="|items[${stat.index}].product.shortName|"
+                                               th:value="${item.product != null ? item.product.shortName : ''}"
+                                               placeholder="Товар">
+                                        <button class="btn btn-outline-secondary btn-find-details-item-product" type="button">
+                                            <i class="bi bi-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-1">
+                                    <input type="number"
+                                           min="1"
+                                           class="form-control form-control-sm item-quantity"
+                                           th:name="|items[${stat.index}].quantity|"
+                                           th:value="${item.quantity}">
+                                </div>
+
+                                <div class="col-md-2">
+                                    <input type="text"
+                                           class="form-control form-control-sm item-price"
+                                           th:name="|items[${stat.index}].price|"
+                                           th:value="${#numbers.formatDecimal(item.price, 1, 'WHITESPACE', 2, 'COMMA')}">
+                                </div>
+
+                                <div class="col-md-2">
+                                    <input type="text"
+                                           class="form-control form-control-sm item-price-supplier"
+                                           th:name="|items[${stat.index}].priceSupplier|"
+                                           th:value="${#numbers.formatDecimal(item.priceSupplier, 1, 'WHITESPACE', 2, 'COMMA')}">
+                                </div>
+
+                                <div class="col-md-1">
+                                    <input type="number"
+                                           min="0"
+                                           max="100"
+                                           step="1"
+                                           class="form-control form-control-sm item-discount"
+                                           th:name="|items[${stat.index}].discountRate|"
+                                           th:value="${#numbers.formatDecimal(item.discountRate, 1, 'WHITESPACE', 0, 'COMMA')}">
+                                </div>
+
+                                <div class="col-md-2">
+                                    <input type="text"
+                                           readonly
+                                           class="form-control form-control-sm item-amount"
+                                           th:name="|items[${stat.index}].amount|"
+                                           th:value="${#numbers.formatDecimal(item.amount, 1, 'WHITESPACE', 2, 'COMMA')}">
+                                </div>
+
+                                <div class="col-md-1">
+                                    <button type="button"
+                                            class="btn btn-light btn-sm btn-remove-order-item">
+                                        −
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <template id="order-item-template">
+                            <div class="order-item-row row g-2 mb-2 align-items-start">
+
+                                <input type="hidden" data-name="id">
+                                <input type="hidden" data-name="product.id" class="input-product-id">
+
+                                <div class="col-md-3">
+                                    <div class="input-group input-group-sm">
+                                        <input type="text"
+                                               class="form-control"
+                                               data-name="product.shortName"
+                                               placeholder="Товар">
+                                        <button class="btn btn-outline-secondary" type="button">
+                                            <i class="bi bi-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-1">
+                                    <input type="number"
+                                           min="1"
+                                           value="1"
+                                           class="form-control form-control-sm item-quantity"
+                                           data-name="quantity">
+                                </div>
+
+                                <div class="col-md-2">
+                                    <input type="text"
+                                           value="0.00"
+                                           class="form-control form-control-sm item-price"
+                                           data-name="price">
+                                </div>
+
+                                <div class="col-md-2">
+                                    <input type="text"
+                                           value="0.00"
+                                           class="form-control form-control-sm item-price-supplier"
+                                           data-name="priceSupplier">
+                                </div>
+
+                                <div class="col-md-1">
+                                    <input type="number"
+                                           min="0"
+                                           max="100"
+                                           value="0"
+                                           class="form-control form-control-sm item-discount"
+                                           data-name="discountRate">
+                                </div>
+
+                                <div class="col-md-2">
+                                    <input type="text"
+                                           readonly
+                                           value="0.00"
+                                           class="form-control form-control-sm item-amount"
+                                           data-name="amount">
+                                </div>
+
+                                <div class="col-md-1">
+                                    <button type="button"
+                                            class="btn btn-light btn-sm btn-remove-order-item">
+                                        −
+                                    </button>
+                                </div>
+                            </div>
+                        </template>
+
+
+                        <button type="button"
+                                id="btn-add-order-item"
+                                class="btn btn-light btn-sm mt-2">
+                            + Строка
+                        </button>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-7"></div>
+                        <div class="col-sm-2">Итого:</div>
+                        <div id="details-items-amounts-total" class="col-sm-2 text-end">--</div>
+                        <div class="col-sm-1"></div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-sm-7"></div>
+                        <div class="col-sm-2">Доставка:</div>
+                        <div id="details-items-amounts-delivery" class="col-sm-2 text-end">--</div>
+                        <div class="col-sm-1"></div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-7"></div>
+                        <div class="col-sm-2">
+                            <strong>Итого к оплате:</strong>
+                        </div>
+                        <div id="details-items-amounts-total-with-delivery" class="col-sm-2 text-end fw-semibold">--</div>
+                        <div class="col-sm-1"></div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-sm-7"></div>
+                        <div class="col-sm-2">Доход:</div>
+                        <div id="details-items-amounts-bill" class="col-sm-2 text-end">--</div>
+                        <div class="col-sm-1"></div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-7"></div>
+                        <div class="col-sm-2">Закупка:</div>
+                        <div id="details-items-amounts-supplier" class="col-sm-2 text-end">--</div>
+                        <div class="col-sm-1"></div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-7"></div>
+                        <div class="col-sm-2">Прибыль:</div>
+                        <div id="details-items-amounts-margin" class="col-sm-2 text-end">--</div>
+                        <div class="col-sm-1"></div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-7"></div>
+                        <div class="col-sm-2">
+                            <strong>Постоплата:</strong>
+                        </div>
+                        <div id="details-items-amounts-postpay" class="col-sm-2 text-end fw-semibold">--</div>
+                        <div class="col-sm-1"></div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-sm-7"></div>
+                        <div class="col-sm-2">Доставка продавца:</div>
+                        <div id="details-items-amounts-delivery-seller-summary" class="col-sm-2 text-end">--</div>
+                        <div class="col-sm-1"></div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-7"></div>
+                        <div class="col-sm-2">Доставка покупателя:</div>
+                        <div id="details-items-amounts-delivery-customer-summary" class="col-sm-2 text-end">--</div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <hr class="mb-4">
+                    <button type="button" class="btn btn-primary" th:text="#{main.btn.save}"></button>
+                    <br>
+                    <br>
 
                 </form>
             </div>
@@ -650,6 +945,176 @@
 </div>
 
 <div th:replace="fragments/footer-scripts :: footer-scripts"></div>
+
+
+<script>
+    const container = document.getElementById('order-items-container');
+    const template = document.getElementById('order-item-template');
+    const addButton = document.getElementById('btn-add-order-item');
+
+    function reindexOrderItems() {
+        container.querySelectorAll('.order-item-row').forEach((row, index) => {
+            row.querySelectorAll('[name], [data-name]').forEach(input => {
+                const fieldName = input.dataset.name || input.name.replace(/^items\[\d+\]\./, '');
+                input.name = `items[${index}].${fieldName}`;
+            });
+        });
+    }
+
+    function parseMoney(value) {
+        if (!value) {
+            return 0;
+        }
+
+        let normalized = value.toString().trim();
+
+        // если есть и точка и запятая → определяем формат
+        if (normalized.includes(',') && normalized.includes('.')) {
+
+            // формат 4,725.00
+            if (normalized.lastIndexOf('.') > normalized.lastIndexOf(',')) {
+                normalized = normalized.replace(/,/g, '');
+            }
+            // формат 4.725,00
+            else {
+                normalized = normalized.replace(/\./g, '').replace(',', '.');
+            }
+
+        } else if (normalized.includes(',')) {
+            // формат 4725,00
+            normalized = normalized.replace(',', '.');
+        }
+
+        normalized = normalized.replace(/\s/g, '');
+
+        return Number(normalized) || 0;
+    }
+
+    function formatMoney(value) {
+        return value.toLocaleString('ru-RU', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+    }
+
+    function recalcRow(row) {
+        const quantity = parseMoney(row.querySelector('.item-quantity')?.value);
+        const price = parseMoney(row.querySelector('.item-price')?.value);
+        const discount = parseMoney(row.querySelector('.item-discount')?.value);
+
+        const amount = quantity * price * (100 - discount) / 100;
+
+        const amountInput = row.querySelector('.item-amount');
+        if (amountInput) {
+            amountInput.value = formatMoney(amount);
+        }
+    }
+
+    function recalcTotals() {
+        let total = 0;
+        let supplierTotal = 0;
+
+        container.querySelectorAll('.order-item-row').forEach(row => {
+            const quantity = parseMoney(row.querySelector('.item-quantity')?.value);
+            const price = parseMoney(row.querySelector('.item-price')?.value);
+            const priceSupplier = parseMoney(row.querySelector('.item-price-supplier')?.value);
+            const discount = parseMoney(row.querySelector('.item-discount')?.value);
+
+            total += quantity * price * (100 - discount) / 100;
+            supplierTotal += quantity * priceSupplier;
+        });
+
+        const margin = total - supplierTotal;
+        const deliveryInput = document.getElementById('input-delivery-price');
+        const deliveryAmount = deliveryInput ? parseMoney(deliveryInput.value) : 0;
+
+        document.getElementById('details-items-amounts-total').textContent = formatMoney(total);
+        document.getElementById('details-items-amounts-delivery').textContent = formatMoney(deliveryAmount);
+        document.getElementById('details-items-amounts-total-with-delivery').textContent = formatMoney(total + deliveryAmount);
+
+        document.getElementById('details-items-amounts-supplier').textContent = formatMoney(supplierTotal);
+        document.getElementById('details-items-amounts-margin').textContent = formatMoney(margin);
+    }
+
+    function addOrderItemRow() {
+        const fragment = template.content.cloneNode(true);
+        container.appendChild(fragment);
+
+        reindexOrderItems();
+
+        const lastRow = container.querySelector('.order-item-row:last-child');
+        if (lastRow) {
+            recalcRow(lastRow);
+            recalcTotals();
+        }
+    }
+
+    addButton.addEventListener('click', addOrderItemRow);
+
+    container.addEventListener('click', function (event) {
+        const removeButton = event.target.closest('.btn-remove-order-item');
+
+        if (!removeButton) {
+            return;
+        }
+
+        removeButton.closest('.order-item-row').remove();
+        reindexOrderItems();
+    });
+
+    container.addEventListener('input', function (event) {
+        const row = event.target.closest('.order-item-row');
+
+        if (!row) {
+            return;
+        }
+
+        if (
+            event.target.classList.contains('item-quantity') ||
+            event.target.classList.contains('item-price') ||
+            event.target.classList.contains('item-discount')
+        ) {
+            recalcRow(row);
+            recalcTotals();
+        }
+    });
+
+    function normalizeMoneyForSubmit(value) {
+        if (!value) {
+            return '';
+        }
+
+        return value.toString()
+            .replace(/\u00A0/g, '')
+            .replace(/\s/g, '')
+            .replace(',', '.');
+    }
+
+    document.querySelector('form').addEventListener('submit', function () {
+        reindexOrderItems();
+
+        container.querySelectorAll('.order-item-row').forEach(row => {
+            recalcRow(row);
+            recalcTotals();
+        });
+
+        document.querySelectorAll('.item-price, .item-price-supplier, .item-amount').forEach(input => {
+            input.value = normalizeMoneyForSubmit(input.value);
+        });
+
+        document.querySelectorAll('.item-discount').forEach(input => {
+            input.value = parseInt(input.value || '0', 10);
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        container.querySelectorAll('.order-item-row').forEach(row => {
+            recalcRow(row);
+        });
+        recalcTotals();
+    });
+
+</script>
 
 </body>
 </html>
