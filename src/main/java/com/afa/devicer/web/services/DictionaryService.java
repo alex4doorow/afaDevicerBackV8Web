@@ -2,8 +2,6 @@ package com.afa.devicer.web.services;
 
 import com.afa.core.dto.dictionaries.CountryDto;
 import com.afa.core.dto.dictionaries.CountryResponse;
-import com.afa.core.dto.products.ProductCategoryDto;
-import com.afa.core.dto.products.ProductCategoryResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,17 +14,6 @@ import java.util.List;
 public class DictionaryService {
 
     private final WebClient webClient;
-
-    @Transactional(readOnly = true)
-    public List<ProductCategoryDto> getProductCategories() {
-
-        final ProductCategoryResponse response = webClient.get()
-                .uri("api/v8/products/productCategories")
-                .retrieve()
-                .bodyToMono(ProductCategoryResponse.class)
-                .block();
-        return response.getItems();
-    }
 
     @Transactional(readOnly = true)
     public List<CountryDto> getCountries() {

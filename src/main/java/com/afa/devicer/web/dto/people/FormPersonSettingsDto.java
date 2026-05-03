@@ -1,7 +1,7 @@
-package com.afa.devicer.web.dto.persons;
+package com.afa.devicer.web.dto.people;
 
 import com.afa.core.dto.customers.CustomerConditionsDto;
-import com.afa.core.dto.persons.PersonSettingsDto;
+import com.afa.core.dto.people.PersonSettingsDto;
 import com.afa.core.dto.products.ProductConditionsDto;
 import com.afa.core.enums.OrderStatusTypes;
 import jakarta.validation.constraints.NotNull;

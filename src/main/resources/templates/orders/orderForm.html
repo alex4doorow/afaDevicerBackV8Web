@@ -797,6 +797,7 @@
 
                                 <input type="hidden" data-name="id">
                                 <input type="hidden" data-name="product.id" class="input-product-id">
+                                <input type="hidden" data-name="product.sku" class="input-product-sku">
 
                                 <div class="col-md-3">
                                     <div class="input-group input-group-sm">
@@ -804,7 +805,7 @@
                                                class="form-control"
                                                data-name="product.shortName"
                                                placeholder="Товар">
-                                        <button class="btn btn-outline-secondary" type="button">
+                                        <button class="btn btn-outline-secondary btn-find-details-item-product" type="button">
                                             <i class="bi bi-search"></i>
                                         </button>
                                     </div>
@@ -1114,6 +1115,91 @@
         recalcTotals();
     });
 
+</script>
+
+<script>
+    async function findProductSuggest(query) {
+        const response = await fetch(
+            '/web/wiki/products/suggest?nameContext=' + encodeURIComponent(query),
+            {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error('Ошибка поиска товара');
+        }
+
+        return await response.json();
+    }
+
+    container.addEventListener('click', async function (event) {
+        const findButton = event.target.closest('.btn-find-details-item-product');
+
+        if (!findButton) {
+            return;
+        }
+
+        const row = findButton.closest('.order-item-row');
+
+        if (!row) {
+            return;
+        }
+
+        const productNameInput = row.querySelector('input[name$=".product.shortName"]');
+        const productIdInput = row.querySelector('.input-product-id');
+        const productSkuInput = row.querySelector('.input-product-sku');
+        const priceInput = row.querySelector('.item-price');
+        const supplierPriceInput = row.querySelector('.item-price-supplier');
+
+        const query = productNameInput?.value?.trim();
+
+        if (!query || query.length < 2) {
+            alert('Введите минимум 2 символа для поиска товара');
+            return;
+        }
+
+        try {
+            const result = await findProductSuggest(query);
+
+            if (!result.items || result.items.length === 0) {
+                alert('Товар не найден');
+                return;
+            }
+
+            const product = result.items[0];
+
+            if (productIdInput) {
+                productIdInput.value = product.id || '';
+            }
+
+            if (productSkuInput) {
+                productSkuInput.value = product.sku || '';
+            }
+
+            if (productNameInput) {
+                productNameInput.value = product.shortName || '';
+            }
+
+            if (priceInput && product.price != null) {
+                priceInput.value = formatMoney(product.price);
+            }
+
+            if (supplierPriceInput && product.stock?.supplierPrice != null) {
+                supplierPriceInput.value = formatMoney(product.stock.supplierPrice);
+            }
+
+            recalcRow(row);
+            recalcTotals();
+
+        } catch (error) {
+            console.error(error);
+            alert('Ошибка поиска товара');
+        }
+    });
 </script>
 
 </body>

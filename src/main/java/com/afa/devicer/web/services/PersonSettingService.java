@@ -1,9 +1,9 @@
 package com.afa.devicer.web.services;
 
 import com.afa.core.dto.BaseResponse;
-import com.afa.core.dto.persons.PersonSettingsResponse;
-import com.afa.core.dto.persons.PersonSettingsSaveRequest;
-import com.afa.devicer.web.dto.persons.FormPersonSettingsDto;
+import com.afa.core.dto.people.PersonSettingsResponse;
+import com.afa.core.dto.people.PersonSettingsSaveRequest;
+import com.afa.devicer.web.dto.people.FormPersonSettingsDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;

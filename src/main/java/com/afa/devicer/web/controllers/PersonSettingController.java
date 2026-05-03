@@ -1,8 +1,8 @@
 package com.afa.devicer.web.controllers;
 
-import com.afa.core.dto.persons.PersonSettingsResponse;
+import com.afa.core.dto.people.PersonSettingsResponse;
 import com.afa.devicer.web.controllers.internal.ControllerConstants;
-import com.afa.devicer.web.dto.persons.FormPersonSettingsDto;
+import com.afa.devicer.web.dto.people.FormPersonSettingsDto;
 import com.afa.devicer.web.mappers.PersonSettingsDtoMapper;
 import com.afa.devicer.web.services.PersonSettingService;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +33,7 @@ public class PersonSettingController extends BaseController {
         populateDefaultModel(model);
         model.addAttribute("activeMenu", "orders");
         model.addAttribute("formSettings", form);
-        return "persons/orderConditionForm.html";
+        return "people/orderConditionForm.html";
     }
 
     @PostMapping("/conditions/order-list/filter")
@@ -46,7 +46,7 @@ public class PersonSettingController extends BaseController {
             populateDefaultModel(model);
             model.addAttribute("activeMenu", "orders");
             model.addAttribute("formSettings", form);
-            return "persons/orderConditionForm.html";
+            return "people/orderConditionForm.html";
         }
         personSettingService.saveSettingsByOrderConditions(form);
         return "redirect:/web/orders";

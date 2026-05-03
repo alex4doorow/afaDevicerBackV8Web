@@ -48,19 +48,19 @@ public class OrderService {
             final OrderSaveRequest request) {
 
         final String uri = "/api/v8/orders/%d".formatted(orderId);
-        final OrderSingleResponse result = webClient.put()
+        final OrderSingleResponse response = webClient.put()
                 .uri(uri)
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(request)
                 .retrieve()
                 .bodyToMono(OrderSingleResponse.class)
                 .block();
-        if (result != null && result.getResult() != null && StringUtils.equals(result.getResult(), "error")) {
+        if (response != null && response.getResult() != null && StringUtils.equals(response.getResult(), "error")) {
             throw new DevicerException(DevicerErrors.UNKNOWN_VALIDATION_ERROR,
                     WebDevicerErrors.ORDER_SAVE_ERROR.getErrorMessage(),
-                    result.getViolations());
+                    response.getViolations());
         }
-        return result.getOrder();
+        return response.getOrder();
     }
 
     @Transactional

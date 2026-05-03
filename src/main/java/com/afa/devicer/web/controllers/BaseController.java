@@ -3,8 +3,8 @@ package com.afa.devicer.web.controllers;
 import com.afa.core.dto.dictionaries.OrderStatusTypeDto;
 import com.afa.core.enums.*;
 import com.afa.devicer.web.services.DictionaryService;
+import com.afa.devicer.web.services.ProductService;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -17,13 +17,15 @@ import java.util.List;
 
 @Slf4j
 @Getter
-@RequiredArgsConstructor
-public class BaseController {
+@SuppressWarnings({"PMD.AbstractClassWithoutAbstractMethod"})
+public abstract class BaseController {
 
     @Autowired
     protected MessageSource messageSource;
     @Autowired
     protected DictionaryService dictionaryService;
+    @Autowired
+    protected ProductService productService;
 
     protected void populateDefaultModel(final Model model) {
 
@@ -42,7 +44,7 @@ public class BaseController {
         model.addAttribute("deliveryPaymentTypes", DeliveryPaymentTypes.values());
         model.addAttribute("deliveryPriceTypes", DeliveryPriceTypes.values());
 
-        model.addAttribute("productCategories", dictionaryService.getProductCategories());
+        model.addAttribute("productCategories", productService.getProductCategories());
         model.addAttribute("countries", dictionaryService.getCountries());
         model.addAttribute("orderStatuses", getOrderStatuses());
         setActiveMenu(model);

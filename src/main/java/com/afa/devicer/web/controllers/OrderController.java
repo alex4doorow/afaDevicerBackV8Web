@@ -2,8 +2,8 @@ package com.afa.devicer.web.controllers;
 
 import com.afa.core.dto.dictionaries.AddressSaveRequest;
 import com.afa.core.dto.orders.*;
-import com.afa.core.dto.persons.PersonSaveRequest;
-import com.afa.core.dto.persons.PersonSettingsResponse;
+import com.afa.core.dto.people.PersonSaveRequest;
+import com.afa.core.dto.people.PersonSettingsResponse;
 import com.afa.core.enums.*;
 import com.afa.devicer.web.controllers.internal.ControllerConstants;
 import com.afa.devicer.web.dto.orders.FormOrderDto;
@@ -25,7 +25,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
 import java.util.Set;
-import java.util.UUID;
 
 @Slf4j
 @CrossOrigin
@@ -33,7 +32,7 @@ import java.util.UUID;
 @Tag(name = "orders", description = "Orders controller")
 @Controller
 @RequiredArgsConstructor
-@SuppressWarnings({"PMD"})
+@SuppressWarnings({"PMD.AvoidDuplicateLiterals", "PMD.LawOfDemeter"})
 public class OrderController extends BaseController {
 
     private final PersonSettingService personSettingService;
@@ -90,9 +89,9 @@ public class OrderController extends BaseController {
     @PostMapping("/{orderId}/update")
     public String saveOrder4Edit(
             @NotNull @Valid @PathVariable final Long orderId,
-            @ModelAttribute("formOrder") @Validated FormOrderDto form,
-            BindingResult bindingResult,
-            Model model,
+            @ModelAttribute("formOrder") @Validated final FormOrderDto form,
+            final BindingResult bindingResult,
+            final Model model,
             final RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
@@ -104,7 +103,7 @@ public class OrderController extends BaseController {
         }
         form.convertForm();
         final OrderDto order = orderService.getOrderById(orderId).getOrder();
-        OrderSaveRequest request = OrderSaveRequest.builder()
+        final OrderSaveRequest request = OrderSaveRequest.builder()
                 .orderNum(form.getOrderNum())
                 .orderDate(form.getOrderDate())
                 .type(form.getType())
@@ -123,7 +122,7 @@ public class OrderController extends BaseController {
                         .address(AddressSaveRequest.builder()
                                 .countryId(form.getDelivery().getRecipient().getCountry().getId())
                                 .type(AddressTypes.MAIN)
-                                .addressLine(order.getDelivery().getAddress().getAddressLine())
+                                .addressLine(form.getDelivery().getAddress().getAddressLine())
                                 .build())
                         .recipient(PersonSaveRequest.builder()
                                 .firstName("Константин")
@@ -148,7 +147,7 @@ public class OrderController extends BaseController {
     @GetMapping("/{orderId}/change-status/{list-type}")
     public String getOrder4ChangeStatus(
             @NotNull @Valid @PathVariable final Long orderId,
-            @PathVariable("list-type") String listType,
+            @PathVariable("list-type") final String listType,
             final Model model) {
 
         final OrderSingleResponse response = orderService.getOrderById(orderId);
@@ -164,10 +163,10 @@ public class OrderController extends BaseController {
     @PostMapping("/{orderId}/change-status/{list-type}")
     public String saveOrder4ChangeStatus(
             @NotNull @Valid @PathVariable final Long orderId,
-            @PathVariable("list-type") String listType,
-            @ModelAttribute("formOrder") @Validated FormOrderDto form,
-            BindingResult bindingResult,
-            Model model,
+            @PathVariable("list-type") final String listType,
+            @ModelAttribute("formOrder") @Validated final FormOrderDto form,
+            final BindingResult bindingResult,
+            final Model model,
             final RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
