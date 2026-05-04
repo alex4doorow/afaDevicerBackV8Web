@@ -216,7 +216,7 @@
                                 <td class="text-end">
                                     <span th:text="${#numbers.formatDecimal(orderItem.discountRate, 1, 'COMMA', 2, 'POINT')}"></span>%
                                 </td>
-                                <td class="text-end" th:text="${#numbers.formatDecimal(orderItem.amountSupplier, 1, 'COMMA', 2, 'POINT')}">
+                                <td class="text-end" th:text="${#numbers.formatDecimal(orderItem.supplierAmount, 1, 'COMMA', 2, 'POINT')}">
                                 </td>
                                 <td class="text-end" th:text="${#numbers.formatDecimal(orderItem.amount, 1, 'COMMA', 2, 'POINT')}">
                                 </td>

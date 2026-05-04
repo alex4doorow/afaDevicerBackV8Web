@@ -26,7 +26,7 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public List<ProductShortDto> getProductsSuggest(final ProductFilter filter) {
+    public List<ProductDto> getProductsSuggest(final ProductFilter filter) {
 
         final ProductResponse response = webClient.get()
                 .uri(uriBuilder -> uriBuilder

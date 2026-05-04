@@ -60,7 +60,7 @@ public class OrderService {
                     WebDevicerErrors.ORDER_SAVE_ERROR.getErrorMessage(),
                     response.getViolations());
         }
-        return response.getOrder();
+        return response == null ? null : response.getOrder();
     }
 
     @Transactional
@@ -69,13 +69,13 @@ public class OrderService {
             final OrderChangeStatusSaveRequest request) {
 
         final String uri = "/api/v8/orders/%d/change-status".formatted(orderId);
-        final OrderSingleResponse result = webClient.patch()
+        final OrderSingleResponse response = webClient.patch()
                 .uri(uri)
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(request)
                 .retrieve()
                 .bodyToMono(OrderSingleResponse.class)
                 .block();
-        return result.getOrder();
+        return response == null ? null : response.getOrder();
     }
 }

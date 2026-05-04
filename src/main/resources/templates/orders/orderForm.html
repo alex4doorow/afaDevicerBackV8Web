@@ -488,46 +488,54 @@
                     </div>
                     <div class="form-check mb-3">
                         <input id="check-delivery-customer-equals-recipient"
-                               name="customerEqualsRecipient"
+                               th:field="*{formDeliveryCustomerEqualsRecipient}"
                                class="form-check-input"
                                type="checkbox"
-                               value="true"
                                checked>
-                        <input type="hidden" name="_customerEqualsRecipient" value="on">
-                        <label for="check-delivery-customer-equals-recipient" class="form-check-label">
-                            Заказчик и получатель являются одним лицом
+                        <label for="check-delivery-customer-equals-recipient"
+                               class="form-check-label"
+                               th:text="#{order.form.delivery.fields.recipient.isCustomerEqualsRecipient}">
                         </label>
                     </div>
 
                     <div class="row g-3 mb-3">
                         <div class="col-md-3">
-                            <label for="input-delivery-recipient-first-name" class="form-label">Имя</label>
+                            <label for="input-delivery-recipient-first-name"
+                                   class="form-label"
+                                   th:text="#{order.form.delivery.fields.recipient.contact.firstName}">
+                            </label>
                             <input id="input-delivery-recipient-first-name"
-                                   name="delivery.recipient.firstName"
+                                   th:field="*{delivery.recipient.firstName}"
                                    type="text"
                                    class="form-control form-control-sm input-delivery-recipient">
                         </div>
-
                         <div class="col-md-3">
-                            <label for="input-delivery-recipient-middle-name" class="form-label">Отчество</label>
+                            <label for="input-delivery-recipient-first-name"
+                                   class="form-label"
+                                   th:text="#{order.form.delivery.fields.recipient.contact.middleName}">
+                            </label>
                             <input id="input-delivery-recipient-middle-name"
-                                   name="delivery.recipient.middleName"
+                                   th:field="*{delivery.recipient.middleName}"
                                    type="text"
                                    class="form-control form-control-sm input-delivery-recipient">
                         </div>
-
                         <div class="col-md-3">
-                            <label for="input-delivery-recipient-last-name" class="form-label">Фамилия</label>
+                            <label for="input-delivery-recipient-first-name"
+                                   class="form-label"
+                                   th:text="#{order.form.delivery.fields.recipient.contact.lastName}">
+                            </label>
                             <input id="input-delivery-recipient-last-name"
-                                   name="delivery.recipient.lastName"
+                                   th:field="*{delivery.recipient.lastName}"
                                    type="text"
                                    class="form-control form-control-sm input-delivery-recipient">
                         </div>
-
                         <div class="col-md-3">
-                            <label for="input-delivery-recipient-phone-number" class="form-label">Телефон</label>
+                            <label for="input-delivery-recipient-phone-number"
+                                   class="form-label"
+                                   th:text="#{order.form.delivery.fields.recipient.contact.telephone}">
+                            </label>
                             <input id="input-delivery-recipient-phone-number"
-                                   name="delivery.recipient.phoneNumber"
+                                   th:field="*{delivery.recipient.phoneNumber}"
                                    type="text"
                                    class="form-control form-control-sm input-delivery-recipient">
                         </div>
@@ -741,6 +749,10 @@
                                             <i class="bi bi-search"></i>
                                         </button>
                                     </div>
+
+                                    <span class="badge text-bg-light mt-1 span-product-sku"
+                                          th:text="${item.product != null ? item.product.sku : ''}">
+                                    </span>
                                 </div>
 
                                 <div class="col-md-1">
@@ -749,6 +761,11 @@
                                            class="form-control form-control-sm item-quantity"
                                            th:name="|items[${stat.index}].quantity|"
                                            th:value="${item.quantity}">
+                                    <span class="badge mt-1 span-product-stock-info"
+                                          th:if="${item.product != null}"
+                                          th:classappend="${item.product.viewStockQuantityClass != null ? ' text-bg-' + item.product.viewStockQuantityClass : ' text-bg-light'}"
+                                          th:text="${item.product.viewStockQuantityText}">
+                                    </span>
                                 </div>
 
                                 <div class="col-md-2">
@@ -760,9 +777,9 @@
 
                                 <div class="col-md-2">
                                     <input type="text"
-                                           class="form-control form-control-sm item-price-supplier"
-                                           th:name="|items[${stat.index}].priceSupplier|"
-                                           th:value="${#numbers.formatDecimal(item.priceSupplier, 1, 'WHITESPACE', 2, 'COMMA')}">
+                                           class="form-control form-control-sm item-supplier-price"
+                                           th:name="|items[${stat.index}].supplierPrice|"
+                                           th:value="${#numbers.formatDecimal(item.supplierPrice, 1, 'WHITESPACE', 2, 'COMMA')}">
                                 </div>
 
                                 <div class="col-md-1">
@@ -809,6 +826,8 @@
                                             <i class="bi bi-search"></i>
                                         </button>
                                     </div>
+
+                                    <span class="badge text-bg-light mt-1 span-product-sku"></span>
                                 </div>
 
                                 <div class="col-md-1">
@@ -817,6 +836,7 @@
                                            value="1"
                                            class="form-control form-control-sm item-quantity"
                                            data-name="quantity">
+                                    <span class="badge text-bg-light mt-1 span-product-stock-info"></span>
                                 </div>
 
                                 <div class="col-md-2">
@@ -829,8 +849,8 @@
                                 <div class="col-md-2">
                                     <input type="text"
                                            value="0.00"
-                                           class="form-control form-control-sm item-price-supplier"
-                                           data-name="priceSupplier">
+                                           class="form-control form-control-sm item-supplier-price"
+                                           data-name="supplierPrice">
                                 </div>
 
                                 <div class="col-md-1">
@@ -1018,11 +1038,11 @@
         container.querySelectorAll('.order-item-row').forEach(row => {
             const quantity = parseMoney(row.querySelector('.item-quantity')?.value);
             const price = parseMoney(row.querySelector('.item-price')?.value);
-            const priceSupplier = parseMoney(row.querySelector('.item-price-supplier')?.value);
+            const supplierPrice = parseMoney(row.querySelector('.item-supplier-price')?.value);
             const discount = parseMoney(row.querySelector('.item-discount')?.value);
 
             total += quantity * price * (100 - discount) / 100;
-            supplierTotal += quantity * priceSupplier;
+            supplierTotal += quantity * supplierPrice;
         });
 
         const margin = total - supplierTotal;
@@ -1099,7 +1119,7 @@
             recalcTotals();
         });
 
-        document.querySelectorAll('.item-price, .item-price-supplier, .item-amount').forEach(input => {
+        document.querySelectorAll('.item-price, .item-supplier-price, .item-amount').forEach(input => {
             input.value = normalizeMoneyForSubmit(input.value);
         });
 
@@ -1153,7 +1173,7 @@
         const productIdInput = row.querySelector('.input-product-id');
         const productSkuInput = row.querySelector('.input-product-sku');
         const priceInput = row.querySelector('.item-price');
-        const supplierPriceInput = row.querySelector('.item-price-supplier');
+        const supplierPriceInput = row.querySelector('.item-supplier-price');
 
         const query = productNameInput?.value?.trim();
 
@@ -1170,6 +1190,8 @@
                 return;
             }
 
+            const productSkuBadge = row.querySelector('.span-product-sku');
+            const productStockBadge = row.querySelector('.span-product-stock-info');
             const product = result.items[0];
 
             if (productIdInput) {
@@ -1192,6 +1214,17 @@
                 supplierPriceInput.value = formatMoney(product.stock.supplierPrice);
             }
 
+            if (productSkuBadge) {
+                productSkuBadge.textContent = product.sku || '';
+            }
+
+            if (productStockBadge) {
+                productStockBadge.textContent = product.viewStockQuantityText || '';
+
+                productStockBadge.className = 'badge mt-1 span-product-stock-info text-bg-' +
+                    (product.viewStockQuantityClass || 'light');
+            }
+
             recalcRow(row);
             recalcTotals();
 
@@ -1199,6 +1232,29 @@
             console.error(error);
             alert('Ошибка поиска товара');
         }
+    });
+
+    function toggleDeliveryRecipientFields() {
+        const checkbox = document.getElementById('check-delivery-customer-equals-recipient');
+        const recipientInputs = document.querySelectorAll('.input-delivery-recipient');
+
+        recipientInputs.forEach(input => {
+            input.disabled = checkbox.checked;
+
+            if (checkbox.checked) {
+                input.classList.add('bg-light');
+            } else {
+                input.classList.remove('bg-light');
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const checkbox = document.getElementById('check-delivery-customer-equals-recipient');
+
+        toggleDeliveryRecipientFields();
+
+        checkbox.addEventListener('change', toggleDeliveryRecipientFields);
     });
 </script>
 

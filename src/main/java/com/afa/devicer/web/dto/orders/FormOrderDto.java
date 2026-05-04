@@ -39,15 +39,10 @@ public class FormOrderDto extends OrderDto {
     private String formCustomerShortName;
     private String formCustomerLongName;
 
+    // delivery
+    private boolean formDeliveryCustomerEqualsRecipient = true;
+
     public void convertForm() {
-        // order
-        this.setOrderNum(formOrderNum);
-        this.setStatus(OrderStatusTypeDto.builder()
-                .code(formStatusCode)
-                .build());
-        this.setProductCategory(ProductCategoryDto.builder()
-                .id(formProductCategoryId)
-                .build());
         // customer
         if (getCustomer() == null) {
             this.setCustomer(CustomerDto.builder()
@@ -71,6 +66,21 @@ public class FormOrderDto extends OrderDto {
                             .id(formCustomerCountryId)
                             .build())
                     .build());
+        }
+        // order
+        this.setOrderNum(formOrderNum);
+        this.setStatus(OrderStatusTypeDto.builder()
+                .code(formStatusCode)
+                .build());
+        this.setProductCategory(ProductCategoryDto.builder()
+                .id(formProductCategoryId)
+                .build());
+        // delivery
+        if (getDelivery().getRecipient().getFirstName() == null) {
+            getDelivery().getRecipient().setFirstName(".");
+        }
+        if (getDelivery().getRecipient().getPhoneNumber() == null) {
+            getDelivery().getRecipient().setPhoneNumber(".");
         }
     }
 }
