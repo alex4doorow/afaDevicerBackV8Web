@@ -6,10 +6,7 @@ import com.afa.devicer.web.controllers.internal.ControllerConstants;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,5 +17,11 @@ public class CdekIntegrationRestController {
     @GetMapping("/location/cities")
     public ResponseEntity<BaseResponse> get(@Valid @ModelAttribute final CdekCityFilter filter) {
         return ResponseEntity.ok(new BaseResponse());
+    }
+
+    // https://web/wiki/integrations/cdek/widjet
+    @PostMapping("/widget")
+    public ResponseEntity<String> widget(@RequestBody String body) {
+        return ResponseEntity.ok("{}");
     }
 }

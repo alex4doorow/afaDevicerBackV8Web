@@ -125,7 +125,7 @@ public class OrderController extends BaseController {
                                 .addressLine(form.getDelivery().getAddress().getAddressLine())
                                 .build())
                         .customerEqualsRecipient(form.isFormDeliveryCustomerEqualsRecipient())
-                        .recipient(PersonSaveRequest.builder()
+                        .recipient(OrderDeliveryRecipientSaveRequest.builder()
                                 .firstName(form.getDelivery().getRecipient().getFirstName())
                                 .middleName(form.getDelivery().getRecipient().getMiddleName())
                                 .lastName(form.getDelivery().getRecipient().getLastName())

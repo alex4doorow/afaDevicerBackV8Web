@@ -92,7 +92,8 @@
                         <div class="col-md-2">
                             <label for="input-order-orderDate"
                                    class="form-label"
-                                   th:text="#{order.form.fields.orderDate}"></label>
+                                   th:text="#{order.form.fields.orderDate}">
+                            </label>
                             <div class="input-group input-group-sm">
                                 <input type="text"
                                        th:field="*{orderDate}"
@@ -116,7 +117,6 @@
                         <div class="col-md-3">
                             <label for="select-store" class="form-label">Сайт</label>
                             <select id="select-store" name="store" class="form-select form-select-sm">
-                                <option value="SR">sir-richard.ru</option>
                                 <option value="PM" selected>pribormaster.ru</option>
                             </select>
                         </div>
@@ -192,7 +192,6 @@
                             <label for="input-payment-annotation"
                                    class="form-label"
                                    th:text="#{order.form.fields.annotation}">
-                                Annotation
                             </label>
                             <textarea id="input-payment-annotation"
                                       th:field="*{annotation}"
@@ -205,7 +204,7 @@
                     </div>
 
                     <!-- Покупатель -->
-                    <h4 id="header-group-customer" class="mt-4 mb-3">Юридическое лицо</h4>
+                    <h4 id="header-group-customer" class="mt-4 mb-3" th:text="#{order.form.headers.customer.company}"></h4>
                     <hr class="mb-4">
 
                     <div class="row g-3 mb-3">
@@ -216,7 +215,9 @@
                                        name="gridRadiosCustomerType"
                                        id="customer-types-CUSTOMER"
                                        value="CUSTOMER">
-                                <label class="form-check-label" for="customer-types-CUSTOMER">физическое лицо</label>
+                                <label class="form-check-label"
+                                       for="customer-types-CUSTOMER">физическое лицо
+                                </label>
                             </div>
                         </div>
 
@@ -227,7 +228,9 @@
                                        name="gridRadiosCustomerType"
                                        id="customer-types-COMPANY"
                                        value="COMPANY">
-                                <label class="form-check-label" for="customer-types-COMPANY">юридическое лицо</label>
+                                <label class="form-check-label"
+                                       for="customer-types-COMPANY">юридическое лицо
+                                </label>
                             </div>
                         </div>
 
@@ -238,7 +241,9 @@
                                        name="gridRadiosCustomerType"
                                        id="customer-types-BUSINESSMAN"
                                        value="BUSINESSMAN">
-                                <label class="form-check-label" for="customer-types-BUSINESSMAN">индивидуальный предприниматель</label>
+                                <label class="form-check-label"
+                                       for="customer-types-BUSINESSMAN">индивидуальный предприниматель
+                                </label>
                             </div>
                         </div>
 
@@ -249,7 +254,9 @@
                                        name="gridRadiosCustomerType"
                                        id="customer-types-FOREIGNER_CUSTOMER"
                                        value="FOREIGNER_CUSTOMER">
-                                <label class="form-check-label" for="customer-types-FOREIGNER_CUSTOMER">нерезидент, физическое лицо</label>
+                                <label class="form-check-label"
+                                       for="customer-types-FOREIGNER_CUSTOMER">нерезидент, физическое лицо
+                                </label>
                             </div>
                         </div>
 
@@ -260,13 +267,15 @@
                                        name="gridRadiosCustomerType"
                                        id="customer-types-FOREIGNER_COMPANY"
                                        value="FOREIGNER_COMPANY">
-                                <label class="form-check-label" for="customer-types-FOREIGNER_COMPANY">нерезидент, юридическое лицо</label>
+                                <label class="form-check-label"
+                                       for="customer-types-FOREIGNER_COMPANY">нерезидент, юридическое лицо
+                                </label>
                             </div>
                         </div>
                     </div>
 
                     <div class="row g-3 mb-3">
-                        <div class="col-md-6">
+                        <div class="col-md-5">
                             <label for="select-customer-country"
                                    class="form-label"
                                    th:text="#{order.form.customer.fields.country}"></label>
@@ -313,7 +322,8 @@
                             <div class="col-md-7">
                                 <label for="input-customer-long-name"
                                        class="form-label"
-                                       th:text="#{order.form.customer.fields.longName}"></label>
+                                       th:text="#{order.form.customer.fields.longName}">
+                                </label>
                                 <input id="input-customer-long-name"
                                        th:field="*{formCustomerLongName}"
                                        th:placeholder="#{order.form.customer.fields.placeholder.longName}"
@@ -324,54 +334,58 @@
                             </div>
                         </div>
 
-                        <h5 class="mt-3 mb-3">Контактное лицо</h5>
+                        <h5 class="mt-3 mb-3" th:text="#{order.form.headers.customer.contact}"></h5>
 
                         <div class="row g-3 mb-3">
-
                              <div class="col-md-3">
-                                <label for="input-customer-contact-first-name" class="form-label">Имя *</label>
+                                <label for="input-customer-contact-first-name"
+                                       class="form-label"
+                                       th:text="#{order.form.customer.fields.contact.firstName}">
+                                </label>
                                 <input id="input-customer-contact-first-name"
-                                       name="formCustomer.mainContact.firstName"
-                                       placeholder="Имя контактного лица"
+                                       th:field="*{formCustomerContactPersonFirstName}"
+                                       th:placeholder="#{order.form.customer.fields.placeholder.contact.firstName}"
                                        type="text"
-                                       class="form-control form-control-sm"
-                                       value="Юлия">
-                                <div class="invalid-feedback">Укажите имя контактного лица</div>
+                                       class="form-control form-control-sm">
                             </div>
 
                             <div class="col-md-4">
-                                <label for="input-customer-contact-middle-name" class="form-label">Отчество</label>
+                                <label for="input-customer-contact-middle-name"
+                                       class="form-label"
+                                       th:text="#{order.form.customer.fields.contact.middleName}">
+                                </label>
                                 <input id="input-customer-contact-middle-name"
-                                       name="formCustomer.mainContact.middleName"
-                                       placeholder="Отчество контактного лица"
+                                       th:field="*{formCustomerContactPersonMiddleName}"
+                                       th:placeholder="#{order.form.customer.fields.placeholder.contact.middleName}"
                                        type="text"
-                                       class="form-control form-control-sm"
-                                       value="Александровна">
-                                <div class="invalid-feedback">Укажите отчество контактного лица</div>
+                                       class="form-control form-control-sm">
                             </div>
 
                             <div class="col-md-5">
-                                <label for="input-customer-contact-last-name" class="form-label">Фамилия</label>
+                                <label for="input-customer-contact-middle-name"
+                                       class="form-label"
+                                       th:text="#{order.form.customer.fields.contact.lastName}">
+                                </label>
                                 <input id="input-customer-contact-last-name"
-                                       name="formCustomer.mainContact.lastName"
-                                       placeholder="Фамилия контактного лица"
+                                       th:field="*{formCustomerContactPersonLastName}"
+                                       th:placeholder="#{order.form.customer.fields.placeholder.contact.lastName}"
                                        type="text"
-                                       class="form-control form-control-sm"
-                                       value="Ткачева">
-                                <div class="invalid-feedback">Укажите фамилию контактного лица</div>
+                                       class="form-control form-control-sm">
                             </div>
                         </div>
 
                         <div class="row g-3 mb-3 align-items-start">
                             <div class="col-md-3">
-                                <label for="input-customer-contact-phone" class="form-label">Телефон *</label>
+                                <label for="input-customer-contact-phone"
+                                       class="form-label"
+                                       th:text="#{order.form.customer.fields.contact.telephone}">
+                                </label>
                                 <div class="input-group input-group-sm">
                                     <input id="input-customer-contact-phone"
-                                           name="formCustomer.mainContact.phoneNumber"
-                                           placeholder="Телефон контактного лица"
+                                           th:field="*{formCustomerContactPersonPhoneNumber}"
+                                           th:placeholder="#{order.form.customer.fields.placeholder.contact.telephone}"
                                            type="text"
                                            class="form-control phone input-mask-phone form-control-customer-find"
-                                           value="(483) 271-61-23"
                                            maxlength="15">
                                     <button id="btn-find-customer-contact-phone"
                                             class="btn btn-outline-secondary"
@@ -379,22 +393,22 @@
                                         <i class="bi bi-search text-dark"></i>
                                     </button>
                                 </div>
-                                <div class="invalid-feedback">Укажите телефон контактного лица</div>
                             </div>
-
                             <div class="col-md-9">
-                                <label for="input-customer-contact-email" class="form-label">Email *</label>
+                                <label for="input-customer-contact-email"
+                                       class="form-label"
+                                       th:text="#{order.form.customer.fields.contact.email}">
+                                </label>
                                 <input id="input-customer-contact-email"
-                                       name="formCustomer.mainContact.email"
+                                       th:field="*{formCustomerContactPersonEmail}"
                                        type="text"
-                                       class="form-control form-control-sm form-control-customer-find"
-                                       value="u.tkachyova@bkenergo.ru">
+                                       class="form-control form-control-sm form-control-customer-find">
                             </div>
                         </div>
                     </div>
 
                     <!-- Доставка и оплата -->
-                    <h4 class="mt-4 mb-3">Доставка и оплата</h4>
+                    <h4 class="mt-4 mb-3" th:text="#{order.form.headers.delivery}"></h4>
                     <hr class="mb-4">
 
                     <div class="row g-3 mb-3">
@@ -472,11 +486,10 @@
 
                     <div class="row g-3 mb-3">
                         <div class="col-12">
-                            <label for="select-delivery-address-country"
+                            <label for="input-delivery-address"
                                    class="form-label"
                                    th:text="#{order.form.delivery.fields.address}">
                             </label>
-                            <label for="input-delivery-address" class="form-label">Адрес доставки</label>
                             <textarea id="input-delivery-address"
                                       th:field="*{delivery.address.addressLine}"
                                       name="delivery.address.address"
@@ -537,7 +550,7 @@
                             <input id="input-delivery-recipient-phone-number"
                                    th:field="*{delivery.recipient.phoneNumber}"
                                    type="text"
-                                   class="form-control form-control-sm input-delivery-recipient">
+                                   class="form-control form-control-sm input-delivery-recipient input-mask-phone">
                         </div>
                     </div>
 
@@ -548,7 +561,6 @@
                             <label for="input-delivery-price"
                                    class="form-label"
                                    th:text="#{order.form.delivery.fields.price}">
-                                Стоимость доставки
                             </label>
 
                             <div class="input-group input-group-sm">
@@ -565,8 +577,8 @@
                                     <i class="bi bi-truck text-dark"></i>
                                 </button>
 
-                                <button id="btn-cdek-widjet-1"
-                                        class="btn btn-outline-secondary btn-cdek-widjet"
+                                <button id="btn-cdek-widget-1"
+                                        class="btn btn-outline-secondary btn-cdek-widget"
                                         type="button">
                                     <i class="bi bi-map text-dark"></i>
                                 </button>
@@ -635,22 +647,17 @@
                         </div>
 
                         <!-- Постоплата -->
-                        <!--
                         <div class="col-md-3">
                             <label for="input-amounts-postpay"
                                    class="form-label"
-                                   th:text="#{order.form.amounts.fields.postpay}">
-                                Постоплата
+                                   th:text="#{order.form.delivery.fields.postpayAmount}">
                             </label>
-
                             <div class="input-group input-group-sm">
                                 <input id="input-amounts-postpay"
-                                       th:field="*{amounts.postpay}"
+                                       th:field="*{formPostpayAmount}"
                                        type="text"
                                        class="form-control"
-                                       maxlength="12"
-                                       th:classappend="${#fields.hasErrors('amounts.postpay')} ? ' is-invalid' : ''"/>
-
+                                       maxlength="12">
                                 <button id="btn-calc-parcel-delivery-amounts-info"
                                         class="btn btn-outline-secondary"
                                         type="button"
@@ -661,15 +668,8 @@
                                         th:attr="data-bs-content=${delivery != null && delivery.address != null ? delivery.address.addressLine : ''}">
                                     <i class="bi bi-cash-coin text-dark"></i>
                                 </button>
-
-                                <div class="invalid-feedback"
-                                     th:if="${#fields.hasErrors('amounts.postpay')}"
-                                     th:errors="*{amounts.postpay}">
-                                </div>
                             </div>
-
                         </div>
-                        -->
 
                         <!-- Трэккод -->
                         <div class="col-md-2">
@@ -690,22 +690,20 @@
                                  th:errors="*{delivery.trackCode}">
                             </div>
                         </div>
-
                     </div>
-
-<!--
 
                     <div class="row g-3 mb-4">
                         <div class="col-12">
-                            <label for="input-delivery-courier-annotation" class="form-label">Дополнительная информация по доставке</label>
+                            <label for="input-delivery-courier-annotation"
+                                   class="form-label">Дополнительная информация по доставке
+                            </label>
                             <input id="input-delivery-courier-annotation"
-                                   name="delivery.annotation"
+                                   th:field="*{delivery.annotation}"
                                    type="text"
-                                   class="form-control form-control-sm">
+                                   class="form-control form-control-sm"
+                                   th:classappend="${#fields.hasErrors('delivery.annotation')} ? ' is-invalid' : ''"/>
                         </div>
                     </div>
-
--->
 
                     <h4 class="mt-4 mb-3">Детализация</h4>
                     <hr class="mb-3">
@@ -958,6 +956,9 @@
                     <br>
                     <br>
 
+                    <div id="cdek-map" class="mt-2" style="width: 100%; height: 600px;"></div>
+
+
                 </form>
             </div>
         </main>
@@ -1035,6 +1036,7 @@
         let total = 0;
         let supplierTotal = 0;
 
+        const postpay = parseMoney(document.getElementById('input-amounts-postpay')?.value);
         container.querySelectorAll('.order-item-row').forEach(row => {
             const quantity = parseMoney(row.querySelector('.item-quantity')?.value);
             const price = parseMoney(row.querySelector('.item-price')?.value);
@@ -1055,6 +1057,7 @@
 
         document.getElementById('details-items-amounts-supplier').textContent = formatMoney(supplierTotal);
         document.getElementById('details-items-amounts-margin').textContent = formatMoney(margin);
+        document.getElementById('details-items-amounts-postpay').textContent = formatMoney(postpay);
     }
 
     function addOrderItemRow() {
@@ -1125,6 +1128,10 @@
 
         document.querySelectorAll('.item-discount').forEach(input => {
             input.value = parseInt(input.value || '0', 10);
+        });
+
+        $('.input-mask-phone').each(function () {
+            $(this).val($(this).cleanVal());
         });
     });
 
@@ -1256,6 +1263,51 @@
 
         checkbox.addEventListener('change', toggleDeliveryRecipientFields);
     });
+
+    $(document).ready(function () {
+        $('.input-mask-phone').mask('(000) 000-00-00');
+        $('.input-mask-time').mask('00:00');
+    });
+
+
+    let cdekWidget;
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const cdekButton = document.getElementById('btn-cdek-widget-1');
+
+        if (!cdekButton) {
+            return;
+        }
+
+        cdekButton.addEventListener('click', function () {
+            if (cdekWidget) {
+                return;
+            }
+
+            cdekWidget = new window.CDEKWidget({
+                from: {
+                    code: 44
+                },
+                defaultLocation: 'Москва',
+                root: 'cdek-map',
+                apiKey: 'YANDEX_MAP_API_KEY',
+                servicePath: '/web/wiki/integrations/cdek/widget',
+                canChoose: true,
+                hideFilters: false,
+                hideDeliveryOptions: false,
+                debug: true,
+
+                onChoose: function (deliveryType, tariff, address) {
+                    console.log('deliveryType', deliveryType);
+                    console.log('tariff', tariff);
+                    console.log('address', address);
+                }
+            });
+        });
+    });
+
+
+
 </script>
 
 </body>
