@@ -37,6 +37,7 @@ public abstract class BaseController {
         model.addAttribute("msg", null);
 
         model.addAttribute("orderTypes", OrderTypes.values());
+        model.addAttribute("storeTypes", StoreTypes.values());
         model.addAttribute("orderSourceTypes", OrderSourceTypes.values());
         model.addAttribute("orderAdvertTypes", OrderAdvertTypes.values());
         model.addAttribute("orderPaymentTypes", OrderPaymentTypes.values());

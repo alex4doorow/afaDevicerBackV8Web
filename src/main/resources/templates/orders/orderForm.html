@@ -27,20 +27,22 @@
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             <div class="d-flex justify-content-start flex-wrap flex-md-nowrap align-items-start">
                 <h1 class="mt-2 h4">
-                    <span th:text="#{order.form.update.headers.h1(${order.viewNum}, ${#temporals.format(order.orderDate, 'dd.MM.yyyy')})}">
-                        Заказ № XXX от XX.XX.XXXX
+                    <span th:text="${formOrder.new}
+                            ? #{order.form.new.headers.h1}
+                            : #{order.form.update.headers.h1(${formOrder.viewNum}, ${#temporals.format(formOrder.orderDate, 'dd.MM.yyyy')})}">
                     </span>
                 </h1>
             </div>
             <div class="d-flex justify-content-start flex-wrap flex-md-nowrap align-items-start border-bottom mb-2">
                 <h2 class="h5">
-                    <span th:text="${order.customer.viewLongNameWithContactInfo}"></span>&nbsp;
-                    <span class="badge bg-secondary" th:text="${order.customer.id}"></span>
+                    <span th:text="${formOrder.new}
+                            ? #{order.form.new.headers.h2}
+                            : ${formOrder.viewCustomerLongNameWithContactInfo}">
+                    </span>
+                    <span class="badge bg-secondary" th:text="${formOrder.customer.id}"></span>
                 </h2>
             </div>
-
             <div class="small col-xl-8 col-lg-10 col-md-12">
-
                 <form th:action="@{/web/orders/{orderId}/update(orderId=${order.id})}"
                       th:object="${formOrder}"
                       method="post">
@@ -115,9 +117,17 @@
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <label for="select-store" class="form-label">Сайт</label>
-                            <select id="select-store" name="store" class="form-select form-select-sm">
-                                <option value="PM" selected>pribormaster.ru</option>
+                            <label for="select-store"
+                                   class="form-label"
+                                   th:text="#{order.form.fields.store}">
+                            </label>
+                            <select th:field="*{store}"
+                                    id="select-store"
+                                    class="form-select form-select-sm">
+                                <option th:each="item : ${storeTypes}"
+                                        th:value="${item.code}"
+                                        th:text="${item.site}">
+                                </option>
                             </select>
                         </div>
                     </div>
@@ -212,11 +222,13 @@
                             <div class="form-check">
                                 <input class="form-check-input radio-customer-type"
                                        type="radio"
-                                       name="gridRadiosCustomerType"
-                                       id="customer-types-CUSTOMER"
-                                       value="CUSTOMER">
+                                       th:field="*{formCustomerType}"
+                                       id="customer-types-PERSON"
+                                       th:value="${T(com.afa.core.enums.CustomerTypes).PERSON}">
+
                                 <label class="form-check-label"
-                                       for="customer-types-CUSTOMER">физическое лицо
+                                       for="customer-types-PERSON"
+                                       th:text="${T(com.afa.core.enums.CustomerTypes).PERSON.longName}">
                                 </label>
                             </div>
                         </div>
@@ -225,11 +237,12 @@
                             <div class="form-check">
                                 <input class="form-check-input radio-customer-type"
                                        type="radio"
-                                       name="gridRadiosCustomerType"
+                                       th:field="*{formCustomerType}"
                                        id="customer-types-COMPANY"
-                                       value="COMPANY">
+                                       th:value="${T(com.afa.core.enums.CustomerTypes).COMPANY}">
                                 <label class="form-check-label"
-                                       for="customer-types-COMPANY">юридическое лицо
+                                       for="customer-types-COMPANY"
+                                       th:text="${T(com.afa.core.enums.CustomerTypes).COMPANY.longName}">
                                 </label>
                             </div>
                         </div>
@@ -238,11 +251,12 @@
                             <div class="form-check">
                                 <input class="form-check-input radio-customer-type"
                                        type="radio"
-                                       name="gridRadiosCustomerType"
+                                       th:field="*{formCustomerType}"
                                        id="customer-types-BUSINESSMAN"
-                                       value="BUSINESSMAN">
+                                       th:value="${T(com.afa.core.enums.CustomerTypes).BUSINESSMAN}">
                                 <label class="form-check-label"
-                                       for="customer-types-BUSINESSMAN">индивидуальный предприниматель
+                                       for="customer-types-BUSINESSMAN"
+                                       th:text="${T(com.afa.core.enums.CustomerTypes).BUSINESSMAN.longName}">
                                 </label>
                             </div>
                         </div>
@@ -251,11 +265,12 @@
                             <div class="form-check">
                                 <input class="form-check-input radio-customer-type"
                                        type="radio"
-                                       name="gridRadiosCustomerType"
-                                       id="customer-types-FOREIGNER_CUSTOMER"
-                                       value="FOREIGNER_CUSTOMER">
+                                       th:field="*{formCustomerType}"
+                                       id="customer-types-FOREIGNER_PERSON"
+                                       th:value="${T(com.afa.core.enums.CustomerTypes).FOREIGNER_PERSON}">
                                 <label class="form-check-label"
-                                       for="customer-types-FOREIGNER_CUSTOMER">нерезидент, физическое лицо
+                                       for="customer-types-FOREIGNER_PERSON"
+                                       th:text="${T(com.afa.core.enums.CustomerTypes).FOREIGNER_PERSON.longName}">
                                 </label>
                             </div>
                         </div>
@@ -264,11 +279,12 @@
                             <div class="form-check">
                                 <input class="form-check-input radio-customer-type"
                                        type="radio"
-                                       name="gridRadiosCustomerType"
+                                       th:field="*{formCustomerType}"
                                        id="customer-types-FOREIGNER_COMPANY"
-                                       value="FOREIGNER_COMPANY">
+                                       th:value="${T(com.afa.core.enums.CustomerTypes).FOREIGNER_COMPANY}">
                                 <label class="form-check-label"
-                                       for="customer-types-FOREIGNER_COMPANY">нерезидент, юридическое лицо
+                                       for="customer-types-FOREIGNER_COMPANY"
+                                       th:text="${T(com.afa.core.enums.CustomerTypes).FOREIGNER_COMPANY.longName}">
                                 </label>
                             </div>
                         </div>
@@ -289,6 +305,115 @@
                             </select>
                         </div>
                     </div>
+
+
+                    <div class="form-group-customer">
+
+                        <div class="row g-3 mb-3 align-items-start">
+
+                            <div class="col-md-3">
+                                <label for="input-customer-phone"
+                                       class="form-label"
+                                       th:text="#{order.form.customer.fields.telephone}">
+                                </label>
+
+                                <div class="input-group input-group-sm">
+                                    <input id="input-customer-phone"
+                                           th:field="*{formCustomerContactPersonPhoneNumber}"
+                                           th:placeholder="#{order.form.customer.fields.placeholder.telephone}"
+                                           type="text"
+                                           maxlength="15"
+                                           class="form-control phone input-mask-phone form-control-customer-find"
+                                           th:classappend="${#fields.hasErrors('formCustomerContactPersonPhoneNumber')} ? ' is-invalid' : ''"/>
+
+                                    <button id="btn-find-customer-phone"
+                                            class="btn btn-outline-secondary"
+                                            type="button">
+                                        <i class="bi bi-search text-dark"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="input-customer-email"
+                                       class="form-label"
+                                       th:text="#{order.form.customer.fields.email}">
+                                </label>
+
+                                <input id="input-customer-email"
+                                       th:field="*{formCustomerContactPersonEmail}"
+                                       type="text"
+                                       maxlength="30"
+                                       class="form-control form-control-sm form-control-customer-find"/>
+                            </div>
+
+                            <div class="col-md-5">
+                                <label class="form-label">&nbsp;</label>
+
+                                <div class="dropdown">
+                                    <button id="btn-find-customer-orders"
+                                            class="btn btn-sm btn-light dropdown-toggle"
+                                            type="button"
+                                            data-bs-toggle="dropdown"
+                                            aria-expanded="false">
+                                        <span th:text="#{orders.btn.customerOrders}"></span>
+                                        <span class="badge bg-secondary">0</span>
+                                    </button>
+
+                                    <div class="dropdown-menu dropdown-menu-customer-orders">
+                                        <!-- dynamic customer orders -->
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row g-3 mb-3">
+
+                            <div class="col-md-3">
+                                <label for="input-customer-first-name"
+                                       class="form-label"
+                                       th:text="#{order.form.customer.fields.firstName}">
+                                </label>
+
+                                <input id="input-customer-first-name"
+                                       th:field="*{formCustomerContactPersonFirstName}"
+                                       th:placeholder="#{order.form.customer.fields.placeholder.firstName}"
+                                       type="text"
+                                       class="form-control form-control-sm"
+                                       th:classappend="${#fields.hasErrors('formCustomerContactPersonFirstName')} ? ' is-invalid' : ''"/>
+
+
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="input-customer-middle-name"
+                                       class="form-label"
+                                       th:text="#{order.form.customer.fields.middleName}">
+                                </label>
+
+                                <input id="input-customer-middle-name"
+                                       th:field="*{formCustomerContactPersonMiddleName}"
+                                       type="text"
+                                       class="form-control form-control-sm"/>
+                            </div>
+
+                            <div class="col-md-5">
+                                <label for="input-customer-last-name"
+                                       class="form-label"
+                                       th:text="#{order.form.customer.fields.lastName}">
+                                </label>
+
+                                <input id="input-customer-last-name"
+                                       th:field="*{formCustomerContactPersonLastName}"
+                                       type="text"
+                                       class="form-control form-control-sm"/>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
 
                     <!-- Юридическое лицо -->
                     <div class="form-group-company">
@@ -1133,6 +1258,17 @@
         $('.input-mask-phone').each(function () {
             $(this).val($(this).cleanVal());
         });
+
+        const customerBlock = document.querySelector('.form-group-customer');
+        const companyBlock = document.querySelector('.form-group-company');
+
+        if (customerBlock.classList.contains('d-none')) {
+            customerBlock.querySelectorAll('input, select, textarea').forEach(el => el.disabled = true);
+        }
+
+        if (companyBlock.classList.contains('d-none')) {
+            companyBlock.querySelectorAll('input, select, textarea').forEach(el => el.disabled = true);
+        }
     });
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -1305,6 +1441,139 @@
             });
         });
     });
+
+
+    function updateCustomerHeader() {
+        const selectedRadio = document.querySelector('.radio-customer-type:checked');
+        const header = document.getElementById('header-group-customer');
+
+        if (!selectedRadio || !header) {
+            return;
+        }
+
+        const labels = {
+            PERSON: 'Покупатель (физическое лицо)',
+            COMPANY: 'Покупатель (юридическое лицо)',
+            BUSINESSMAN: 'Покупатель (индивидуальный предприниматель)',
+            FOREIGNER_PERSON: 'Покупатель (нерезидент, физическое лицо)',
+            FOREIGNER_COMPANY: 'Покупатель (нерезидент, юридическое лицо)'
+        };
+
+        header.textContent = labels[selectedRadio.value] || 'Покупатель';
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.radio-customer-type').forEach(radio => {
+            radio.addEventListener('change', updateCustomerHeader);
+        });
+
+        updateCustomerHeader();
+    });
+
+    function toggleCustomerTypeBlocks() {
+        const selectedRadio = document.querySelector('.radio-customer-type:checked');
+        const customerBlock = document.querySelector('.form-group-customer');
+        const companyBlock = document.querySelector('.form-group-company');
+
+        if (!selectedRadio || !customerBlock || !companyBlock) {
+            return;
+        }
+
+        const personTypes = ['PERSON', 'FOREIGNER_PERSON'];
+        const companyTypes = ['COMPANY', 'BUSINESSMAN', 'FOREIGNER_COMPANY'];
+
+        const selectedType = selectedRadio.value;
+
+        customerBlock.classList.toggle('d-none', !personTypes.includes(selectedType));
+        companyBlock.classList.toggle('d-none', !companyTypes.includes(selectedType));
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.radio-customer-type').forEach(radio => {
+            radio.addEventListener('change', function () {
+                updateCustomerHeader();
+                toggleCustomerTypeBlocks();
+            });
+        });
+
+        updateCustomerHeader();
+        toggleCustomerTypeBlocks();
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const findCustomerButton = document.getElementById('btn-find-customer-phone');
+
+        if (!findCustomerButton) {
+            return;
+        }
+
+        findCustomerButton.addEventListener('click', async function () {
+            const phoneInput = document.getElementById('input-customer-phone');
+            const selectedCustomerType = document.querySelector('.radio-customer-type:checked');
+
+            if (!phoneInput || !selectedCustomerType) {
+                return;
+            }
+
+            const phoneNumber = phoneInput.value.trim();
+
+            if (!phoneNumber) {
+                alert('Введите телефон');
+                return;
+            }
+
+            const requestBody = {
+                pageNumber: 1,
+                resultsOnPage: 10,
+                conditions: {
+                    customerTypes: [selectedCustomerType.value],
+                    personPhoneNumber: phoneNumber
+                }
+            };
+
+            try {
+                const response = await fetch('/web/wiki/integrations/union/customers/suggest', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Ошибка поиска клиента');
+                }
+
+                const result = await response.json();
+                console.log('Customer suggest response:', result);
+
+                document.querySelector('input[name="formCustomerId"]').value = result.customer?.id || '';
+                document.getElementById('input-customer-first-name').value = result.customer?.person?.firstName || '';
+                document.getElementById('input-customer-middle-name').value = result.customer?.person?.middleName || '';
+                document.getElementById('input-customer-last-name').value = result.customer?.person?.lastName || '';
+
+                document.getElementById('input-customer-phone').value = result.customer?.person?.phoneNumber || '';
+                document.getElementById('input-customer-email').value = result.customer?.person?.email || '';
+                document.querySelector('input[name="formCustomerPersonId"]').value = result.customer?.person?.id || '';
+
+            } catch (error) {
+                console.error('Ошибка запроса customer suggest:', error);
+                alert('Ошибка поиска клиента');
+            }
+        });
+    });
+
+    function toggleBlockState(block, enabled) {
+        block.classList.toggle('d-none', !enabled);
+
+        block.querySelectorAll('input, select, textarea').forEach(el => {
+            el.disabled = !enabled;
+        });
+    }
+
+    toggleBlockState(customerBlock, personTypes.includes(selectedType));
+    toggleBlockState(companyBlock, companyTypes.includes(selectedType));
 
 
 

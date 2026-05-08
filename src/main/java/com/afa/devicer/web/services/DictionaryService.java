@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -23,7 +25,19 @@ public class DictionaryService {
                 .retrieve()
                 .bodyToMono(CountryResponse.class)
                 .block();
-        return response.getItems();
+
+        return response == null || response.getItems() == null
+                ? Collections.emptyList()
+                : response.getItems();
+    }
+
+    @Transactional(readOnly = true)
+    public CountryDto getDefaultCountry() {
+        return getCountries()
+                .stream()
+                .filter(c -> c.getIsoCode2().equals("RU"))
+                .toList()
+                .getFirst();
     }
 
 }

@@ -20,6 +20,16 @@ public class OrderService {
     private final WebClient webClient;
 
     @Transactional(readOnly = true)
+    public Long findNextOrderNum() {
+        final String uri = "/api/v8/orders/next-order-num";
+        return webClient.get()
+                .uri(uri)
+                .retrieve()
+                .bodyToMono(Long.class)
+                .block();
+    }
+
+    @Transactional(readOnly = true)
     public OrderPagedResponse fullFiltered(final OrderPagedFilter orderPagedFilter) {
 
         return webClient.post()
@@ -40,6 +50,26 @@ public class OrderService {
                 .retrieve()
                 .bodyToMono(OrderSingleResponse.class)
                 .block();
+    }
+
+    @Transactional
+    public OrderDto create(
+            final OrderSaveRequest request) {
+
+        final String uri = "/api/v8/orders";
+        final OrderSingleResponse response = webClient.put()
+                .uri(uri)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(request)
+                .retrieve()
+                .bodyToMono(OrderSingleResponse.class)
+                .block();
+        if (response != null && response.getResult() != null && StringUtils.equals(response.getResult(), "error")) {
+            throw new DevicerException(DevicerErrors.UNKNOWN_VALIDATION_ERROR,
+                    WebDevicerErrors.ORDER_SAVE_ERROR.getErrorMessage(),
+                    response.getViolations());
+        }
+        return response == null ? null : response.getOrder();
     }
 
     @Transactional

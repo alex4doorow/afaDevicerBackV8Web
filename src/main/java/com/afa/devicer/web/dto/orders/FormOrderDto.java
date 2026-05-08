@@ -8,14 +8,11 @@ import com.afa.core.dto.dictionaries.OrderStatusTypeDto;
 import com.afa.core.dto.orders.OrderDto;
 import com.afa.core.dto.people.PersonFullDto;
 import com.afa.core.dto.products.ProductCategoryDto;
-import com.afa.core.enums.AmountTypes;
 import com.afa.core.enums.ContactTypes;
 import com.afa.core.enums.CustomerTypes;
+import com.afa.core.utils.TextHelper;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.Set;
@@ -25,6 +22,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@SuppressWarnings({"PMD.TooManyFields"})
 public class FormOrderDto extends OrderDto {
 
     // customer
@@ -57,6 +55,16 @@ public class FormOrderDto extends OrderDto {
     // delivery
     private boolean formDeliveryCustomerEqualsRecipient = true;
 
+    public boolean isNew() {
+        return (this.getId() == null || this.getId() == 0);
+    }
+
+    public String getViewCustomerLongNameWithContactInfo() {
+        return isNew()
+                ? "New customer, +7 (000) 000-00-00"
+                : super.getCustomer().getViewLongNameWithContactInfo();
+    }
+
     public void convertForm() {
         // customer
         if (getCustomer() == null) {
@@ -70,7 +78,7 @@ public class FormOrderDto extends OrderDto {
                     .firstName(formCustomerContactPersonFirstName)
                     .middleName(formCustomerContactPersonMiddleName)
                     .lastName(formCustomerContactPersonLastName)
-                    .phoneNumber(formCustomerContactPersonPhoneNumber)
+                    .phoneNumber(TextHelper.formatPhoneNumber(formCustomerContactPersonPhoneNumber))
                     .email(formCustomerContactPersonEmail)
                     .build();
             final CustomerContactDto customerContactDto = CustomerContactDto.builder()
@@ -79,6 +87,7 @@ public class FormOrderDto extends OrderDto {
                     .build();
             this.getCustomer().setCompany(CompanyDto.builder()
                     .id(formCustomerCompanyId)
+                            .inn(formCustomerInn)
                     .longName(formCustomerLongName)
                     .shortName(formCustomerShortName)
                     .country(CountryDto.builder()
@@ -90,6 +99,10 @@ public class FormOrderDto extends OrderDto {
         } else if (formCustomerType == CustomerTypes.PERSON) {
             final PersonFullDto person = PersonFullDto.builder()
                     .id(formCustomerPersonId)
+                    .firstName(formCustomerContactPersonFirstName)
+                    .middleName(formCustomerContactPersonMiddleName)
+                    .lastName(formCustomerContactPersonLastName)
+                    .phoneNumber(TextHelper.formatPhoneNumber(formCustomerContactPersonPhoneNumber))
                     .country(CountryDto.builder()
                             .id(formCustomerCountryId)
                             .build())
@@ -113,4 +126,6 @@ public class FormOrderDto extends OrderDto {
         // amounts
         //getAmounts().put(AmountTypes.POSTPAY, formPostpayAmount);
     }
+
+
 }

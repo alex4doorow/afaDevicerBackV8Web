@@ -1,13 +1,19 @@
 package com.afa.devicer.web.controllers;
 
+import com.afa.core.dto.companies.CompanySaveRequest;
+import com.afa.core.dto.customers.CustomerDto;
+import com.afa.core.dto.customers.CustomerSaveRequest;
 import com.afa.core.dto.dictionaries.AddressSaveRequest;
+import com.afa.core.dto.dictionaries.OrderStatusTypeDto;
 import com.afa.core.dto.orders.*;
-import com.afa.core.dto.people.PersonSaveRequest;
+import com.afa.core.dto.people.PersonFullDto;
 import com.afa.core.dto.people.PersonSettingsResponse;
+import com.afa.core.dto.products.ProductCategoryDto;
 import com.afa.core.enums.*;
 import com.afa.devicer.web.controllers.internal.ControllerConstants;
 import com.afa.devicer.web.dto.orders.FormOrderDto;
 import com.afa.devicer.web.mappers.OrderDtoMapper;
+import com.afa.devicer.web.services.CustomerService;
 import com.afa.devicer.web.services.OrderService;
 import com.afa.devicer.web.services.PersonSettingService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,6 +30,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Set;
 
 @Slf4j
@@ -32,10 +41,11 @@ import java.util.Set;
 @Tag(name = "orders", description = "Orders controller")
 @Controller
 @RequiredArgsConstructor
-@SuppressWarnings({"PMD.AvoidDuplicateLiterals", "PMD.LawOfDemeter"})
+@SuppressWarnings({"PMD.AvoidDuplicateLiterals", "PMD.LawOfDemeter", "PMD.ExcessiveImports"})
 public class OrderController extends BaseController {
 
     private final PersonSettingService personSettingService;
+    private final CustomerService customerService;
     private final OrderService orderService;
     private final OrderDtoMapper orderDtoMapper;
 
@@ -71,6 +81,45 @@ public class OrderController extends BaseController {
         return "orders/show.html";
     }
 
+    @GetMapping("/create")
+    public String getOrder4Create(final Model model) {
+
+        final OrderDto order = OrderDto.builder()
+                .id(0L)
+                .orderNum(orderService.findNextOrderNum())
+                .orderDate(LocalDate.now())
+                .type(OrderTypes.ORDER)
+                .store(StoreTypes.PM)
+                .sourceType(OrderSourceTypes.CALL)
+                .advertType(OrderAdvertTypes.ADVERT)
+                .productCategory(getProductService().getProductCategories()
+                        .stream()
+                        .filter(pc -> pc.getId() > 0)
+                        .sorted(Comparator.comparing(ProductCategoryDto::getId))
+                        .toList()
+                        .getFirst())
+                .status(OrderStatusTypeDto.builder()
+                        .code(OrderStatusTypes.BID.getCode())
+                        .build())
+                .amounts(Collections.emptyMap())
+                .customer(CustomerDto.builder()
+                        .id(0L)
+                        .type(CustomerTypes.PERSON)
+                        .person(PersonFullDto.builder()
+                                .id(0L)
+                                .country(dictionaryService.getDefaultCountry())
+                                .build())
+                        .build())
+                .build();
+        final FormOrderDto form = orderDtoMapper.fromOrderToForm(order);
+
+        populateDefaultModel(model);
+        model.addAttribute("listType", "list");
+        model.addAttribute("order", order);
+        model.addAttribute("formOrder", form);
+        return "orders/orderForm.html";
+    }
+
     @GetMapping("/{orderId}/update")
     public String getOrder4Edit(
             @NotNull @Valid @PathVariable final Long orderId,
@@ -102,7 +151,28 @@ public class OrderController extends BaseController {
             return "orders/orderForm.html";
         }
         form.convertForm();
+        if (form.isNew()) {
+
+            return "redirect:/web/orders";
+        }
+
+
         final OrderDto order = orderService.getOrderById(orderId).getOrder();
+        CustomerDto customer = customerService.getCustomerById(order.getCustomer().getId()).getCustomer();
+
+        final CustomerSaveRequest customerRequest = CustomerSaveRequest.builder()
+                .company(CompanySaveRequest.builder()
+                        .inn(form.getFormCustomerInn())
+                        .shortName(form.getFormCustomerShortName())
+                        .longName(form.getFormCustomerLongName())
+                        .build())
+//                .person(PersonSaveRequest.builder()
+//                        .firstName(form.)
+//                        .build())
+                .countryId(form.getFormCustomerCountryId())
+                .build();
+//        customer = customerService.update(form.getFormCustomerId(), customerRequest);
+
         final OrderSaveRequest request = OrderSaveRequest.builder()
                 .orderNum(form.getOrderNum())
                 .orderDate(form.getOrderDate())

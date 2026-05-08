@@ -20,6 +20,7 @@ public final class ControllerConstants {
     // REST CONTROLLERS
     public static final String REST_PRODUCTS = BASE_API + "/wiki/products";
     public static final String REST_INTEGRATIONS_CDEK = BASE_API + "/wiki/integrations/cdek";
+    public static final String REST_INTEGRATIONS_UNION = BASE_API + "/wiki/integrations/union";
 
     public static final String ROLE_ADMIN = "ROLE_ADMIN";
     public static final String ROLE_CUSTOMER = "ROLE_CUSTOMER";
