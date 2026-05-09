@@ -1,11 +1,13 @@
 package com.afa.devicer.web.services;
 
-import com.afa.core.dto.customers.CustomerDto;
-import com.afa.core.dto.customers.CustomerSaveRequest;
-import com.afa.core.dto.customers.CustomerSingleResponse;
+import com.afa.core.dto.companies.CompanySaveRequest;
+import com.afa.core.dto.customers.*;
+import com.afa.core.dto.integrations.union.CustomerDataUnionResponse;
+import com.afa.core.enums.CustomerTypes;
 import com.afa.core.enums.DevicerErrors;
 import com.afa.core.exceptions.DevicerException;
 import com.afa.devicer.web.enums.WebDevicerErrors;
+import com.afa.devicer.web.services.rest.UnionIntegrationService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.binary.StringUtils;
 import org.springframework.http.MediaType;
@@ -13,10 +15,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.Set;
+
 @Service
 @RequiredArgsConstructor
 public class CustomerService {
 
+    private final UnionIntegrationService unionIntegrationService;
     private final WebClient webClient;
 
     @Transactional(readOnly = true)
@@ -32,6 +37,10 @@ public class CustomerService {
 
     @Transactional
     public CustomerDto create(final CustomerSaveRequest request) {
+        final CustomerDto findCustomer = finaCustomerByCustomerSaveRequest(request);
+        if (findCustomer != null) {
+            return findCustomer;
+        }
 
         final String uri = "/api/v8/customers";
         final CustomerSingleResponse response = webClient.post()
@@ -69,6 +78,26 @@ public class CustomerService {
         }
         return response == null ? null : response.getCustomer();
     }
+
+    private CustomerDto finaCustomerByCustomerSaveRequest(final CustomerSaveRequest request) {
+        final CustomerSearchPagedFilter filter;
+        if (request.getType() == CustomerTypes.PERSON) {
+            filter = CustomerSearchPagedFilter.builder()
+                    .conditions(CustomerConditionsDto.builder()
+                            .customerTypes(Set.of(request.getType()))
+                            .personPhoneNumber(request.getPerson().getPhoneNumber())
+                            .build())
+                    .build();
+        } else {
+            return null;
+        }
+
+        CustomerDataUnionResponse response = unionIntegrationService.getCustomerSuggest(filter);
+        return response == null || response.getCustomer() == null
+                ? null
+                : response.getCustomer();
+    }
+
 }
 
 

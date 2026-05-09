@@ -1,8 +1,12 @@
 package com.afa.devicer.web.services;
 
+import com.afa.core.dto.dictionaries.AddressSaveRequest;
 import com.afa.core.dto.orders.*;
+import com.afa.core.enums.AddressTypes;
+import com.afa.core.enums.DeliveryTypes;
 import com.afa.core.enums.DevicerErrors;
 import com.afa.core.exceptions.DevicerException;
+import com.afa.devicer.web.dto.orders.FormOrderDto;
 import com.afa.devicer.web.enums.WebDevicerErrors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +15,10 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -32,13 +40,21 @@ public class OrderService {
     @Transactional(readOnly = true)
     public OrderPagedResponse fullFiltered(final OrderPagedFilter orderPagedFilter) {
 
-        return webClient.post()
+        final OrderPagedResponse response = webClient.post()
                 .uri("/api/v8/orders/full-filtered")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(orderPagedFilter)
                 .retrieve()
                 .bodyToMono(OrderPagedResponse.class)
                 .block();
+        if (response != null && response.getOrders() != null) {
+            final List<OrderDto> orders = response.getOrders().stream()
+                    .peek(dto -> dto.setPresentation(OrderPresentationStatusDto.createOrderPresentationStatusDto(dto)))
+                    .toList();
+            response.getOrders().clear();
+            response.getOrders().addAll(orders);
+        }
+        return response;
     }
 
     @Transactional(readOnly = true)
@@ -57,7 +73,7 @@ public class OrderService {
             final OrderSaveRequest request) {
 
         final String uri = "/api/v8/orders";
-        final OrderSingleResponse response = webClient.put()
+        final OrderSingleResponse response = webClient.post()
                 .uri(uri)
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(request)

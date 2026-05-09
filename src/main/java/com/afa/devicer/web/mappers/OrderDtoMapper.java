@@ -17,6 +17,7 @@ import java.util.UUID;
 public interface OrderDtoMapper {
 
     @Mapping(target = "formOrderNum", expression = "java(getFormOrderNum(dto))")
+    @Mapping(target = "formDeliveryAddressAddressLine", expression = "java(getFormDeliveryAddressAddressLine(dto))")
     @Mapping(target = "formStatusCode", expression = "java(getFormStatusCode(dto))")
 
     @Mapping(target = "formProductCategoryId", expression = "java(getFormProductCategoryId(dto))")
@@ -41,6 +42,11 @@ public interface OrderDtoMapper {
 
     default Long getFormOrderNum(final OrderDto dto) {
         return dto.getOrderNum();
+    }
+    default String getFormDeliveryAddressAddressLine(final OrderDto dto) {
+        return dto.getDelivery() == null || dto.getDelivery().getAddress() == null
+                ? ""
+                : dto.getDelivery().getAddress().getAddressLine();
     }
 
     default String getFormStatusCode(final OrderDto dto) {

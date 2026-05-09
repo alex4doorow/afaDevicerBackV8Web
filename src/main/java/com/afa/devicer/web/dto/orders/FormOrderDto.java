@@ -3,6 +3,7 @@ package com.afa.devicer.web.dto.orders;
 import com.afa.core.dto.companies.CompanyDto;
 import com.afa.core.dto.customers.CustomerContactDto;
 import com.afa.core.dto.customers.CustomerDto;
+import com.afa.core.dto.dictionaries.AddressDto;
 import com.afa.core.dto.dictionaries.CountryDto;
 import com.afa.core.dto.dictionaries.OrderStatusTypeDto;
 import com.afa.core.dto.orders.OrderDto;
@@ -11,6 +12,8 @@ import com.afa.core.dto.products.ProductCategoryDto;
 import com.afa.core.enums.ContactTypes;
 import com.afa.core.enums.CustomerTypes;
 import com.afa.core.utils.TextHelper;
+import com.afa.devicer.web.validators.ValidFormOrderCustomer;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -18,6 +21,7 @@ import java.math.BigDecimal;
 import java.util.Set;
 import java.util.UUID;
 
+@ValidFormOrderCustomer
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
@@ -44,6 +48,9 @@ public class FormOrderDto extends OrderDto {
 
     @NotNull(message = "{order.form.fields.invalidFeedback.no}")
     private Long formOrderNum;
+
+    @NotBlank(message = "{order.form.delivery.fields.invalidFeedback.address}")
+    private String formDeliveryAddressAddressLine;
 
     // order
     private String formStatusCode;
@@ -116,6 +123,11 @@ public class FormOrderDto extends OrderDto {
         }
         // order
         this.setOrderNum(formOrderNum);
+        if (this.getDelivery().getAddress() == null) {
+            this.getDelivery().setAddress(AddressDto.builder()
+                    .build());
+        }
+        this.getDelivery().getAddress().setAddressLine(formDeliveryAddressAddressLine);
         this.setStatus(OrderStatusTypeDto.builder()
                 .code(formStatusCode)
                 .build());

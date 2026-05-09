@@ -1,15 +1,19 @@
 package com.afa.devicer.web.controllers;
 
 import com.afa.core.dto.companies.CompanySaveRequest;
+import com.afa.core.dto.customers.CustomerAddressSaveRequest;
+import com.afa.core.dto.customers.CustomerContactSaveRequest;
 import com.afa.core.dto.customers.CustomerDto;
 import com.afa.core.dto.customers.CustomerSaveRequest;
 import com.afa.core.dto.dictionaries.AddressSaveRequest;
 import com.afa.core.dto.dictionaries.OrderStatusTypeDto;
 import com.afa.core.dto.orders.*;
 import com.afa.core.dto.people.PersonFullDto;
+import com.afa.core.dto.people.PersonSaveRequest;
 import com.afa.core.dto.people.PersonSettingsResponse;
 import com.afa.core.dto.products.ProductCategoryDto;
 import com.afa.core.enums.*;
+import com.afa.core.utils.TextHelper;
 import com.afa.devicer.web.controllers.internal.ControllerConstants;
 import com.afa.devicer.web.dto.orders.FormOrderDto;
 import com.afa.devicer.web.mappers.OrderDtoMapper;
@@ -120,6 +124,46 @@ public class OrderController extends BaseController {
         return "orders/orderForm.html";
     }
 
+    @PostMapping("/create")
+    public String saveOrder4Create(
+            @ModelAttribute("formOrder") @Validated final FormOrderDto form,
+            final BindingResult bindingResult,
+            final Model model) {
+
+        if (bindingResult.hasErrors()) {
+
+            model.addAttribute("listType", "list");
+            form.convertForm();
+            model.addAttribute("order", form);
+            model.addAttribute("formOrder", form);
+            return "orders/orderForm.html";
+        }
+        form.convertForm();
+        final CustomerSaveRequest customerRequest = createCustomerRequestByForm(form);
+
+        final OrderDto result;
+        CustomerDto customer;
+        if (form.getCustomer().getId() > 0) {
+
+            customer = customerService.update(form.getCustomer().getId(), customerRequest);
+        } else {
+
+            customer = customerService.create(customerRequest);
+            if (customer != null && customer.getId() > 0) {
+                form.getCustomer().setId(customer.getId());
+            }
+        }
+        if (customer == null) {
+            log.error("{}", "customer didn't create");
+            return "redirect:/web/orders";
+        }
+        result = orderService.create(createOrderRequestByForm(form));
+        //result = new OrderDto();
+
+        log.info("{}", result.getId());
+        return "redirect:/web/orders";
+    }
+
     @GetMapping("/{orderId}/update")
     public String getOrder4Edit(
             @NotNull @Valid @PathVariable final Long orderId,
@@ -144,75 +188,41 @@ public class OrderController extends BaseController {
             final RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
-            final OrderSingleResponse response = orderService.getOrderById(orderId);
+
             model.addAttribute("listType", "list");
-            model.addAttribute("order", response.getOrder());
-            model.addAttribute("formOrder", form);
+            if (orderId > 0) {
+                final OrderSingleResponse response = orderService.getOrderById(orderId);
+                model.addAttribute("order", response.getOrder());
+                model.addAttribute("formOrder", form);
+            } else {
+                form.convertForm();
+                model.addAttribute("order", form);
+                model.addAttribute("formOrder", form);
+            }
             return "orders/orderForm.html";
         }
         form.convertForm();
-        if (form.isNew()) {
+        final CustomerSaveRequest customerRequest = createCustomerRequestByForm(form);
+//        if (!customerValidator.validateCustomerCreating(customerRequest)) {
+//            model.addAttribute("listType", "list");
+//            if (orderId > 0) {
+//                final OrderSingleResponse response = orderService.getOrderById(orderId);
+//                model.addAttribute("order", response.getOrder());
+//                model.addAttribute("formOrder", form);
+//            } else {
+//                model.addAttribute("order", form);
+//                model.addAttribute("formOrder", form);
+//            }
+//            return "orders/orderForm.html";
+//        }
 
-            return "redirect:/web/orders";
-        }
+        final OrderDto result;
 
+        CustomerDto customer;
+        //final OrderDto order = orderService.getOrderById(orderId).getOrder();
+        customerService.update(form.getCustomer().getId(), customerRequest);
+        result = orderService.update(orderId, createOrderRequestByForm(form));
 
-        final OrderDto order = orderService.getOrderById(orderId).getOrder();
-        CustomerDto customer = customerService.getCustomerById(order.getCustomer().getId()).getCustomer();
-
-        final CustomerSaveRequest customerRequest = CustomerSaveRequest.builder()
-                .company(CompanySaveRequest.builder()
-                        .inn(form.getFormCustomerInn())
-                        .shortName(form.getFormCustomerShortName())
-                        .longName(form.getFormCustomerLongName())
-                        .build())
-//                .person(PersonSaveRequest.builder()
-//                        .firstName(form.)
-//                        .build())
-                .countryId(form.getFormCustomerCountryId())
-                .build();
-//        customer = customerService.update(form.getFormCustomerId(), customerRequest);
-
-        final OrderSaveRequest request = OrderSaveRequest.builder()
-                .orderNum(form.getOrderNum())
-                .orderDate(form.getOrderDate())
-                .type(form.getType())
-                .sourceType(form.getSourceType())
-                .advertType(form.getAdvertType())
-                .store(form.getStore())
-                .productCategoryId(form.getProductCategory().getId())
-                .annotation(form.getAnnotation())
-                .paymentType(form.getPaymentType())
-                .customerId(form.getCustomer().getId())
-                .delivery(OrderDeliverySaveRequest.builder()
-                        .deliveryType(DeliveryTypes.valueOf(form.getDelivery().getDeliveryType().getCode()))
-                        .deliveryPaymentType(form.getDelivery().getDeliveryPaymentType())
-                        .deliveryPriceType(form.getDelivery().getDeliveryPriceType())
-                        .price(form.getDelivery().getPrice())
-                        .address(AddressSaveRequest.builder()
-                                .countryId(form.getDelivery().getRecipient().getCountry().getId())
-                                .type(AddressTypes.MAIN)
-                                .addressLine(form.getDelivery().getAddress().getAddressLine())
-                                .build())
-                        .customerEqualsRecipient(form.isFormDeliveryCustomerEqualsRecipient())
-                        .recipient(OrderDeliveryRecipientSaveRequest.builder()
-                                .firstName(form.getDelivery().getRecipient().getFirstName())
-                                .middleName(form.getDelivery().getRecipient().getMiddleName())
-                                .lastName(form.getDelivery().getRecipient().getLastName())
-                                .phoneNumber(form.getDelivery().getRecipient().getPhoneNumber())
-                                .build())
-                        .deliveryDate(order.getDelivery().getDeliveryDate())
-                        .build())
-                .items(Set.of(OrderItemSaveRequest.builder()
-                        .itemNum(1)
-                        .productId(32L)
-                        .price(BigDecimal.valueOf(4725))
-                        .quantity(2)
-                        .discountRate(BigDecimal.ZERO)
-                        .build()))
-                .build();
-
-        final OrderDto result = orderService.update(orderId, request);
         log.info("{}", result.getId());
         return "redirect:/web/orders";
     }
@@ -268,6 +278,91 @@ public class OrderController extends BaseController {
     @Override
     protected void setActiveMenu(final Model model) {
         model.addAttribute("activeMenu", "orders");
+    }
+
+    private CustomerSaveRequest createCustomerRequestByForm(final FormOrderDto form) {
+        CompanySaveRequest companySaveRequest;
+        PersonSaveRequest personSaveRequest;
+        String addressLine = "";
+        if (form.getCustomer().getType() == CustomerTypes.COMPANY) {
+            companySaveRequest = CompanySaveRequest.builder()
+                    .inn(form.getFormCustomerInn())
+                    .shortName(form.getFormCustomerShortName())
+                    .longName(form.getFormCustomerLongName())
+                    .build();
+            personSaveRequest = null;
+            addressLine = form.getCustomer().getMainAddress().getAddress().getAddressLine();
+
+        } else {
+            companySaveRequest = null;
+            personSaveRequest = PersonSaveRequest.builder()
+                    .firstName(form.getFormCustomerContactPersonFirstName())
+                    .middleName(form.getFormCustomerContactPersonMiddleName())
+                    .lastName(form.getFormCustomerContactPersonLastName())
+                    .phoneNumber(TextHelper.formatPhoneNumber(form.getFormCustomerContactPersonPhoneNumber()))
+                    .email("")
+                    .build();
+            addressLine = form.getDelivery().getAddress().getAddressLine();
+        }
+
+        return CustomerSaveRequest.builder()
+                .type(form.getCustomer().getType())
+                .company(companySaveRequest)
+                .person(personSaveRequest)
+                .countryId(form.getFormCustomerCountryId())
+                .contacts(Set.of(CustomerContactSaveRequest.builder()
+                        .type(ContactTypes.MAIN)
+                        .person(personSaveRequest)
+                        .build()))
+                .addresses(Set.of(CustomerAddressSaveRequest.builder()
+                        .address(AddressSaveRequest.builder()
+                                .countryId(form.getFormCustomerCountryId())
+                                .type(AddressTypes.MAIN)
+                                .addressLine(addressLine)
+                                .build())
+                        .build()))
+                .build();
+    }
+
+    private OrderSaveRequest createOrderRequestByForm(final FormOrderDto form) {
+        return OrderSaveRequest.builder()
+                .orderNum(form.getOrderNum())
+                .orderDate(form.getOrderDate())
+                .type(form.getType())
+                .sourceType(form.getSourceType())
+                .advertType(form.getAdvertType())
+                .store(form.getStore())
+                .productCategoryId(form.getProductCategory().getId())
+                .annotation(form.getAnnotation())
+                .paymentType(form.getPaymentType())
+                .customerId(form.getCustomer().getId())
+                .delivery(OrderDeliverySaveRequest.builder()
+                        .deliveryType(DeliveryTypes.valueOf(form.getDelivery().getDeliveryType().getCode()))
+                        .deliveryPaymentType(form.getDelivery().getDeliveryPaymentType())
+                        .deliveryPriceType(form.getDelivery().getDeliveryPriceType())
+                        .price(form.getDelivery().getPrice())
+                        .address(AddressSaveRequest.builder()
+                                .countryId(form.getDelivery().getRecipient().getCountry().getId())
+                                .type(AddressTypes.MAIN)
+                                .addressLine(form.getDelivery().getAddress().getAddressLine())
+                                .build())
+                        .customerEqualsRecipient(form.isFormDeliveryCustomerEqualsRecipient())
+                        .recipient(OrderDeliveryRecipientSaveRequest.builder()
+                                .firstName(form.getDelivery().getRecipient().getFirstName())
+                                .middleName(form.getDelivery().getRecipient().getMiddleName())
+                                .lastName(form.getDelivery().getRecipient().getLastName())
+                                .phoneNumber(form.getDelivery().getRecipient().getPhoneNumber())
+                                .build())
+                        .deliveryDate(form.getDelivery().getDeliveryDate())
+                        .build())
+                .items(Set.of(OrderItemSaveRequest.builder()
+                        .itemNum(1)
+                        .productId(32L)
+                        .price(BigDecimal.valueOf(4725))
+                        .quantity(2)
+                        .discountRate(BigDecimal.ZERO)
+                        .build()))
+                .build();
     }
 
 }

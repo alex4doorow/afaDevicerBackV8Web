@@ -43,7 +43,7 @@
                 </h2>
             </div>
             <div class="small col-xl-8 col-lg-10 col-md-12">
-                <form th:action="@{/web/orders/{orderId}/update(orderId=${order.id})}"
+                <form th:action="${formOrder.new} ? '/web/orders/create' : '/web/orders/' + ${order.id} + '/update'"
                       th:object="${formOrder}"
                       method="post">
 
@@ -84,7 +84,6 @@
                                    th:field="*{formOrderNum}"
                                    th:placeholder="#{order.form.fields.placeholder.no}"
                                    th:classappend="${#fields.hasErrors('formOrderNum')} ? ' is-invalid' : ''"/>
-
                             <div class="invalid-feedback"
                                  th:if="${#fields.hasErrors('formOrderNum')}"
                                  th:errors="*{formOrderNum}">
@@ -316,7 +315,6 @@
                                        class="form-label"
                                        th:text="#{order.form.customer.fields.telephone}">
                                 </label>
-
                                 <div class="input-group input-group-sm">
                                     <input id="input-customer-phone"
                                            th:field="*{formCustomerContactPersonPhoneNumber}"
@@ -325,7 +323,6 @@
                                            maxlength="15"
                                            class="form-control phone input-mask-phone form-control-customer-find"
                                            th:classappend="${#fields.hasErrors('formCustomerContactPersonPhoneNumber')} ? ' is-invalid' : ''"/>
-
                                     <button id="btn-find-customer-phone"
                                             class="btn btn-outline-secondary"
                                             type="button">
@@ -338,9 +335,9 @@
                                        class="form-label"
                                        th:text="#{order.form.customer.fields.email}">
                                 </label>
-
                                 <input id="input-customer-email"
                                        th:field="*{formCustomerContactPersonEmail}"
+                                       th:placeholder="#{order.form.customer.fields.placeholder.email}"
                                        type="text"
                                        maxlength="30"
                                        class="form-control form-control-sm form-control-customer-find"/>
@@ -374,46 +371,39 @@
                                        class="form-label"
                                        th:text="#{order.form.customer.fields.firstName}">
                                 </label>
-
                                 <input id="input-customer-first-name"
                                        th:field="*{formCustomerContactPersonFirstName}"
                                        th:placeholder="#{order.form.customer.fields.placeholder.firstName}"
                                        type="text"
                                        class="form-control form-control-sm"
                                        th:classappend="${#fields.hasErrors('formCustomerContactPersonFirstName')} ? ' is-invalid' : ''"/>
-
-
                             </div>
-
                             <div class="col-md-4">
                                 <label for="input-customer-middle-name"
                                        class="form-label"
                                        th:text="#{order.form.customer.fields.middleName}">
                                 </label>
-
                                 <input id="input-customer-middle-name"
                                        th:field="*{formCustomerContactPersonMiddleName}"
+                                       th:placeholder="#{order.form.customer.fields.placeholder.middleName}"
                                        type="text"
-                                       class="form-control form-control-sm"/>
+                                       class="form-control form-control-sm"
+                                       th:classappend="${#fields.hasErrors('formCustomerContactPersonMiddleName')} ? ' is-invalid' : ''"/>
                             </div>
-
                             <div class="col-md-5">
                                 <label for="input-customer-last-name"
                                        class="form-label"
                                        th:text="#{order.form.customer.fields.lastName}">
                                 </label>
-
                                 <input id="input-customer-last-name"
                                        th:field="*{formCustomerContactPersonLastName}"
+                                       th:placeholder="#{order.form.customer.fields.placeholder.lastName}"
                                        type="text"
-                                       class="form-control form-control-sm"/>
+                                       class="form-control form-control-sm"
+                                       th:classappend="${#fields.hasErrors('formCustomerContactPersonLastName')} ? ' is-invalid' : ''"/>
                             </div>
-
                         </div>
-
                     </div>
-
-
 
                     <!-- Юридическое лицо -->
                     <div class="form-group-company">
@@ -526,6 +516,7 @@
                                 </label>
                                 <input id="input-customer-contact-email"
                                        th:field="*{formCustomerContactPersonEmail}"
+                                       th:placeholder="#{order.form.customer.fields.placeholder.contact.email}"
                                        type="text"
                                        class="form-control form-control-sm form-control-customer-find">
                             </div>
@@ -616,13 +607,20 @@
                                    th:text="#{order.form.delivery.fields.address}">
                             </label>
                             <textarea id="input-delivery-address"
-                                      th:field="*{delivery.address.addressLine}"
+                                      th:field="*{formDeliveryAddressAddressLine}"
                                       name="delivery.address.address"
                                       maxlength="255"
                                       class="form-control form-control-sm"
-                                      rows="2">
+                                      rows="2"
+                                      th:placeholder="#{order.form.delivery.fields.placeholder.address}"
+                                      th:classappend="${#fields.hasErrors('formDeliveryAddressAddressLine')} ? ' is-invalid' : ''">
                             </textarea>
+                            <div class="invalid-feedback"
+                                 th:if="${#fields.hasErrors('formDeliveryAddressAddressLine')}"
+                                 th:errors="*{formDeliveryAddressAddressLine}">
+                            </div>
                         </div>
+
                     </div>
                     <div class="form-check mb-3">
                         <input id="check-delivery-customer-equals-recipient"
@@ -1093,7 +1091,6 @@
 
 <div th:replace="fragments/footer-scripts :: footer-scripts"></div>
 
-
 <script>
     const container = document.getElementById('order-items-container');
     const template = document.getElementById('order-item-template');
@@ -1278,9 +1275,6 @@
         recalcTotals();
     });
 
-</script>
-
-<script>
     async function findProductSuggest(query) {
         const response = await fetch(
             '/web/wiki/products/suggest?nameContext=' + encodeURIComponent(query),
