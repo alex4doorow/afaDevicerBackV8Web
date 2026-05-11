@@ -5,10 +5,11 @@ import com.afa.devicer.web.dto.orders.FormOrderDto;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
+@SuppressWarnings({"PMD.CyclomaticComplexity", "PMD.NPathComplexity", "PMD.LawOfDemeter", "PMD.AvoidDuplicateLiterals"})
 public class FormOrderCustomerValidator implements ConstraintValidator<ValidFormOrderCustomer, FormOrderDto> {
 
     @Override
-    public boolean isValid(FormOrderDto form, ConstraintValidatorContext context) {
+    public boolean isValid(final FormOrderDto form, final ConstraintValidatorContext context) {
         if (form == null) {
             return true;
         }
@@ -52,14 +53,14 @@ public class FormOrderCustomerValidator implements ConstraintValidator<ValidForm
         return valid;
     }
 
-    private static boolean isBlank(String value) {
+    private static boolean isBlank(final String value) {
         return value == null || value.trim().isEmpty();
     }
 
     private static void addViolation(
-            ConstraintValidatorContext context,
-            String field,
-            String message
+            final ConstraintValidatorContext context,
+            final String field,
+            final String message
     ) {
         context.buildConstraintViolationWithTemplate(message)
                 .addPropertyNode(field)

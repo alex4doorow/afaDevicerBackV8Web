@@ -694,10 +694,10 @@
                                        maxlength="12"
                                        th:classappend="${#fields.hasErrors('delivery.price')} ? ' is-invalid' : ''"/>
 
-                                <button id="btn-calc-parcel-delivery-amounts-1"
-                                        class="btn btn-outline-secondary btn-calc-parcel-delivery-amounts"
-                                        type="button">
-                                    <i class="bi bi-truck text-dark"></i>
+                                <button id="btn-calc-parcel-delivery-amounts"
+                                        type="button"
+                                        class="btn btn-sm btn-outline-secondary">
+                                    <i class="bi bi-truck"></i>
                                 </button>
 
                                 <button id="btn-cdek-widget-1"
@@ -707,8 +707,10 @@
                                 </button>
 
                                 <button id="btn-cdek-pvzs"
+                                        type="button"
                                         class="btn btn-outline-secondary"
-                                        type="button">
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#delivery-cdek-modal">
                                     <i class="bi bi-list text-dark"></i>
                                 </button>
 
@@ -1086,6 +1088,122 @@
             </div>
         </main>
 
+    </div>
+</div>
+
+<!-- delivery-cdek-modal -->
+<div class="modal fade"
+     id="delivery-cdek-modal"
+     tabindex="-1"
+     aria-labelledby="delivery-cdek-modal-title"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="delivery-cdek-modal-title">
+                    Расчет доставки [СДЭК, ПВЗ]
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="input-group mb-3">
+                    <input type="text"
+                           id="input-delivery-cdek-city-search"
+                           class="form-control form-control-sm"
+                           placeholder="Город"
+                           aria-label="Город">
+
+                    <button id="btn-find-delivery-cdek-city"
+                            class="btn btn-sm btn-outline-secondary"
+                            type="button">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+
+                <div class="mb-3">
+                    <label for="select-delivery-cdek-city" class="form-label">
+                        Куда
+                    </label>
+                    <select id="select-delivery-cdek-city"
+                            class="form-select form-select-sm">
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="select-delivery-cdek-pvz" class="form-label">
+                        Пункт выдачи
+                    </label>
+                    <select multiple
+                            id="select-delivery-cdek-pvz"
+                            class="form-select form-select-sm"
+                            size="5">
+                    </select>
+                </div>
+
+                <div class="row g-2 mb-3">
+                    <div class="col-md-8">
+                        <label for="input-delivery-cdek-street" class="form-label">
+                            Улица
+                        </label>
+                        <input type="text"
+                               id="input-delivery-cdek-street"
+                               class="form-control form-control-sm input-delivery-cdek-address-part">
+                    </div>
+
+                    <div class="col-md-2">
+                        <label for="input-delivery-cdek-house" class="form-label">
+                            Дом
+                        </label>
+                        <input type="text"
+                               id="input-delivery-cdek-house"
+                               class="form-control form-control-sm input-delivery-cdek-address-part">
+                    </div>
+
+                    <div class="col-md-2">
+                        <label for="input-delivery-cdek-flat" class="form-label">
+                            Квартира
+                        </label>
+                        <input type="text"
+                               id="input-delivery-cdek-flat"
+                               class="form-control form-control-sm input-delivery-cdek-address-part">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="input-delivery-cdek-city-address" class="form-label">
+                        Адрес
+                    </label>
+                    <input type="text"
+                           id="input-delivery-cdek-city-address"
+                           class="form-control form-control-sm">
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button id="button-modal-delivery-cdek-cancel"
+                        type="button"
+                        class="btn btn-light"
+                        data-bs-dismiss="modal">
+                    Отмена
+                </button>
+
+                <button id="button-modal-delivery-cdek-ok"
+                        type="button"
+                        class="btn btn-primary">
+                    OK
+                </button>
+            </div>
+
+        </div>
     </div>
 </div>
 
@@ -1558,6 +1676,184 @@
         });
     });
 
+    document.addEventListener('DOMContentLoaded', function () {
+
+        const btnDeliveryCdekOk = document.getElementById('button-modal-delivery-cdek-ok');
+        const deliveryCdekModalElement = document.getElementById('delivery-cdek-modal');
+
+        if (btnDeliveryCdekOk && deliveryCdekModalElement) {
+
+            btnDeliveryCdekOk.addEventListener('click', function () {
+
+                const selectedCity = document.getElementById('select-delivery-cdek-city')?.value || '';
+                const selectedPvz = document.getElementById('select-delivery-cdek-pvz')?.value || '';
+
+                const street = document.getElementById('input-delivery-cdek-street')?.value || '';
+                const house = document.getElementById('input-delivery-cdek-house')?.value || '';
+                const flat = document.getElementById('input-delivery-cdek-flat')?.value || '';
+                const fullAddress = document.getElementById('input-delivery-cdek-city-address')?.value || '';
+
+                console.log('CDEK delivery selected:', {
+                    city: selectedCity,
+                    pvz: selectedPvz,
+                    street: street,
+                    house: house,
+                    flat: flat,
+                    address: fullAddress
+                });
+
+                /*
+                 TODO:
+                 Здесь будет:
+                 - запись данных в форму заказа
+                 - расчет стоимости доставки
+                 - обновление UI
+                */
+
+                const modalInstance = bootstrap.Modal.getInstance(deliveryCdekModalElement);
+                if (modalInstance) {
+                    modalInstance.hide();
+                }
+            });
+        }
+
+    });
+
+
+    document.getElementById('btn-find-delivery-cdek-city').addEventListener('click', async function () {
+        const cityName = document.getElementById('input-delivery-cdek-city-search').value.trim();
+        const citySelect = document.getElementById('select-delivery-cdek-city');
+
+        if (!cityName) {
+            console.warn('Город не указан');
+            return;
+        }
+
+        try {
+            const response = await fetch(
+                `/web/wiki/integrations/cdek/location/cities?countryCode2=RU&cityNameContext=${encodeURIComponent(cityName)}`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error(`Ошибка HTTP: ${response.status}`);
+            }
+
+            const result = await response.json();
+            console.log('Города СДЭК:', result);
+
+            citySelect.innerHTML = '';
+            if (!result.items || result.items.length === 0) {
+                const option = document.createElement('option');
+                option.value = '';
+                option.textContent = 'Города не найдены';
+                citySelect.appendChild(option);
+                return;
+            }
+
+            result.items.forEach(city => {
+                const option = document.createElement('option');
+
+                option.value = city.code;
+                option.textContent = `${city.city}, ${city.region || ''}, ${city.country}`;
+
+                option.dataset.city = city.city;
+                option.dataset.region = city.region || '';
+                option.dataset.country = city.country;
+                option.dataset.code = city.code;
+                option.dataset.cityUuid = city.city_uuid || '';
+                option.dataset.fiasGuid = city.fias_guid || '';
+                citySelect.appendChild(option);
+            });
+            citySelect.selectedIndex = 0;
+
+            if (result.items.length === 1) {
+                await loadCdekDeliveryPoints();
+            }
+
+        } catch (error) {
+            console.error('Ошибка поиска города СДЭК:', error);
+        }
+    });
+
+
+    document.getElementById('select-delivery-cdek-city').addEventListener('change', loadCdekDeliveryPoints);
+
+    async function loadCdekDeliveryPoints() {
+        const citySelect = document.getElementById('select-delivery-cdek-city');
+        const pvzSelect = document.getElementById('select-delivery-cdek-pvz');
+
+        const cityCode = citySelect.value;
+        pvzSelect.innerHTML = '';
+
+        if (!cityCode) {
+            return;
+        }
+
+        try {
+            const response = await fetch(
+                `/web/wiki/integrations/cdek/deliveryPoints?countryCode2=RU&cityCode=${encodeURIComponent(cityCode)}`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error(`Ошибка HTTP: ${response.status}`);
+            }
+
+            const result = await response.json();
+            console.log('ПВЗ СДЭК:', result);
+
+            if (result.result && result.result !== 'ok') {
+                throw new Error(result.errorMessage || 'Ошибка получения ПВЗ СДЭК');
+            }
+
+            const items = Array.isArray(result)
+                ? result
+                : Array.isArray(result.items)
+                    ? result.items
+                    : [];
+
+            if (items.length === 0) {
+                const option = document.createElement('option');
+                option.value = '';
+                option.textContent = 'ПВЗ не найдены';
+                pvzSelect.appendChild(option);
+                return;
+            }
+
+            items.forEach(pvz => {
+                const option = document.createElement('option');
+
+                const address = pvz.location?.address || pvz.location?.addressFull || '';
+
+                option.value = pvz.code || '';
+                option.textContent = `[${pvz.code}] ${address}`;
+
+                option.dataset.code = pvz.code || '';
+                option.dataset.uuid = pvz.uuid || '';
+                option.dataset.name = pvz.name || '';
+                option.dataset.address = address;
+                option.dataset.city = pvz.location?.city || '';
+                option.dataset.region = pvz.location?.region || '';
+
+                pvzSelect.appendChild(option);
+            });
+
+        } catch (error) {
+            console.error('Ошибка загрузки ПВЗ СДЭК:', error);
+        }
+    }
+
     function toggleBlockState(block, enabled) {
         block.classList.toggle('d-none', !enabled);
 
@@ -1565,11 +1861,6 @@
             el.disabled = !enabled;
         });
     }
-
-    toggleBlockState(customerBlock, personTypes.includes(selectedType));
-    toggleBlockState(companyBlock, companyTypes.includes(selectedType));
-
-
 
 </script>
 

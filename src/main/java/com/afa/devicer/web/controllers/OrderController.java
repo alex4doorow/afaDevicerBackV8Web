@@ -124,6 +124,7 @@ public class OrderController extends BaseController {
         return "orders/orderForm.html";
     }
 
+    @SuppressWarnings("PMD")
     @PostMapping("/create")
     public String saveOrder4Create(
             @ModelAttribute("formOrder") @Validated final FormOrderDto form,
@@ -142,7 +143,7 @@ public class OrderController extends BaseController {
         final CustomerSaveRequest customerRequest = createCustomerRequestByForm(form);
 
         final OrderDto result;
-        CustomerDto customer;
+        final CustomerDto customer;
         if (form.getCustomer().getId() > 0) {
 
             customer = customerService.update(form.getCustomer().getId(), customerRequest);
@@ -158,7 +159,6 @@ public class OrderController extends BaseController {
             return "redirect:/web/orders";
         }
         result = orderService.create(createOrderRequestByForm(form));
-        //result = new OrderDto();
 
         log.info("{}", result.getId());
         return "redirect:/web/orders";
@@ -179,6 +179,7 @@ public class OrderController extends BaseController {
         return "orders/orderForm.html";
     }
 
+    @SuppressWarnings("PMD")
     @PostMapping("/{orderId}/update")
     public String saveOrder4Edit(
             @NotNull @Valid @PathVariable final Long orderId,
@@ -280,10 +281,11 @@ public class OrderController extends BaseController {
         model.addAttribute("activeMenu", "orders");
     }
 
+    @SuppressWarnings("PMD")
     private CustomerSaveRequest createCustomerRequestByForm(final FormOrderDto form) {
-        CompanySaveRequest companySaveRequest;
-        PersonSaveRequest personSaveRequest;
-        String addressLine = "";
+        final CompanySaveRequest companySaveRequest;
+        final PersonSaveRequest personSaveRequest;
+        String addressLine;
         if (form.getCustomer().getType() == CustomerTypes.COMPANY) {
             companySaveRequest = CompanySaveRequest.builder()
                     .inn(form.getFormCustomerInn())

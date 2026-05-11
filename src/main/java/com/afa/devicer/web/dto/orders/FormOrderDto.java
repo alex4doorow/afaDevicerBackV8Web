@@ -26,7 +26,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@SuppressWarnings({"PMD.TooManyFields"})
+@SuppressWarnings({"PMD.TooManyFields", "PMD.LawOfDemeter"})
 public class FormOrderDto extends OrderDto {
 
     // customer

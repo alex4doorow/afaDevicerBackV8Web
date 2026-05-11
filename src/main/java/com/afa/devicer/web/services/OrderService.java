@@ -1,12 +1,8 @@
 package com.afa.devicer.web.services;
 
-import com.afa.core.dto.dictionaries.AddressSaveRequest;
 import com.afa.core.dto.orders.*;
-import com.afa.core.enums.AddressTypes;
-import com.afa.core.enums.DeliveryTypes;
 import com.afa.core.enums.DevicerErrors;
 import com.afa.core.exceptions.DevicerException;
-import com.afa.devicer.web.dto.orders.FormOrderDto;
 import com.afa.devicer.web.enums.WebDevicerErrors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,9 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.Set;
 
 @Slf4j
 @Service

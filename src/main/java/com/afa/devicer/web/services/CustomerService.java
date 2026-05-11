@@ -1,6 +1,5 @@
 package com.afa.devicer.web.services;
 
-import com.afa.core.dto.companies.CompanySaveRequest;
 import com.afa.core.dto.customers.*;
 import com.afa.core.dto.integrations.union.CustomerDataUnionResponse;
 import com.afa.core.enums.CustomerTypes;
@@ -19,6 +18,7 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
+@SuppressWarnings({"PMD.LawOfDemeter"})
 public class CustomerService {
 
     private final UnionIntegrationService unionIntegrationService;
@@ -92,7 +92,7 @@ public class CustomerService {
             return null;
         }
 
-        CustomerDataUnionResponse response = unionIntegrationService.getCustomerSuggest(filter);
+        final CustomerDataUnionResponse response = unionIntegrationService.getCustomerSuggest(filter);
         return response == null || response.getCustomer() == null
                 ? null
                 : response.getCustomer();

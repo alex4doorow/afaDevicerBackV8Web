@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -35,7 +34,7 @@ public class DictionaryService {
     public CountryDto getDefaultCountry() {
         return getCountries()
                 .stream()
-                .filter(c -> c.getIsoCode2().equals("RU"))
+                .filter(c -> "RU".equalsIgnoreCase(c.getIsoCode2()))
                 .toList()
                 .getFirst();
     }

@@ -25,6 +25,9 @@ public class WebClientConfig {
         return WebClient.builder()
                 .baseUrl(backendUrl)
                 .apply(oauth2.oauth2Configuration())
+                .codecs(configurer -> configurer
+                        .defaultCodecs()
+                        .maxInMemorySize(5 * 1024 * 1024))
                 .build();
     }
 }
