@@ -6,7 +6,8 @@ import lombok.Getter;
 @SuppressWarnings("PMD.ExcessivePublicCount")
 public enum WebDevicerErrors {
     CUSTOMER_SAVE_ERROR("Ошибка при сохранении покупателя"),
-    ORDER_SAVE_ERROR("Ошибка при сохранении заказа")
+    ORDER_SAVE_ERROR("Ошибка при сохранении заказа"),
+    DELIVERY_CALC_ERROR("Ошибка расчета стоимости доставки"),
     ;
 
     private final String errorMessage;

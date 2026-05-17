@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.time.Duration;
+
 @Service
 @RequiredArgsConstructor
 public class CdekService {
@@ -28,6 +30,7 @@ public class CdekService {
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<CdekCityResponse>() {})
+                .timeout(Duration.ofSeconds(5))
                 .block();
     }
 
@@ -41,6 +44,7 @@ public class CdekService {
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<CdekDeliveryPointResponse>() {})
+                .timeout(Duration.ofSeconds(5))
                 .block();
     }
 }
