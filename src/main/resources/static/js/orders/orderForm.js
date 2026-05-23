@@ -212,6 +212,23 @@ async function findProductSuggest(query) {
     return await response.json();
 }
 
+container.addEventListener('click', function (event) {
+    const productButton = event.target.closest('.product-suggest-item');
+
+    if (!productButton) {
+        return;
+    }
+
+    const row = productButton.closest('.order-item-row');
+
+    if (!row) {
+        return;
+    }
+
+    const product = JSON.parse(productButton.dataset.productJson);
+    applyProductToRow(row, product);
+});
+
 container.addEventListener('click', async function (event) {
     const findButton = event.target.closest('.btn-find-details-item-product');
 
@@ -226,67 +243,36 @@ container.addEventListener('click', async function (event) {
     }
 
     const productNameInput = row.querySelector('input[name$=".product.shortName"]');
-    const productIdInput = row.querySelector('.input-product-id');
-    const productSkuInput = row.querySelector('.input-product-sku');
-    const priceInput = row.querySelector('.item-price');
-    const supplierPriceInput = row.querySelector('.item-supplier-price');
-
     const query = productNameInput?.value?.trim();
 
     if (!query || query.length < 2) {
-        alert('Введите минимум 2 символа для поиска товара');
+        console.log('Введите минимум 2 символа для поиска товара');
         return;
     }
 
     try {
         const result = await findProductSuggest(query);
+        const products = result.items || [];
 
-        if (!result.items || result.items.length === 0) {
-            alert('Товар не найден');
+        if (products.length === 0) {
+            console.log('Товар не найден');
             return;
         }
 
-        const productSkuBadge = row.querySelector('.span-product-sku');
-        const productStockBadge = row.querySelector('.span-product-stock-info');
-        const product = result.items[0];
-
-        if (productIdInput) {
-            productIdInput.value = product.id || '';
-        }
-
-        if (productSkuInput) {
-            productSkuInput.value = product.sku || '';
+        if (products.length === 1) {
+            applyProductToRow(row, products[0]);
+            return;
         }
 
         if (productNameInput) {
-            productNameInput.value = product.shortName || '';
+            productNameInput.value = '';
         }
 
-        if (priceInput && product.price != null) {
-            priceInput.value = formatMoney(product.price);
-        }
-
-        if (supplierPriceInput && product.stock?.supplierPrice != null) {
-            supplierPriceInput.value = formatMoney(product.stock.supplierPrice);
-        }
-
-        if (productSkuBadge) {
-            productSkuBadge.textContent = product.sku || '';
-        }
-
-        if (productStockBadge) {
-            productStockBadge.textContent = product.viewStockQuantityText || '';
-
-            productStockBadge.className = 'badge mt-1 span-product-stock-info text-bg-' +
-                (product.viewStockQuantityClass || 'light');
-        }
-
-        recalcRow(row);
-        recalcTotals();
+        renderProductSuggestList(row, products);
 
     } catch (error) {
         console.error(error);
-        alert('Ошибка поиска товара');
+        console.log('Ошибка поиска товара');
     }
 });
 
@@ -711,6 +697,74 @@ function renderCustomerOrders(orders) {
         li.appendChild(link);
         menu.appendChild(li);
     });
+}
+
+function renderProductSuggestList(row, products) {
+    const list = row.querySelector('.product-suggest-list');
+
+    if (!list) {
+        return;
+    }
+
+    list.innerHTML = '';
+
+    if (!products || products.length === 0) {
+        list.classList.add('d-none');
+        return;
+    }
+
+    if (products.length === 1) {
+        applyProductToRow(row, products[0]);
+        return;
+    }
+
+    products.forEach(product => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'product-suggest-item';
+
+        button.textContent = `${product.sku || ''} : ${product.shortName || product.longName || ''}`;
+        button.dataset.productJson = JSON.stringify(product);
+
+        list.appendChild(button);
+    });
+
+    list.classList.remove('d-none');
+}
+
+function applyProductToRow(row, product) {
+    row.querySelector('.input-product-id').value = product.id || '';
+    row.querySelector('.input-product-sku').value = product.sku || '';
+
+    const productNameInput = row.querySelector('input[name$=".product.shortName"], .input-product-search');
+    const priceInput = row.querySelector('.item-price');
+    const supplierPriceInput = row.querySelector('.item-supplier-price');
+    const productSkuBadge = row.querySelector('.span-product-sku');
+    const productStockBadge = row.querySelector('.span-product-stock-info');
+
+    if (productNameInput) {
+        productNameInput.value = product.shortName || '';
+    }
+
+    if (priceInput && product.price != null) {
+        priceInput.value = formatMoney(product.price);
+    }
+
+    if (supplierPriceInput && product.stock?.supplierPrice != null) {
+        supplierPriceInput.value = formatMoney(product.stock.supplierPrice);
+    }
+
+    if (productSkuBadge) {
+        productSkuBadge.textContent = product.sku || '';
+    }
+
+    if (productStockBadge) {
+        productStockBadge.textContent = product.viewStockQuantityText || '';
+        productStockBadge.className = 'badge mt-1 span-product-stock-info text-bg-' +
+            (product.viewStockQuantityClass || 'light');
+    }
+
+    row.querySelector('.product-suggest-list')?.classList.add('d-none');
 }
 
 function formatIsoDateRu(value) {

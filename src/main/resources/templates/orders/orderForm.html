@@ -872,20 +872,26 @@
                                        class="input-product-sku"/>
 
                                 <div class="col-md-3">
-                                    <div class="input-group input-group-sm">
-                                        <input type="text"
-                                               class="form-control"
-                                               th:name="|items[${stat.index}].product.shortName|"
-                                               th:value="${item.product != null ? item.product.shortName : ''}"
-                                               placeholder="Товар">
-                                        <button class="btn btn-outline-secondary btn-find-details-item-product" type="button">
-                                            <i class="bi bi-search"></i>
-                                        </button>
+                                    <div class="product-suggest-wrapper position-relative">
+                                        <div class="input-group input-group-sm">
+                                            <input type="text"
+                                                   class="form-control input-product-search"
+                                                   th:name="|items[${stat.index}].product.shortName|"
+                                                   th:value="${item.product != null ? item.product.shortName : ''}"
+                                                   placeholder="Товар">
+
+                                            <button class="btn btn-outline-secondary btn-find-details-item-product"
+                                                    type="button">
+                                                <i class="bi bi-search"></i>
+                                            </button>
+                                        </div>
+
+                                        <div class="product-suggest-list d-none"></div>
                                     </div>
 
                                     <span class="badge text-bg-light mt-1 span-product-sku"
                                           th:text="${item.product != null ? item.product.sku : ''}">
-                                    </span>
+                                        </span>
                                 </div>
 
                                 <div class="col-md-1">
@@ -950,14 +956,20 @@
                                 <input type="hidden" data-name="product.sku" class="input-product-sku">
 
                                 <div class="col-md-3">
-                                    <div class="input-group input-group-sm">
-                                        <input type="text"
-                                               class="form-control"
-                                               data-name="product.shortName"
-                                               placeholder="Товар">
-                                        <button class="btn btn-outline-secondary btn-find-details-item-product" type="button">
-                                            <i class="bi bi-search"></i>
-                                        </button>
+                                    <div class="product-suggest-wrapper position-relative">
+                                        <div class="input-group input-group-sm">
+                                            <input type="text"
+                                                   class="form-control input-product-search"
+                                                   data-name="product.shortName"
+                                                   placeholder="Товар">
+
+                                            <button class="btn btn-outline-secondary btn-find-details-item-product"
+                                                    type="button">
+                                                <i class="bi bi-search"></i>
+                                            </button>
+                                        </div>
+
+                                        <div class="product-suggest-list d-none"></div>
                                     </div>
 
                                     <span class="badge text-bg-light mt-1 span-product-sku"></span>
