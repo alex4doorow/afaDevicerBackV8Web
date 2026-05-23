@@ -63,8 +63,7 @@ public class OrderService {
     }
 
     @Transactional
-    public OrderDto create(
-            final OrderSaveRequest request) {
+    public OrderDto create(final OrderSaveRequest request) {
 
         final String uri = "/api/v8/orders";
         final OrderSingleResponse response = webClient.post()

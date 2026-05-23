@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
-<head th:fragment="header-head (customPageTitle)">
+<head th:fragment="header-head (customPageTitle, pageCss)">
+
     <meta charset="utf-8">
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,6 +18,7 @@
     <link th:href="@{https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css}" rel="stylesheet">
     <meta name="theme-color" content="#712cf9">
     <link th:href="@{/css/dashboard.css}" rel="stylesheet">
+    <link th:if="${pageCss != null}" th:href="@{${pageCss}}" rel="stylesheet">
 
     <style>.bd-placeholder-img {
         font-size: 1.125rem;

@@ -161,6 +161,16 @@ document.querySelector('form').addEventListener('submit', function () {
         input.value = parseInt(input.value || '0', 10);
     });
 
+    const deliveryPriceInput = document.getElementById('input-delivery-price');
+    if (deliveryPriceInput) {
+        deliveryPriceInput.value = normalizeMoneyForSubmit(deliveryPriceInput.value);
+    }
+
+    const postpayAmountInput = document.getElementById('input-amounts-postpay');
+    if (postpayAmountInput) {
+        postpayAmountInput.value = normalizeMoneyForSubmit(postpayAmountInput.value);
+    }
+
     $('.input-mask-phone').each(function () {
         $(this).val($(this).cleanVal());
     });
@@ -425,7 +435,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const phoneNumber = phoneInput.value.trim();
 
         if (!phoneNumber) {
-            alert('Введите телефон');
             return;
         }
 
@@ -454,19 +463,25 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const result = await response.json();
             console.log('Customer suggest response:', result);
+            renderCustomerOrders(result.orders || []);
 
+            const customerId = result.customer?.id || '';
             document.querySelector('input[name="formCustomerId"]').value = result.customer?.id || '';
-            document.getElementById('input-customer-first-name').value = result.customer?.person?.firstName || '';
-            document.getElementById('input-customer-middle-name').value = result.customer?.person?.middleName || '';
-            document.getElementById('input-customer-last-name').value = result.customer?.person?.lastName || '';
-
-            document.getElementById('input-customer-phone').value = result.customer?.person?.phoneNumber || '';
-            document.getElementById('input-customer-email').value = result.customer?.person?.email || '';
             document.querySelector('input[name="formCustomerPersonId"]').value = result.customer?.person?.id || '';
+
+            if (result.customer?.id) {
+                setIfBlank('#input-customer-first-name', result.customer?.person?.firstName);
+                setIfBlank('#input-customer-middle-name', result.customer?.person?.middleName);
+                setIfBlank('#input-customer-last-name', result.customer?.person?.lastName);
+                setIfBlank('#input-customer-email', result.customer?.person?.email);
+            }
+            const customerBadge = document.getElementById('badge-customer-id');
+            if (customerBadge) {
+                customerBadge.textContent = customerId || '0';
+            }
 
         } catch (error) {
             console.error('Ошибка запроса customer suggest:', error);
-            alert('Ошибка поиска клиента');
         }
     });
 });
@@ -659,13 +674,65 @@ async function loadCdekDeliveryPoints() {
     }
 }
 
-function toggleBlockState(block, enabled) {
-    block.classList.toggle('d-none', !enabled);
+function renderCustomerOrders(orders) {
+    const badge = document.getElementById('badge-customer-orders-count');
+    const menu = document.getElementById('dropdown-customer-orders');
 
-    block.querySelectorAll('input, select, textarea').forEach(el => {
-        el.disabled = !enabled;
+    if (!badge || !menu) {
+        return;
+    }
+
+    badge.textContent = orders.length;
+    menu.innerHTML = '';
+
+    if (orders.length === 0) {
+        const item = document.createElement('li');
+        item.innerHTML = '<span class="dropdown-item text-muted">Заказов не найдено</span>';
+        menu.appendChild(item);
+        return;
+    }
+
+    orders.forEach(order => {
+        const itemNames = (order.items || [])
+            .map(item => `${item.product?.shortName || ''}: ${item.quantity || 0} шт`)
+            .join('; ');
+
+        const amount = order.amounts?.TOTAL_WITH_DELIVERY ?? order.amounts?.TOTAL ?? 0;
+        const status = order.status?.annotation || '';
+        const orderDate = formatIsoDateRu(order.orderDate);
+
+        const li = document.createElement('li');
+        const link = document.createElement('a');
+
+        link.className = 'dropdown-item small customer-order-dropdown-item';
+        link.href = `/web/orders/${order.id}/show`;
+        link.textContent = `${order.viewNum || order.orderNum} ${orderDate} ${formatMoney(amount)} ${status} ${itemNames}`;
+
+        li.appendChild(link);
+        menu.appendChild(li);
     });
 }
+
+function formatIsoDateRu(value) {
+    if (!value) {
+        return '';
+    }
+
+    const parts = value.split('-');
+    if (parts.length !== 3) {
+        return value;
+    }
+
+    return `${parts[2]}.${parts[1]}.${parts[0]}`;
+}
+
+document.getElementById('btn-find-customer-orders')?.addEventListener('click', function () {
+    const menu = document.getElementById('dropdown-customer-orders');
+
+    if (!menu || menu.children.length === 0) {
+        return;
+    }
+});
 
 document.getElementById('btn-calc-parcel-delivery-amounts')?.addEventListener('click', calcParcelDeliveryAmounts);
 
@@ -776,13 +843,6 @@ function buildOrderItemsCalcRequest() {
     return items;
 }
 
-function getSelectedCdekCityName() {
-    const citySelect = document.getElementById('select-delivery-cdek-city');
-    const selectedOption = citySelect?.selectedOptions?.[0];
-
-    return selectedOption?.dataset?.city || selectedOption?.textContent || '';
-}
-
 function applyDeliveryCalcResult(deliveryCalcParcel) {
 
     document.getElementById('input-amounts-postpay').value = formatMoney(deliveryCalcParcel.postpayAmount);
@@ -815,4 +875,18 @@ function toIsoDate(value) {
     }
 
     return `${parts[2]}-${parts[1]}-${parts[0]}`;
+}
+
+function setIfBlank(selector, value) {
+    const element = document.querySelector(selector);
+
+    if (!element) {
+        return;
+    }
+
+    if (element.value && element.value.trim() !== '') {
+        return;
+    }
+
+    element.value = value || '';
 }
