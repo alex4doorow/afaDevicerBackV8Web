@@ -7,6 +7,7 @@ import lombok.Getter;
 public enum WebDevicerErrors {
     CUSTOMER_SAVE_ERROR("Ошибка при сохранении покупателя"),
     ORDER_SAVE_ERROR("Ошибка при сохранении заказа"),
+    ORDER_DELETE_ERROR("Ошибка при удалении заказа"),
     DELIVERY_CALC_ERROR("Ошибка расчета стоимости доставки"),
     ;
 

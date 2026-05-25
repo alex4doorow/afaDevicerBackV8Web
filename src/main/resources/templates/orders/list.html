@@ -102,7 +102,12 @@
                         th:onclick="|window.location.href='@{/web/orders/create}'|">
                 </button>
                 <button type="button" class="btn btn-light btn-sm" th:text="#{main.btn.update}"></button>
-                <button type="button" class="btn btn-danger btn-sm" th:text="#{main.btn.delete}"></button>
+                <button id="btn-delete-order"
+                        type="button"
+                        class="btn btn-danger btn-sm"
+                        disabled
+                        th:text="#{main.btn.delete}">
+                </button>
 
                 <div class="btn-group" role="group">
                     <button th:text="#{main.btn.operations}"
@@ -112,7 +117,13 @@
                             data-bs-toggle="dropdown" aria-expanded="false">
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                        <li><a class="dropdown-item" href="#" th:text="#{main.btn.statusData}"></a></li>
+                        <li>
+                            <a id="btn-change-order-status"
+                               class="dropdown-item"
+                               href="#"
+                               th:text="#{main.btn.statusData}">
+                            </a>
+                        </li>
                         <li><a class="dropdown-item" href="#" th:text="#{main.btn.queryActualData}"></a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="#" th:text="#{main.btn.cloneData}"></a></li>
@@ -141,7 +152,9 @@
                         <!-- Чекбокс -->
                         <td th:class="${#strings.isEmpty(order.presentation.union) ? 'table-' + order.presentation.orderId : ''}">
                             <input type="checkbox"
+                                   class="order-row-checkbox"
                                    th:id="'checkbox-' + ${order.id}"
+                                   th:data-id="${order.id}"
                                    th:data-no="${order.orderNum}">
                         </td>
 
@@ -275,6 +288,50 @@
             </canvas>
 
         </main>
+    </div>
+</div>
+
+<div class="modal fade"
+     id="deleteOrderModal"
+     tabindex="-1"
+     aria-labelledby="deleteOrderModalLabel"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title"
+                    id="deleteOrderModalLabel">
+                    Удаление заказа
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close">
+                </button>
+            </div>
+
+            <div class="modal-body">
+                Вы хотите удалить заказ?
+            </div>
+
+            <div class="modal-footer">
+                <button type="button"
+                        class="btn btn-light"
+                        data-bs-dismiss="modal">
+                    Нет
+                </button>
+
+                <button type="button"
+                        id="btn-confirm-delete-order"
+                        class="btn btn-primary">
+                    Да
+                </button>
+            </div>
+
+        </div>
     </div>
 </div>
 

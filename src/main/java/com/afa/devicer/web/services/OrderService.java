@@ -1,5 +1,6 @@
 package com.afa.devicer.web.services;
 
+import com.afa.core.dto.BaseResponse;
 import com.afa.core.dto.orders.*;
 import com.afa.core.enums.DevicerErrors;
 import com.afa.core.exceptions.DevicerException;
@@ -116,5 +117,21 @@ public class OrderService {
                 .bodyToMono(OrderSingleResponse.class)
                 .block();
         return response == null ? null : response.getOrder();
+    }
+
+    @Transactional
+    public void delete(final Long orderId) {
+
+        final String uri = "/api/v8/orders/%d".formatted(orderId);
+        final BaseResponse response = webClient.delete()
+                .uri(uri)
+                .retrieve()
+                .bodyToMono(BaseResponse.class)
+                .block();
+        if (response != null && response.getResult() != null && StringUtils.equals(response.getResult(), "error")) {
+            throw new DevicerException(DevicerErrors.UNKNOWN_VALIDATION_ERROR,
+                    WebDevicerErrors.ORDER_DELETE_ERROR.getErrorMessage(),
+                    response.getViolations());
+        }
     }
 }

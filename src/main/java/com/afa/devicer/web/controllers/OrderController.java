@@ -28,6 +28,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -216,20 +217,6 @@ public class OrderController extends BaseController {
         }
         form.convertForm();
         final CustomerSaveRequest customerRequest = createCustomerRequestByForm(form);
-        /*
-        if (!customerValidator.validateCustomerCreating(customerRequest)) {
-            model.addAttribute("listType", "list");
-            if (orderId > 0) {
-                final OrderSingleResponse response = orderService.getOrderById(orderId);
-                model.addAttribute("order", response.getOrder());
-                model.addAttribute("formOrder", form);
-            } else {
-                model.addAttribute("order", form);
-                model.addAttribute("formOrder", form);
-            }
-            return "orders/orderForm.html";
-        }
-        */
         final OrderDto result;
         customerService.update(form.getCustomer().getId(), customerRequest);
         result = orderService.update(orderId, createOrderRequestByForm(form));
@@ -284,6 +271,12 @@ public class OrderController extends BaseController {
         final OrderDto result = orderService.changeStatusOrder(orderId, request);
         log.info("{}", result.getId());
         return "redirect:/web/orders";
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable final Long id) {
+        orderService.delete(id);
+        return ResponseEntity.ok().build();
     }
 
     @Override

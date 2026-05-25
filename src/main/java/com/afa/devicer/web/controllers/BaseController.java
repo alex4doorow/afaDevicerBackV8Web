@@ -59,8 +59,9 @@ public abstract class BaseController {
                         .code(s.getCode())
                         .annotation(s.getAnnotation())
                         .view(s.getView())
+                        .sortKey(s.getSortKey())
                         .build())
-                .sorted(Comparator.comparing(OrderStatusTypeDto::getId))
+                .sorted(Comparator.comparing(OrderStatusTypeDto::getSortKey))
                 .toList();
     }
 
