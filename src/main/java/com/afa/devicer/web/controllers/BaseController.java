@@ -48,6 +48,7 @@ public abstract class BaseController {
         model.addAttribute("productCategories", productService.getProductCategories());
         model.addAttribute("countries", dictionaryService.getCountries());
         model.addAttribute("orderStatuses", getOrderStatuses());
+        model.addAttribute("periodType", ReportPeriodTypes.CURRENT_MONTH);
         setActiveMenu(model);
     }
 

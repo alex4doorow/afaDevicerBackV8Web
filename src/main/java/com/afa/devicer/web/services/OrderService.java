@@ -53,6 +53,24 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
+    public OrderPagedResponse periodFiltered(final String periodName) {
+        final String uri = "/api/v8/orders/period/%s".formatted(periodName);
+        final OrderPagedResponse response = webClient.get()
+                .uri(uri)
+                .retrieve()
+                .bodyToMono(OrderPagedResponse.class)
+                .block();
+        if (response != null && response.getOrders() != null) {
+            final List<OrderDto> orders = response.getOrders().stream()
+                    .peek(dto -> dto.setPresentation(OrderPresentationStatusDto.createOrderPresentationStatusDto(dto)))
+                    .toList();
+            response.getOrders().clear();
+            response.getOrders().addAll(orders);
+        }
+        return response;
+    }
+
+    @Transactional(readOnly = true)
     public OrderSingleResponse getOrderById(final Long orderId) {
 
         final String uri = "/api/v8/orders/%d".formatted(orderId);

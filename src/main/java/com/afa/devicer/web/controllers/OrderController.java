@@ -75,6 +75,23 @@ public class OrderController extends BaseController {
         return "orders/list.html";
     }
 
+    @GetMapping("/period/{periodName}")
+    public String list(
+            @NotNull @Valid @PathVariable final String periodName,
+            final Model model) {
+
+        final OrderPagedResponse result = orderService.periodFiltered(periodName);
+
+        populateDefaultModel(model);
+        model.addAttribute("orders", result.getOrders());
+        model.addAttribute("totalAmounts", result.getTotalAmounts());
+        model.addAttribute("amountConversionBid", result.getTotalAmounts().get(AmountTypes.CONVERSION_BID));
+        model.addAttribute("amountConversionApproved", result.getTotalAmounts().get(AmountTypes.CONVERSION_APPROVED));
+        model.addAttribute("periodType", result.getPeriodType());
+
+        return "orders/list.html";
+    }
+
     @GetMapping("/{orderId}/show")
     @Operation(summary = "Order по идентификатору")
     public String getOrder4Show(

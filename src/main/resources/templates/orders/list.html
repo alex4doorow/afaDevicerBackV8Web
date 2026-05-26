@@ -17,7 +17,7 @@
         <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
             <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
                 <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="sidebarMenuLabel">SIR RICHARD BOSS</h5>
+                    <h5 class="offcanvas-title" id="sidebarMenuLabel"></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu" aria-label="Close"></button>
                 </div>
 
@@ -39,13 +39,48 @@
                         </a>
 
                     </div>
-                    <button type="button"
-                            class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1">
-                        <svg class="bi" aria-hidden="true">
-                            <use xlink:href="#calendar3"></use>
-                        </svg>
-                        This week
-                    </button>
+                    <div class="dropdown">
+                        <button type="button"
+                                class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1"
+                                id="dropdownOrderPeriod"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                            <i class="bi bi-calendar3"></i>
+                            <span th:text="${periodType.caption}">Current month</span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownOrderPeriod">
+                            <li>
+                                <a class="dropdown-item"
+                                   th:href="@{/web/orders/period/{period}(period='CURRENT_MONTH')}">
+                                    Текущий месяц
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item"
+                                   th:href="@{/web/orders/period/{period}(period='PRIOR_MONTH')}">
+                                    Предыдущий месяц
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item"
+                                   th:href="@{/web/orders/period/{period}(period='LAST_7_DAYS')}">
+                                    Последние 7 дней
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item"
+                                   th:href="@{/web/orders/period/{period}(period='LAST_30_DAYS')}">
+                                    Последние 30 дней
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item"
+                                   th:href="@{/web/orders/period/{period}(period='LAST_90_DAYS')}">
+                                    Последние 90 дней
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
             <div th:if="${msg}" class="alert alert-dismissible fade show"
